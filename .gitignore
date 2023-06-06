@@ -27,4 +27,4 @@ coverage
 *.sln
 *.sw?
 *.zip
-assets/app/
+wp/assets/app/

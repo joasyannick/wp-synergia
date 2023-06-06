@@ -5,14 +5,15 @@
   "scripts": {
     "dev": "vite",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
-    "test": "run-p type-check test-and-clean",
-    "test-and-clean": "run-s test-only clean",
-    "test-only": "vite build --mode test",
-    "build": "run-p type-check build-and-clean",
-    "build-and-clean": "run-s build-only clean",
-    "build-only": "vite build",
+    "test": "run-p type-check build-for-test",
+    "build-for-test": "run-s build-test-files build-for-wp",
+    "build-test-files": "vite build --mode test",
+    "build": "run-p type-check build-for-production",
+    "build-for-production": "run-s build-production-files build-for-wp",
+    "build-production-files": "vite build",
+    "build-for-wp": "make-dir wp/assets/app && rimraf -g wp/assets/app/* && cpy --flat dist/assets/*.js wp/assets/app && cpy --flat dist/assets/*.css wp/assets/app",
     "preview": "vite preview",
-    "clean": "make-dir assets/app && rimraf -g assets/app/* && cpy dist/assets/*.js assets/app && cpy dist/assets/*.css assets/app && rimraf dist"
+    "clean": "rimraf dist"
   },
   "dependencies": {
     "pinia": "^2.0.36",
@@ -23,6 +24,7 @@
     "@tsconfig/node18": "^2.0.1",
     "@types/node": "^18.16.8",
     "@vitejs/plugin-vue": "^4.2.3",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vue-leaflet/vue-leaflet": "^0.9.0",
     "@vue/tsconfig": "^0.4.0",
     "cpy-cli": "^4.2.0",

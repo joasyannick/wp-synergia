@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+  }
+
+div#snrg-app {
+    --snrg-horizontal-body-padding: 1rem;
+    --snrg-header-height: 5rem;
+    --snrg-background-hue: 0;
+    --snrg-background-saturation: 0%;
+    --snrg-text-hue: 210;
+    --snrg-text-saturation: 29%;
+    background-color: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
+    font: 1rem/1.5rem 'Nunito Sans';
+    color: hsl( var( --snrg-text-hue ), var( --snrg-text-saturation ), var( --snrg-text-lightness ) );
+  }
+
+div#snrg-app[data-snrg-theme='light'] {
+    --snrg-light-sign: 1;
+    --snrg-background-lightness: 100%;
+    --snrg-text-lightness: 24.3%;
+  }
+
+div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) {
+    --snrg-light-sign: -1;
+    --snrg-background-lightness: 9.4%;
+    --snrg-text-lightness: 92.2%;
+    --snrg-dark-filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+  }

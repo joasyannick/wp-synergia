@@ -1,81 +1,33 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+  import { watch } from 'vue'
+  import { RouterView, useRoute } from 'vue-router'
+  import AppHeader from '@/components/AppHeader.vue'
+  import SearchIcon from '@/components/icons/SearchIcon.vue'
+  import BiographyIcon from '@/components/icons/BiographyIcon.vue'
+  import ContactIcon from '@/components/icons/ContactIcon.vue'
+  import SynergiaIcon from '@/components/icons/SynergiaIcon.vue'
+  import PaddyIcon from '@/components/icons/PaddyIcon.vue'
+  import HelikiaIcon from '@/components/icons/HelikiaIcon.vue'
+  import AccountIcon from '@/components/icons/AccountIcon.vue'
+  import MenuIcon from '@/components/icons/MenuIcon.vue'
+
+  const route = useRoute()
+  watch( () => route.path, ( now, before ) => document.getElementById( 'snrg-app' )!.dataset.snrgRoute = now, { immediate: true } )
 </script>
 
 <template>
-  <header>
-      <nav>
-        <RouterLink to="/">Blog</RouterLink>
-        <RouterLink to="/bio">Bio</RouterLink>
-        <RouterLink to="/helikia">Helikia</RouterLink>
-        <RouterLink to="/synergia">Synergia</RouterLink>
-        <RouterLink to="/hesychia">Hesychia</RouterLink>
-        <RouterLink to="/contact">Contact</RouterLink>
-      </nav>
-  </header>
-  <RouterView/>
+  <AppHeader>
+    <template #search-icon><SearchIcon /></template>
+    <template #biography-icon><BiographyIcon /></template>
+    <template #contact-icon><ContactIcon /></template>
+    <template #synergia-icon><SynergiaIcon /></template>
+    <template #paddy-icon><PaddyIcon /></template>
+    <template #helikia-icon><HelikiaIcon /></template>
+    <template #account-icon><AccountIcon /></template>
+    <template #menu-icon><MenuIcon /></template>
+  </AppHeader>
+    <RouterView />
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
 </style>

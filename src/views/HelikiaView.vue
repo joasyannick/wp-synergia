@@ -1,16 +1,21 @@
+<script setup lang="ts">
+  import { KeepAlive } from 'vue'
+  import { RouterView } from 'vue-router'
+</script>
+
 <template>
-    <div class="snrg-helikia">
-      <h1>This is the Helikia page</h1>
-    </div>
-  </template>
-  
-  <style>
-  @media (min-width: 1024px) {
-    .snrg-helikia {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
+  <main class="snrg-helikia">
+    <RouterView v-slot="{ Component }">
+      <KeepAlive>
+        <component :is="Component" />
+      </KeepAlive>
+    </RouterView>
+  </main>
+</template>
+
+<style scoped>
+  main.snrg-helikia {
+      position: relative;
+      z-index: 0;
     }
-  }
-  </style>
-  
+</style>
