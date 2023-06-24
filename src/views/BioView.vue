@@ -1,15 +1,6 @@
 <template>
-  <div class="snrg-bio">
-    <h1>This is the bio page</h1>
-  </div>
+  <h1>Bio</h1>
 </template>
 
 <style>
-@media (min-width: 1024px) {
-  .snrg-bio {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
 </style>

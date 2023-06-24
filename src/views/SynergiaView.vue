@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import "leaflet/dist/leaflet.css"
   import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet"
 </script>
 
@@ -17,6 +18,7 @@
 </script>
 
 <template>
+  <h1>Synergia</h1>
   <div class="snrg-synergia" style="height:600px; width:800px">
     <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]">
       <l-tile-layer
@@ -29,13 +31,6 @@
   </div>
 </template>
   
-  <style>
-  @media (min-width: 1024px) {
-    .snrg-synergia {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-    }
-  }
-  </style>
+<style>
+</style>
   

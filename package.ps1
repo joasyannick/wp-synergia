@@ -1,1 +1,1 @@
-Compress-Archive -Force -Path *.php, *.css, assets -DestinationPath wp-synergia.zip
+Compress-Archive -Force -Path *.php, *.css, assets, inc -DestinationPath wp-synergia.zip
