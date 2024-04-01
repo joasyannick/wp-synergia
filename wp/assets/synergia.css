@@ -9,6 +9,7 @@ div#snrg-app {
     --snrg-background-saturation: 0%;
     --snrg-text-hue: 210;
     --snrg-text-saturation: 29%;
+    position: relative;
     background-color: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
     font: 1rem/1.5rem 'Nunito Sans';
     color: hsl( var( --snrg-text-hue ), var( --snrg-text-saturation ), var( --snrg-text-lightness ) );

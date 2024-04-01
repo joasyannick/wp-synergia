@@ -117,7 +117,7 @@
       --snrg-header-paddy-hue: 225;
       --snrg-header-helikia-hue: 30;
       --snrg-header-account-hue: 75;
-      position: fixed;
+      position: absolute;
       right: var( --snrg-horizontal-body-padding );
       top: 0;
       height: var( --snrg-header-height );

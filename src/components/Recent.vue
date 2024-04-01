@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import StarryNight2 from '@/components/images/StarryNight2.vue'
-
-  const props = defineProps< { starCount: number } >()
+  import constants from '@/constants'
+  import StarryNight from '@/components/images/StarryNight.vue'
 </script>
 
 <template>
   <article class="snrg-welcome">
-    <StarryNight2 :star-count="props.starCount" />
+    <StarryNight :star-count="constants.starryNight.starCount" />
   </article>
 </template>
 
@@ -28,18 +27,27 @@
       height:100%;
     }
 
+  article.snrg-welcome:deep( svg.snrg-graphic.snrg-sky ) {
+      /* -400px 5 */
+      transform: translateZ( -160px ) scale( 2.6 ) /* scale = (perspective - distance) / perspective */
+    }
+
+  article.snrg-welcome:deep( svg.snrg-graphic.snrg-sky > g > rect.snrg-overlay ) {
+      mix-blend-mode: multiply;
+    }
+
   article.snrg-welcome:deep( svg.snrg-graphic.snrg-stars ) {
-      transform: translateZ( -200px ) scale( 3 )
+      transform: translateZ( -80px ) scale( 1.8 );
     }
 
   article.snrg-welcome:deep( svg.snrg-graphic.snrg-mountains ) {
-      transform: translateZ( -100px ) scale( 2 )
+      transform: translateZ( -40px ) scale( 1.4 );
     }
   article.snrg-welcome:deep( svg.snrg-graphic.snrg-plain ) {
-      transform: translateZ( -50px ) scale( 1.5 )
+      transform: translateZ( -20px ) scale( 1.2 )
     }
 
   article.snrg-welcome:deep( svg.snrg-graphic.snrg-forest ) {
-      transform: translateZ( -25px ) scale( 1.25 )
+      transform: translateZ( -10px ) scale( 1.1 );
     }
 </style>
