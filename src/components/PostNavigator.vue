@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  enum PostType { TEXT, AUDIO, VIDEO }
-  type PostPreview = { title: string, featuredImage: string, description: string, url: string, type: PostType }
+  import type { PostPreview } from '@/types'
   const props = defineProps< { posts: { preview: PostPreview | PostPreview[], pinned: boolean }[] } >()
 </script>
 
