@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import Recent from '@/components/Recent.vue'
-  import MustSees from '@/components/MustSees.vue'
+  import MustSee from '@/components/MustSee.vue'
 </script>
 
 <template>
   <Recent />
-  <MustSees />
+  <MustSee />
 </template>
 
 <style scoped>

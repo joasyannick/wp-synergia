@@ -1,2 +1,5 @@
-export enum PostType { TEXT, AUDIO, VIDEO }
-export type PostPreview = { title: string, featuredImage: string, description: string, url: string, type: PostType }
+export enum ContentType { TEXT, AUDIO, VIDEO }
+
+export type ContentPreview =
+    { title: string, description: string, thumbnail: string, background: string, type: ContentType, url: string } |
+    { title: string, description: string, thumbnail: string, background: string, subcontents: ContentPreview[] }
