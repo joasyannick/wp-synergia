@@ -4,6 +4,14 @@
   import constants from '@/constants'
   import { useThemeStore } from '@/stores/theme'
   import { useMenuStore } from '@/stores/menu'
+  import SearchIcon from '@/components/icons/SearchIcon.vue'
+  import BiographyIcon from '@/components/icons/BiographyIcon.vue'
+  import ContactIcon from '@/components/icons/ContactIcon.vue'
+  import SynergiaIcon from '@/components/icons/SynergiaIcon.vue'
+  import PaddyIcon from '@/components/icons/PaddyIcon.vue'
+  import HelikiaIcon from '@/components/icons/HelikiaIcon.vue'
+  import AccountIcon from '@/components/icons/AccountIcon.vue'
+  import MenuIcon from '@/components/icons/MenuIcon.vue'
 
   const cssStyle = {
       '--snrg-menu-button-width' : constants.menu.buttonWidth + constants.menu.unit,
@@ -34,7 +42,7 @@
           link: '',
           label: 'Rechercher',
           onClick: () => null,
-          slot: 'search-icon'
+          icon: SearchIcon
         },
       {
           key: 2,
@@ -43,7 +51,7 @@
           link: constants.route.paddy.biography.fullPath,
           label: 'Biographie',
           onClick: menuStore.close,
-          slot: 'biography-icon'
+          icon: BiographyIcon
         },
       {
           key: 3,
@@ -52,7 +60,7 @@
           link: '',
           label: 'Contact',
           onClick: themeStore.doSwitch,
-          slot: 'contact-icon'
+          icon: ContactIcon
         },
       {
           key: 4,
@@ -61,7 +69,7 @@
           link: constants.route.helikia.synergia.fullPath,
           label: 'Synergia',
           onClick: menuStore.close,
-          slot: 'synergia-icon'
+          icon: SynergiaIcon
         },
       {
           key: 5,
@@ -70,7 +78,7 @@
           link: constants.route.paddy.fullPath,
           label: 'Paddy Fontaine',
           onClick: menuStore.close,
-          slot: 'paddy-icon'
+          icon: PaddyIcon
         },
       {
           key: 6,
@@ -79,7 +87,7 @@
           link: constants.route.helikia.fullPath,
           label: 'Helikia',
           onClick: menuStore.close,
-          slot: 'helikia-icon'
+          icon: HelikiaIcon
         },
       {
           key: 7,
@@ -88,7 +96,7 @@
           link: constants.route.account.fullPath,
           label: 'Compte',
           onClick: menuStore.close,
-          slot: 'account-icon'
+          icon: AccountIcon
         },
       {
           key: 8,
@@ -97,7 +105,7 @@
           link: '',
           label: '',
           onClick: menuStore.openOrClose,
-          slot: 'menu-icon'
+          icon: MenuIcon
         }
   ] )
 </script>
@@ -106,8 +114,8 @@
   <TransitionGroup name="menu" tag="nav" appear class="snrg-menu" :class="cssClass" :style="cssStyle">
     <template v-for="button in menu" :key="button.key">
       <!--<button v-if="button.key % 2 === test" type="button" @click="test = (test + 1)%2">{{ button.key }}</button>-->
-      <RouterLink v-if="button.condition && button.link" :class="button.class" :to="button.link" @click="button.onClick" :data-snrg-label="button.label"><slot :name="button.slot"></slot></RouterLink>
-      <button v-else-if="button.condition && ! button.link" :class="button.class" type="button" @click="button.onClick" :data-snrg-label="button.label"><slot :name="button.slot"></slot></button>
+      <RouterLink v-if="button.condition && button.link" :class="button.class" :to="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
+      <button v-else-if="button.condition && ! button.link" :class="button.class" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
     </template>
   </TransitionGroup>
 </template>
