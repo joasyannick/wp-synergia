@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { RouterLink } from 'vue-router'
-  import { isSingleContentPreview, type ContentPreview } from '@/types'
+  import { Media, isSingleContentPreview, type ContentPreview } from '@/types'
+
   const props = defineProps< { contents: ContentPreview[] } >()
 
   const current = ref( 0 )
   const currentLink = computed( () => { let a = props.contents[ current.value ]; return isSingleContentPreview( a ) ? a.url : '' } )
+  const goLabel = computed( () => { let a = props.contents[ current.value ]; return isSingleContentPreview( a ) ? ( a.media.has( Media.VIDEO ) ? 'Regarder' : ( a.media.has( Media.AUDIO ) ? 'Ecouter' : 'Lire' ) ) : '' } )
 </script>
 
 <template>
@@ -25,7 +27,7 @@
     <article v-if="props.contents.length" class="snrg-content-description">
       <header>{{ props.contents[ current ].title }}</header>
       <p>{{ props.contents[ current ].description }}</p>
-      <footer v-show="isSingleContentPreview( props.contents[ current ] )"><RouterLink :to="currentLink" /></footer>
+      <footer v-show="isSingleContentPreview( props.contents[ current ] )"><RouterLink :to="currentLink">{{ goLabel }}</RouterLink></footer>
     </article>
   </nav>
 </template>
