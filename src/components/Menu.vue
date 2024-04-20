@@ -12,11 +12,13 @@
   import HesychiaIcon from '@/components/icons/HesychiaIcon.vue'
   import AccountIcon from '@/components/icons/AccountIcon.vue'
 
+  const emit = defineEmits< { stateChanged: [ opened: boolean ] } >()
+
   const route = useRoute()
 
   const opened = ref( false )
-  const close = () => opened.value = false
-  const openOrClose = () => opened.value = ! opened.value
+  const close = () => { opened.value = false; emit( 'stateChanged', opened.value ) }
+  const openOrClose = () => { opened.value = ! opened.value; emit( 'stateChanged', opened.value ) }
 
   const isPaddyView = computed( () => ! route.name ? false : [ constants.route.paddy.name, constants.route.paddy.biography.name, constants.route.paddy.post.name ].includes( route.name.toString() ) )
   const isBiographyView = computed( () => route.name?.toString() === constants.route.paddy.biography.name )
