@@ -2,16 +2,30 @@
   import { ref, computed } from 'vue'
   import { RouterLink, useRoute } from 'vue-router'
   import constants from '@/constants'
-  import { useThemeStore } from '@/stores/theme'
-  import { useMenuStore } from '@/stores/menu'
+  import MenuIcon from '@/components/icons/MenuIcon.vue'
   import SearchIcon from '@/components/icons/SearchIcon.vue'
   import BiographyIcon from '@/components/icons/BiographyIcon.vue'
-  import ContactIcon from '@/components/icons/ContactIcon.vue'
   import SynergiaIcon from '@/components/icons/SynergiaIcon.vue'
+  import ContactIcon from '@/components/icons/ContactIcon.vue'
   import PaddyIcon from '@/components/icons/PaddyIcon.vue'
   import HelikiaIcon from '@/components/icons/HelikiaIcon.vue'
+  import HesychiaIcon from '@/components/icons/HesychiaIcon.vue'
   import AccountIcon from '@/components/icons/AccountIcon.vue'
-  import MenuIcon from '@/components/icons/MenuIcon.vue'
+
+  const route = useRoute()
+
+  const opened = ref( false )
+  const close = () => opened.value = false
+  const openOrClose = () => opened.value = ! opened.value
+
+  const isPaddyView = computed( () => ! route.name ? false : [ constants.route.paddy.name, constants.route.paddy.biography.name, constants.route.paddy.post.name ].includes( route.name.toString() ) )
+  const isBiographyView = computed( () => route.name?.toString() === constants.route.paddy.biography.name )
+  const isHelikiaView = computed( () => ! route.name ? false : [ constants.route.helikia.name, constants.route.helikia.synergia.name, constants.route.helikia.module.name, constants.route.helikia.session.name ].includes( route.name.toString() ) )
+  const isSynergiaView = computed( () => route.name?.toString() === constants.route.helikia.synergia.name )
+
+  const cssClass = computed( () => ( {
+      'snrg-menu-opened' : opened.value
+    } ) )
 
   const cssStyle = {
       '--snrg-menu-button-width' : constants.menu.buttonWidth + constants.menu.unit,
@@ -19,93 +33,88 @@
       '--snrg-max-menu-width' : constants.menu.maxWidth + constants.menu.unit
     }
 
-  const route = useRoute()
-  const themeStore = useThemeStore()
-  const menuStore = useMenuStore()
-
-  const test = ref(0)
-
-  const currentRoute = computed( () => route.name?.toString() )
-  const isPaddyView = computed( () => ! currentRoute.value ? false : [ constants.route.paddy.name, constants.route.paddy.biography.name, constants.route.paddy.post.name ].includes( currentRoute.value ) )
-  const isBiographyView = computed( () => currentRoute.value === constants.route.paddy.biography.name )
-  const isHelikiaView = computed( () => ! currentRoute.value ? false : [ constants.route.helikia.name, constants.route.helikia.synergia.name, constants.route.helikia.module.name, constants.route.helikia.session.name ].includes( currentRoute.value ) )
-  const isSynergiaView = computed( () => currentRoute.value === constants.route.helikia.synergia.name )
-  const cssClass = computed( () => ( {
-      'snrg-menu-opened' : menuStore.opened
-    } ) )
-  const themeLabel = computed( () => themeStore.isLight ? 'Nuit' : 'Jour' )
   const menu = computed( () => [
       {
           key: 1,
-          condition: ( menuStore.enoughSpace || menuStore.opened ) && ( isPaddyView.value || isHelikiaView.value ),
-          class: '',
+          icon: MenuIcon,
+          label: 'Menu',
           link: '',
-          label: 'Rechercher',
-          onClick: () => null,
-          icon: SearchIcon
+          external: false,
+          condition: true,
+          onClick: openOrClose
         },
       {
           key: 2,
-          condition: ( menuStore.enoughSpace || menuStore.opened ) && isPaddyView.value && ! isBiographyView.value,
-          class: '',
-          link: constants.route.paddy.biography.fullPath,
-          label: 'Biographie',
-          onClick: menuStore.close,
-          icon: BiographyIcon
+          icon: SearchIcon,
+          label: 'Rechercher',
+          link: '',
+          external: false,
+          condition: opened.value && ( isPaddyView.value || isHelikiaView.value ),
+          onClick: () => null
         },
       {
           key: 3,
-          condition: ( menuStore.enoughSpace || menuStore.opened ) && isPaddyView.value,
-          class: '',
-          link: '',
-          label: 'Contact',
-          onClick: themeStore.doSwitch,
-          icon: ContactIcon
+          icon: BiographyIcon,
+          label: 'Biographie',
+          link: constants.route.paddy.biography.fullPath,
+          external: false,
+          condition: opened.value && isPaddyView.value && ! isBiographyView.value,
+          onClick: close
         },
       {
           key: 4,
-          condition: ( menuStore.enoughSpace || menuStore.opened ) && isHelikiaView.value && ! isSynergiaView.value,
-          class: '',
-          link: constants.route.helikia.synergia.fullPath,
+          icon: SynergiaIcon,
           label: 'Synergia',
-          onClick: menuStore.close,
-          icon: SynergiaIcon
+          link: constants.route.helikia.synergia.fullPath,
+          external: false,
+          condition: opened.value && isHelikiaView.value && ! isSynergiaView.value,
+          onClick: close
         },
       {
           key: 5,
-          condition: ( menuStore.enoughSpace || menuStore.opened ),
-          class: 'snrg-paddy',
-          link: constants.route.paddy.fullPath,
-          label: 'Paddy Fontaine',
-          onClick: menuStore.close,
-          icon: PaddyIcon
+          icon: ContactIcon,
+          label: 'Contact',
+          link: '',
+          external: false,
+          condition: opened.value,
+          onClick: () => null
         },
+
       {
           key: 6,
-          condition: ( menuStore.enoughSpace || menuStore.opened ),
-          class: 'snrg-helikia',
-          link: constants.route.helikia.fullPath,
-          label: 'Helikia',
-          onClick: menuStore.close,
-          icon: HelikiaIcon
+          icon: PaddyIcon,
+          label: 'Paddy Fontaine',
+          link: constants.route.paddy.fullPath,
+          external: false,
+          condition: opened.value,
+          onClick: close
         },
       {
           key: 7,
-          condition: ( menuStore.enoughSpace || menuStore.opened ),
-          class: 'snrg-account',
-          link: constants.route.account.fullPath,
-          label: 'Compte',
-          onClick: menuStore.close,
-          icon: AccountIcon
+          icon: HelikiaIcon,
+          label: 'Helikia',
+          link: constants.route.helikia.fullPath,
+          external: false,
+          condition: opened.value,
+          onClick: close
         },
       {
           key: 8,
-          condition: ! menuStore.enoughSpace,
-          class: 'snrg-menu',
-          link: '',
-          label: '',
-          onClick: menuStore.openOrClose,
-          icon: MenuIcon
+          icon: HesychiaIcon,
+          label: 'Cap Hesychia',
+          link: 'https://cap-hesychia.fr/',
+          external: true,
+          condition: opened.value,
+          onClick: close
+        },
+      {
+          key: 9,
+          icon: AccountIcon,
+          label: 'Compte',
+          link: constants.route.account.fullPath,
+          external: false,
+          condition: opened.value,
+          onClick: close
         }
   ] )
 </script>
@@ -113,9 +122,9 @@
 <template>
   <TransitionGroup name="menu" tag="nav" appear class="snrg-menu" :class="cssClass" :style="cssStyle">
     <template v-for="button in menu" :key="button.key">
-      <!--<button v-if="button.key % 2 === test" type="button" @click="test = (test + 1)%2">{{ button.key }}</button>-->
-      <RouterLink v-if="button.condition && button.link" :class="button.class" :to="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
-      <button v-else-if="button.condition && ! button.link" :class="button.class" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
+      <a v-if="button.condition && button.link && button.external" :href="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></a>
+      <RouterLink v-else-if="button.condition && button.link && ! button.external" :to="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
+      <button v-else-if="button.condition && ! button.link" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
     </template>
   </TransitionGroup>
 </template>
@@ -180,72 +189,4 @@
   nav.snrg-menu > :is(a, button).menu-leave-to:not( :first-of-type ) {
       margin-left: 0;
     }
-
-/*
-  nav.snrg-menu :is(a, button) {
-    all: unset;
-  }
-
-  nav.snrg-menu a {
-    cursor: pointer;
-  }
-
-
-
-  nav.snrg-menu > nav > :is(a, button) {
-    position: relative;
-    box-sizing: border-box;
-    width: var( --snrg-menu-button-width );
-    height: var( --snrg-menu-button-width );
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-  }
-
-  nav.snrg-menu > nav > :is(a, button):not( .snrg-paddy, .snrg-helikia, .snrg-theme ) {
-    border: 1px solid hsl( var( --snrg-text-hue ), var( --snrg-text-saturation ), var( --snrg-text-lightness ) );
-  }
-
-  nav.snrg-menu > nav > a.snrg-paddy {
-    background-color: hsl( 180, 100%, calc( var( --snrg-text-lightness ) + ( var( --snrg-light-sign ) * var( --snrg-menu-button-lightness-gap ) ) ) );
-  }
-
-  nav.snrg-menu > nav > a.snrg-helikia {
-    background-color: hsl( 150, 100%, calc( var( --snrg-text-lightness ) + ( var( --snrg-light-sign ) * var( --snrg-menu-button-lightness-gap ) ) ) );
-  }
-
-  nav.snrg-menu > nav > button.snrg-theme {
-    background-color: hsl( 50, 100%, calc( var( --snrg-text-lightness ) + ( var( --snrg-light-sign ) * var( --snrg-menu-button-lightness-gap ) ) ) );
-  }
-
-  nav.snrg-menu.snrg-menu-opened > nav > button.snrg-menu {
-    border: none;
-    background-color: hsl( 0, 100%, calc( var( --snrg-theme-lightness ) + (-1 * var( --snrg-light-sign ) * var( --snrg-menu-button-lightness-gap ) ) ) );
-  }
-
-  nav.snrg-menu > nav > :is( a, button ):is( .snrg-paddy, .snrg-helikia, .snrg-theme ) > svg {
-    stroke: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
-  }
-
-  nav.snrg-menu > nav > :is( a, button ) > svg {
-    width: 55%;
-    height: auto;
-  }
-
-  nav.snrg-menu > nav > :is( a, button )::after {
-    content: attr( data-snrg-label );
-    position: absolute;
-    left: 50%;
-    top: var( --snrg-menu-button-width );
-    width: var( --snrg-max-menu-width );
-    display: none;
-    transform: translateX( -50% );
-    text-align: center;
-  }
-
-  nav.snrg-menu > nav > :is( a, button ):hover::after {
-    display: initial;
-  }
-  */
 </style>
