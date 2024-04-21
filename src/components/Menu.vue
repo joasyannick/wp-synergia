@@ -25,16 +25,6 @@
   const isHelikiaView = computed( () => ! route.name ? false : [ constants.route.helikia.name, constants.route.helikia.synergia.name, constants.route.helikia.module.name, constants.route.helikia.session.name ].includes( route.name.toString() ) )
   const isSynergiaView = computed( () => route.name?.toString() === constants.route.helikia.synergia.name )
 
-  const cssClass = computed( () => ( {
-      'snrg-menu-opened' : opened.value
-    } ) )
-
-  const cssStyle = {
-      '--snrg-menu-button-width' : constants.menu.buttonWidth + constants.menu.unit,
-      '--snrg-menu-button-gap' : constants.menu.buttonGap + constants.menu.unit,
-      '--snrg-max-menu-width' : constants.menu.maxWidth + constants.menu.unit
-    }
-
   const menu = computed( () => [
       {
           key: 1,
@@ -122,7 +112,7 @@
 </script>
 
 <template>
-  <TransitionGroup name="menu" tag="nav" appear class="snrg-menu" :class="cssClass" :style="cssStyle">
+  <TransitionGroup name="menu" tag="nav" appear class="snrg-menu">
     <template v-for="button in menu" :key="button.key">
       <a v-if="button.condition && button.link && button.external" :href="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></a>
       <RouterLink v-else-if="button.condition && button.link && ! button.external" :to="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
