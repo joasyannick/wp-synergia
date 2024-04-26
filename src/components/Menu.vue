@@ -126,11 +126,15 @@
       --snrg-header-paddy-hue: 225;
       --snrg-header-helikia-hue: 30;
       --snrg-header-account-hue: 75;
+      --snrg-menu-button-height: 2rem;
+      --snrg-menu-button-width: var(--snrg-menu-button-height);
+      --snrg-menu-button-gap: 0.5rem;
+      --snrg-menu-top: 1rem;
+      --snrg-menu-left: 1rem;
       position: absolute;
-      right: var( --snrg-horizontal-body-padding );
-      top: 0;
-      height: var( --snrg-header-height );
       z-index: 1;
+      top: var(--snrg-menu-top);
+      left: var(--snrg-menu-left);
       display: inline-flex;
       align-items: center;
     }
@@ -156,8 +160,9 @@
       all: unset;
       cursor: default;
       display: inline-flex;
+      border-radius: 30%;
       width: var( --snrg-menu-button-width );
-      overflow: hidden;
+      height: var(--snrg-menu-button-height);
       justify-content: center;
       align-items: center;
     }
@@ -180,5 +185,10 @@
   nav.snrg-menu > :is(a, button).menu-enter-from:not( :first-of-type ),
   nav.snrg-menu > :is(a, button).menu-leave-to:not( :first-of-type ) {
       margin-left: 0;
+    }
+
+  nav.snrg-menu > :is(a, button) > svg {
+      width: 70%;
+      height: 70%;
     }
 </style>

@@ -7,13 +7,6 @@ const constants = Object.freeze( {
         twinklingStarRadius: 20,
         twinklingStarDuration: 4 // seconds
       },
-    menu: {
-        buttonWidth: 2,
-        buttonGap: 0.5,
-        maxWidth: 12, // 4 * ( buttonWidth + buttonGap ) + buttonWidth
-        minScreenWidth: 30, // 2.5 * maxWidth 
-        unit: 'rem'
-      },
     theme: {
         light : 'light',
         dark : 'dark',

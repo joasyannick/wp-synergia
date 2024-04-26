@@ -7,7 +7,4 @@
 </template>
 
 <style scoped>
-section.snrg-biography {
-  padding-top: var( --snrg-header-height );
-}
 </style>
