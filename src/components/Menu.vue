@@ -20,6 +20,10 @@
   const close = () => { opened.value = false; emit( 'stateChanged', opened.value ) }
   const openOrClose = () => { opened.value = ! opened.value; emit( 'stateChanged', opened.value ) }
 
+  const cssClass = computed( () => ( {
+      'snrg-opened': opened.value
+    } ) )
+
   const isPaddyView = computed( () => ! route.name ? false : [ constants.route.paddy.name, constants.route.paddy.biography.name, constants.route.paddy.post.name ].includes( route.name.toString() ) )
   const isBiographyView = computed( () => route.name?.toString() === constants.route.paddy.biography.name )
   const isHelikiaView = computed( () => ! route.name ? false : [ constants.route.helikia.name, constants.route.helikia.synergia.name, constants.route.helikia.module.name, constants.route.helikia.session.name ].includes( route.name.toString() ) )
@@ -28,15 +32,6 @@
   const menu = computed( () => [
       {
           key: 1,
-          icon: MenuIcon,
-          label: 'Menu',
-          link: '',
-          external: false,
-          condition: true,
-          onClick: openOrClose
-        },
-      {
-          key: 2,
           icon: SearchIcon,
           label: 'Rechercher',
           link: '',
@@ -45,7 +40,7 @@
           onClick: () => null
         },
       {
-          key: 3,
+          key: 1,
           icon: BiographyIcon,
           label: 'Biographie',
           link: constants.route.paddy.biography.fullPath,
@@ -54,7 +49,7 @@
           onClick: close
         },
       {
-          key: 4,
+          key: 3,
           icon: SynergiaIcon,
           label: 'Synergia',
           link: constants.route.helikia.synergia.fullPath,
@@ -63,7 +58,7 @@
           onClick: close
         },
       {
-          key: 5,
+          key: 4,
           icon: ContactIcon,
           label: 'Contact',
           link: '',
@@ -73,7 +68,7 @@
         },
 
       {
-          key: 6,
+          key: 5,
           icon: PaddyIcon,
           label: 'Paddy Fontaine',
           link: constants.route.paddy.fullPath,
@@ -82,7 +77,7 @@
           onClick: close
         },
       {
-          key: 7,
+          key: 6,
           icon: HelikiaIcon,
           label: 'Helikia',
           link: constants.route.helikia.fullPath,
@@ -91,7 +86,7 @@
           onClick: close
         },
       {
-          key: 8,
+          key: 7,
           icon: HesychiaIcon,
           label: 'Cap Hesychia',
           link: 'https://cap-hesychia.fr/',
@@ -100,7 +95,7 @@
           onClick: close
         },
       {
-          key: 9,
+          key: 8,
           icon: AccountIcon,
           label: 'Compte',
           link: constants.route.account.fullPath,
@@ -112,13 +107,16 @@
 </script>
 
 <template>
-  <TransitionGroup name="menu" tag="nav" appear class="snrg-menu">
-    <template v-for="button in menu" :key="button.key">
-      <a v-if="button.condition && button.link && button.external" :href="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></a>
-      <RouterLink v-else-if="button.condition && button.link && ! button.external" :to="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
-      <button v-else-if="button.condition && ! button.link" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
-    </template>
-  </TransitionGroup>
+  <nav class="snrg-menu" :class="cssClass">
+    <button type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="opened" /></button>
+    <TransitionGroup name="menu" tag="span" appear>
+      <template v-for="button in menu" :key="button.key">
+        <a v-if="button.condition && button.link && button.external" :href="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></a>
+        <RouterLink v-else-if="button.condition && button.link && ! button.external" :to="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
+        <button v-else-if="button.condition && ! button.link" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
+      </template>
+    </TransitionGroup>
+  </nav>
 </template>
 
 <style scoped>
@@ -134,7 +132,8 @@
       position: absolute;
       z-index: 1;
       top: var(--snrg-menu-top);
-      left: var(--snrg-menu-left);
+      left: 50%;
+      transform: translateX(-50%);
       display: inline-flex;
       align-items: center;
     }

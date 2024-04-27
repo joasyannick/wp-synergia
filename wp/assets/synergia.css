@@ -31,6 +31,7 @@ div#snrg-app > header {
   z-index: 1;
   top: 0;
   left: 0;
+  width: 100vw;
 }
 
 div#snrg-app > main {

@@ -27,12 +27,10 @@
 
 <style scoped>
   header.snrg-header {
-      width: 0;
       height: 0;
     }
 
   header.snrg-header.snrg-menu-opened {
-      width: 100vw;
       height: 100vh;
     }
 </style>

@@ -34,7 +34,4 @@
 </template>
 
 <style scoped>
-section.snrg-post {
-  padding-top: var( --snrg-header-height );
-}
 </style>
