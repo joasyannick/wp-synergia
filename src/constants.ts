@@ -1,4 +1,11 @@
 const constants = Object.freeze( {
+    animation: {
+        menu: {
+            duration: {
+                onOpenOrClose: 2
+              }
+          }
+      },
     starryNight: {
         starCount: 300,
         viewBoxWidth: 16000,
