@@ -25,10 +25,12 @@
 
 <style scoped>
   header.snrg-header {
-      height: 0;
+      display: flex;
+      flex-direction: column;
     }
 
   header.snrg-header.snrg-menu-opened {
-      height: 100vh;
+      min-height: 100vh;
+      background: black;
     }
 </style>

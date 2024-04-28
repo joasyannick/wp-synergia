@@ -33,4 +33,7 @@
 </template>
 
 <style scoped>
+  nav.snrg-content-previewer {
+      flex-grow: 1;
+    }
 </style>

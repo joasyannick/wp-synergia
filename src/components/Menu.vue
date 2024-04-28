@@ -108,8 +108,8 @@
 
 <template>
   <nav class="snrg-menu" :class="cssClass">
-    <button type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="opened" @animation="onMenuAnimation" /></button>
-    <TransitionGroup name="menu" tag="span" appear>
+    <button class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="opened" @animation="onMenuAnimation" /></button>
+    <TransitionGroup name="menu" tag="span" class="snrg-menu-buttons" appear>
       <template v-for="button in menu" :key="button.key">
         <a v-if="button.condition && button.link && button.external" :href="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></a>
         <RouterLink v-else-if="button.condition && button.link && ! button.external" :to="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
@@ -129,18 +129,13 @@
       --snrg-menu-button-gap: 0.5rem;
       --snrg-menu-top: 1rem;
       --snrg-menu-left: 1rem;
-      position: absolute;
-      z-index: 1;
-      top: var(--snrg-menu-top);
-      left: 50%;
-      transform: translateX(-50%);
-      display: inline-flex;
-      align-items: center;
-    }
-
-  nav.snrg-menu {
       --snrg-header-lightness-1: (var(--snrg-background-lightness) - (var(--snrg-light-sign) * 30%));
       --snrg-header-lightness-2: (var(--snrg-header-lightness-1) - (var(--snrg-light-sign) * 30%));
+      width: 100vw;
+      display: flex;
+      padding: 1rem 0;
+      align-items: center;
+      justify-content: center;
     }
 
   div#snrg-app[data-snrg-route^='/'] nav.snrg-menu {
@@ -155,7 +150,7 @@
       --snrg-header-hue: var(--snrg-header-account-hue);
     }
 
-  nav.snrg-menu > :is(a, button) {
+  nav.snrg-menu :is(a, button) {
       all: unset;
       cursor: default;
       display: inline-flex;
@@ -166,28 +161,31 @@
       align-items: center;
     }
 
-  nav.snrg-menu > :is(a, button):not(:first-of-type) {
+  nav.snrg-menu :is(a, button) > svg {
+      width: 70%;
+      height: 70%;
+    }
+
+  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button) {
       margin-left: var( --snrg-menu-button-gap );
     }
 
-  nav.snrg-menu > :is(a, button).menu-enter-active,
-  nav.snrg-menu > :is(a, button).menu-leave-active {
-      transition: margin-left 3s linear, width 3s linear, opacity 3s linear;
+  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-enter-active {
+      transition: margin-left 1s ease-in 1s, width 1s ease-in 1s, opacity 1s ease-in 1s;
     }
 
-  nav.snrg-menu > :is(a, button).menu-enter-from,
-  nav.snrg-menu > :is(a, button).menu-leave-to {
+  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-leave-active {
+      transition: margin-left 1s ease-in, width 1s ease-in, opacity 1s ease-in;
+    }
+
+  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-enter-from,
+  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-leave-to {
       width: 0;
       opacity: 0;
     }
 
-  nav.snrg-menu > :is(a, button).menu-enter-from:not( :first-of-type ),
-  nav.snrg-menu > :is(a, button).menu-leave-to:not( :first-of-type ) {
+  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-enter-from,
+  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-leave-to {
       margin-left: 0;
-    }
-
-  nav.snrg-menu > :is(a, button) > svg {
-      width: 70%;
-      height: 70%;
     }
 </style>
