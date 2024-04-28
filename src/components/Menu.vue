@@ -17,17 +17,17 @@
   const route = useRoute()
 
   const opened = ref( false )
-  const close = () => { opened.value = false; emit( 'stateChanged', opened.value ) }
-  const openOrClose = () => { opened.value = ! opened.value; emit( 'stateChanged', opened.value ) }
+  const menuAnimation = ref( false )
 
-  const cssClass = computed( () => ( {
-      'snrg-opened': opened.value
-    } ) )
-
+  const cssClass = computed( () => ( { 'snrg-opened': opened.value } ) )
   const isPaddyView = computed( () => ! route.name ? false : [ constants.route.paddy.name, constants.route.paddy.biography.name, constants.route.paddy.post.name ].includes( route.name.toString() ) )
   const isBiographyView = computed( () => route.name?.toString() === constants.route.paddy.biography.name )
   const isHelikiaView = computed( () => ! route.name ? false : [ constants.route.helikia.name, constants.route.helikia.synergia.name, constants.route.helikia.module.name, constants.route.helikia.session.name ].includes( route.name.toString() ) )
   const isSynergiaView = computed( () => route.name?.toString() === constants.route.helikia.synergia.name )
+
+  const close = () => { if ( ! menuAnimation.value ) { opened.value = false; emit( 'stateChanged', opened.value ) } }
+  const openOrClose = () => { if ( ! menuAnimation.value ) { opened.value = ! opened.value; emit( 'stateChanged', opened.value ) } }
+  const onMenuAnimation = ( inProgress: boolean ) => { menuAnimation.value = inProgress }
 
   const menu = computed( () => [
       {
@@ -108,7 +108,7 @@
 
 <template>
   <nav class="snrg-menu" :class="cssClass">
-    <button type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="opened" /></button>
+    <button type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="opened" @animation="onMenuAnimation" /></button>
     <TransitionGroup name="menu" tag="span" appear>
       <template v-for="button in menu" :key="button.key">
         <a v-if="button.condition && button.link && button.external" :href="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></a>

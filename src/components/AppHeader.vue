@@ -7,9 +7,7 @@
 
   const menuOpened = ref( false )
 
-  const cssClass = computed( () => ( {
-      'snrg-menu-opened': menuOpened.value
-    } ) )
+  const cssClass = computed( () => ( { 'snrg-menu-opened': menuOpened.value } ) )
 
   const onMenuStateChanged = ( opened: boolean ) => { menuOpened.value = opened }
 

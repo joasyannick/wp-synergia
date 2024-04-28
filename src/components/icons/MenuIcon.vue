@@ -15,17 +15,12 @@
   const translate4a = ref< SVGAnimateTransformElement | null >( null )
   const translate4b = ref< SVGAnimateTransformElement | null >( null )
 
-  //translate1a.value?.addEventListener( 'beginEvent' )
-
-  const cssClass = computed( () => ( {
-      'snrg-opened': props.opened
-    } ) )
-  
-  const cssStyle = computed( () => ( {
-      transition: 'opacity 0s ' + duration + 's'
-    } ) )
+  const cssClass = computed( () => ( { 'snrg-opened': props.opened } ) )
+  const cssStyle = computed( () => ( { transition: 'opacity 0s ' + duration + 's' } ) )
 
   watch( () => props.opened, ( now, before ) => {
+      emit( 'animation', true )
+      setTimeout( () => emit( 'animation', false ), constants.animation.menu.duration.onOpenOrClose * 1000 )
       if ( now ) {
         translate1a.value?.beginElement()
         translate2a.value?.beginElement()
@@ -33,7 +28,7 @@
       } else {
         rotate1b.value?.beginElement()
         rotate2b.value?.beginElement()
-        setTimeout(() => translate4b.value?.beginElement(), duration * 1000)
+        setTimeout( () => translate4b.value?.beginElement(), duration * 1000 )
       }
     } )
 </script>
