@@ -2,8 +2,8 @@
   import { ref, computed } from 'vue'
   import { RouterLink, useRoute } from 'vue-router'
   import constants from '@/constants'
+  import observers from '@/router/observers'
   import MenuIcon from '@/components/icons/MenuIcon.vue'
-  import SearchIcon from '@/components/icons/SearchIcon.vue'
   import BiographyIcon from '@/components/icons/BiographyIcon.vue'
   import SynergiaIcon from '@/components/icons/SynergiaIcon.vue'
   import ContactIcon from '@/components/icons/ContactIcon.vue'
@@ -19,34 +19,23 @@
   const opened = ref( false )
   const menuAnimation = ref( false )
 
-  const cssClass = computed( () => ( { 'snrg-opened': opened.value } ) )
-  const isPaddyView = computed( () => ! route.name ? false : [ constants.route.paddy.name, constants.route.paddy.biography.name, constants.route.paddy.post.name ].includes( route.name.toString() ) )
-  const isBiographyView = computed( () => route.name?.toString() === constants.route.paddy.biography.name )
-  const isHelikiaView = computed( () => ! route.name ? false : [ constants.route.helikia.name, constants.route.helikia.synergia.name, constants.route.helikia.module.name, constants.route.helikia.session.name ].includes( route.name.toString() ) )
-  const isSynergiaView = computed( () => route.name?.toString() === constants.route.helikia.synergia.name )
+  const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
+  const isBiographyView = computed( () => ! route.name ? false : observers.isBiographyView( route.name.toString() ) )
+  const isHelikiaView = computed( () => ! route.name ? false : observers.isHelikiaView( route.name.toString() ) )
+  const isSynergiaView = computed( () => ! route.name ? false : observers.isSynergiaView( route.name.toString() ) )
 
-  const close = () => { if ( ! menuAnimation.value ) { opened.value = false; emit( 'stateChanged', opened.value ) } }
   const openOrClose = () => { if ( ! menuAnimation.value ) { opened.value = ! opened.value; emit( 'stateChanged', opened.value ) } }
   const onMenuAnimation = ( inProgress: boolean ) => { menuAnimation.value = inProgress }
 
   const menu = computed( () => [
       {
-          key: 1,
-          icon: SearchIcon,
-          label: 'Rechercher',
-          link: '',
-          external: false,
-          condition: opened.value && ( isPaddyView.value || isHelikiaView.value ),
-          onClick: () => null
-        },
-      {
-          key: 1,
+          key: 2,
           icon: BiographyIcon,
           label: 'Biographie',
           link: constants.route.paddy.biography.fullPath,
           external: false,
-          condition: opened.value && isPaddyView.value && ! isBiographyView.value,
-          onClick: close
+          condition: isPaddyView.value && ! isBiographyView.value,
+          onClick: () => { return }
         },
       {
           key: 3,
@@ -54,8 +43,8 @@
           label: 'Synergia',
           link: constants.route.helikia.synergia.fullPath,
           external: false,
-          condition: opened.value && isHelikiaView.value && ! isSynergiaView.value,
-          onClick: close
+          condition: isHelikiaView.value && ! isSynergiaView.value,
+          onClick: () => { return }
         },
       {
           key: 4,
@@ -63,18 +52,17 @@
           label: 'Contact',
           link: '',
           external: false,
-          condition: opened.value,
-          onClick: () => null
+          condition: true,
+          onClick: () => { return }
         },
-
       {
           key: 5,
           icon: PaddyIcon,
           label: 'Paddy Fontaine',
           link: constants.route.paddy.fullPath,
           external: false,
-          condition: opened.value,
-          onClick: close
+          condition: true,
+          onClick: () => { return }
         },
       {
           key: 6,
@@ -82,8 +70,8 @@
           label: 'Helikia',
           link: constants.route.helikia.fullPath,
           external: false,
-          condition: opened.value,
-          onClick: close
+          condition: true,
+          onClick: () => { return }
         },
       {
           key: 7,
@@ -91,8 +79,8 @@
           label: 'Cap Hesychia',
           link: 'https://cap-hesychia.fr/',
           external: true,
-          condition: opened.value,
-          onClick: close
+          condition: true,
+          onClick: () => { return }
         },
       {
           key: 8,
@@ -100,23 +88,21 @@
           label: 'Compte',
           link: constants.route.account.fullPath,
           external: false,
-          condition: opened.value,
-          onClick: close
+          condition: true,
+          onClick: () => { return }
         }
   ] )
 </script>
 
 <template>
-  <nav class="snrg-menu" :class="cssClass">
-    <button class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="opened" @animation="onMenuAnimation" /></button>
-    <TransitionGroup name="menu" tag="span" class="snrg-menu-buttons" appear>
-      <template v-for="button in menu" :key="button.key">
-        <a v-if="button.condition && button.link && button.external" :href="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></a>
-        <RouterLink v-else-if="button.condition && button.link && ! button.external" :to="button.link" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
-        <button v-else-if="button.condition && ! button.link" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
-      </template>
-    </TransitionGroup>
-  </nav>
+  <TransitionGroup name="menu" tag="nav" class="snrg-menu">
+    <button :key="1" class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="opened" @animation="onMenuAnimation" /></button>
+    <template v-for="button in menu" :key="button.key">
+      <a v-if="button.condition && button.link && button.external" :href="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></a>
+      <RouterLink v-else-if="button.condition && button.link && ! button.external" :to="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
+      <button v-else-if="button.condition && ! button.link" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
+    </template>
+  </TransitionGroup>
 </template>
 
 <style scoped>
@@ -131,11 +117,10 @@
       --snrg-menu-left: 1rem;
       --snrg-header-lightness-1: (var(--snrg-background-lightness) - (var(--snrg-light-sign) * 30%));
       --snrg-header-lightness-2: (var(--snrg-header-lightness-1) - (var(--snrg-light-sign) * 30%));
-      width: 100vw;
-      display: flex;
-      padding: 1rem 0;
-      align-items: center;
-      justify-content: center;
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      display: inline-flex;
     }
 
   div#snrg-app[data-snrg-route^='/'] nav.snrg-menu {
@@ -166,26 +151,26 @@
       height: 70%;
     }
 
-  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button) {
+  nav.snrg-menu > :is(a, button):not(:first-child) {
       margin-left: var( --snrg-menu-button-gap );
     }
 
-  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-enter-active {
+  nav.snrg-menu > :is(a, button).menu-enter-active {
       transition: margin-left 1s ease-in 1s, width 1s ease-in 1s, opacity 1s ease-in 1s;
     }
 
-  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-leave-active {
+  nav.snrg-menu > :is(a, button).menu-leave-active {
       transition: margin-left 1s ease-in, width 1s ease-in, opacity 1s ease-in;
     }
 
-  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-enter-from,
-  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-leave-to {
+  nav.snrg-menu > :is(a, button).menu-enter-from,
+  nav.snrg-menu > :is(a, button).menu-leave-to {
       width: 0;
       opacity: 0;
     }
 
-  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-enter-from,
-  nav.snrg-menu > span.snrg-menu-buttons > :is(a, button).menu-leave-to {
+  nav.snrg-menu > :is(a, button):not(:first-child).menu-enter-from,
+  nav.snrg-menu > :is(a, button):not(:first-child).menu-leave-to {
       margin-left: 0;
     }
 </style>

@@ -1,15 +1,19 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
+  import { useRoute } from 'vue-router'
+  import observers from '@/router/observers'
   import { Media } from '@/types'
   import type { ContentPreview } from '@/types'
   import Menu from '@/components/Menu.vue'
   import ContentPreviewer from '@/components/ContentPreviewer.vue'
 
+  const route = useRoute()
+
   const menuOpened = ref( false )
 
-  const cssClass = computed( () => ( { 'snrg-menu-opened': menuOpened.value } ) )
-
   const onMenuStateChanged = ( opened: boolean ) => { menuOpened.value = opened }
+
+  const isHelikiaView = computed( () => ! route.name ? false : observers.isHelikiaView( route.name.toString() ) )
 
   // Fetch content data
   //const posts = [] // Test le cas vide
@@ -17,20 +21,12 @@
 </script>
 
 <template>
-  <header class="snrg-header" :class="cssClass">
+  <header class="snrg-header">
     <Menu @state-changed="onMenuStateChanged" />
-    <ContentPreviewer v-show="menuOpened" :contents="posts" />
+    <ContentPreviewer v-if="isHelikiaView" v-show="menuOpened" :contents="posts" />
+    <ContentPreviewer v-else v-show="menuOpened" :contents="posts" />
   </header>
 </template>
 
 <style scoped>
-  header.snrg-header {
-      display: flex;
-      flex-direction: column;
-    }
-
-  header.snrg-header.snrg-menu-opened {
-      min-height: 100vh;
-      background: black;
-    }
 </style>

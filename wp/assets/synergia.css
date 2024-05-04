@@ -28,9 +28,9 @@ div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) {
 
 div#snrg-app > header {
   position: absolute;
-  z-index: 1;
-  top: 0;
   left: 0;
+  top: 0;
+  z-index: 1;
 }
 
 div#snrg-app > main {

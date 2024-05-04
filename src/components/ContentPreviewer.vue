@@ -34,6 +34,8 @@
 
 <style scoped>
   nav.snrg-content-previewer {
-      flex-grow: 1;
+      width: 100vw;
+      height: 100vh;
+      background: black;
     }
 </style>
