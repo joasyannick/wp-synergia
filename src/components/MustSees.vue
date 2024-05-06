@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   const maxCount = 3
-  const mustSee = ref( [] as any[] )
+  const mustSees = ref( [] as any[] )
   const dataReady = ref( false )
 
   const fetchMustSee = async () => {
       try {
         const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/snrg-must-sees?per_page=' + maxCount + '&_fields=title.rendered,content.rendered' )
-        mustSee.value = await response.json()
-        mustSee.value.forEach( ( item ) => item.content.rendered = item.content.rendered.replace( /(<\/?)h(\d+)/g, ( match: string, token: string, level: string ) => token + 'h' + ( parseInt( level ) + 1 ) ) )
+        mustSees.value = await response.json()
+        mustSees.value.forEach( ( mustSee ) => mustSee.content.rendered = mustSee.content.rendered.replace( /(<\/?)h(\d+)/g, ( match: string, token: string, level: string ) => token + 'h' + ( parseInt( level ) + 1 ) ) )
         dataReady.value = true
       } catch ( exception ) {
         console.error( 'Failed to fetch must-see' )
@@ -22,11 +22,11 @@
 
 <template>
   <nav class="snrg-must-see">
-    <article v-for="item in mustSee">
+    <article v-for="mustSee in mustSees">
       <header>
-        <h2 v-html="item.title.rendered"></h2>
+        <h2 v-html="mustSee.title.rendered"></h2>
       </header>
-      <div v-html="item.content.rendered"></div>
+      <div v-html="mustSee.content.rendered"></div>
     </article>
   </nav>
 </template>
