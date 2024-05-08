@@ -1,9 +1,12 @@
 <script setup lang="ts">
-  import { ref, computed, watch } from 'vue'
+  import { inject, ref, computed, watch } from 'vue'
   import constants from '@/constants'
+  import type { IMenu } from '@/injection'
+  import { iMenu } from '@/injection'
 
-  const props = defineProps< { opened: boolean } >()
-  const emit = defineEmits< { animation: [ inProgress: boolean ] } >()
+  const menu = inject( iMenu ) as IMenu
+
+  const emit = defineEmits< { animated: [ animated: boolean ] } >()
 
   const duration = Math.round(0.5 * constants.animation.menu.duration.onOpenOrClose * 1000) / 1000
   const translate1a = ref< SVGAnimateTransformElement | null >( null )
@@ -15,12 +18,12 @@
   const translate4a = ref< SVGAnimateTransformElement | null >( null )
   const translate4b = ref< SVGAnimateTransformElement | null >( null )
 
-  const cssClass = computed( () => ( { 'snrg-opened': props.opened } ) )
+  const cssClass = computed( () => ( { 'snrg-opened': menu.opened.value } ) )
   const cssStyle = computed( () => ( { transition: 'opacity 0s ' + duration + 's' } ) )
 
-  watch( () => props.opened, ( now, before ) => {
-      emit( 'animation', true )
-      setTimeout( () => emit( 'animation', false ), constants.animation.menu.duration.onOpenOrClose * 1000 )
+  watch( () => menu.opened.value, ( now, before ) => {
+      emit( 'animated', true )
+      setTimeout( () => emit( 'animated', false ), constants.animation.menu.duration.onOpenOrClose * 1000 )
       if ( now ) {
         translate1a.value?.beginElement()
         translate2a.value?.beginElement()

@@ -1,20 +1,21 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { inject, ref, computed } from 'vue'
   import { useRoute } from 'vue-router'
   import observers from '@/router/observers'
   import { Media } from '@/types'
   import type { ContentPreview } from '@/types'
+  import type { IMenu } from '@/injection'
+  import { iMenu } from '@/injection'
   import Menu from '@/components/Menu.vue'
   import ContentPreviewer from '@/components/ContentPreviewer.vue'
 
-  const route = useRoute()
-  const maxCount = 3
+  const menu = inject( iMenu ) as IMenu
 
-  const menuOpened = ref( false )
+  const route = useRoute()
+
+  const maxCount = 3
   const posts = ref( [] as any[] )
   const modules = ref( [] as any[] )
-
-  const onMenuStateChanged = ( opened: boolean ) => { menuOpened.value = opened }
 
   const isHelikiaView = computed( () => ! route.name ? false : observers.isHelikiaView( route.name.toString() ) )
 
@@ -35,9 +36,9 @@
 
 <template>
   <header class="snrg-header">
-    <Menu @state-changed="onMenuStateChanged" />
-    <ContentPreviewer v-if="isHelikiaView" v-show="menuOpened" :previews="previews" />
-    <ContentPreviewer v-else v-show="menuOpened" :previews="previews" />
+    <Menu />
+    <ContentPreviewer v-if="isHelikiaView" v-show="menu.opened.value" :previews="previews" />
+    <ContentPreviewer v-else v-show="menu.opened.value" :previews="previews" />
   </header>
 </template>
 

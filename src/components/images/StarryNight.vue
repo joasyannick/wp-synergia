@@ -1,10 +1,24 @@
 <script setup lang="tsx">
-  import { defineComponent, ref, computed, watch, onUnmounted } from 'vue'
+  import { defineComponent, inject, ref, computed, watch, onUnmounted } from 'vue'
   import type { Ref } from 'vue'
   import constants from '@/constants'
+  import type { IMenu } from '@/injection'
+  import { iMenu } from '@/injection'
   import Graphic from '@/components/images/Graphic.vue'
 
-  const props = withDefaults( defineProps< { starCount: number, showLandscape?: boolean } >(), { showLandscape: true } )
+  const menu = inject( iMenu ) as IMenu
+
+  const props = defineProps< { starCount: number } >()
+
+  const quotations = [
+      'Je ne crois pas en Dieu, je le vis.',
+      'Je vis, non plus moi, Christ vit en moi.',
+      "Christ ne se croit pas seulement, il s'expérimente.",
+      "L'évangile ne se prêche pas seulement, il se démontre."
+    ]
+  const current = ref( 0 )
+
+  setInterval( () => { current.value = ( current.value + 1 ) % quotations.length }, 7000 )
 
   const sky = defineComponent(
       ( props: { clipId: string } ) => {
@@ -197,10 +211,16 @@
   <Graphic class="snrg-stars" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-stars-clip">
     <stars :star-count="props.starCount" clip-id="snrg-starry-night-stars-clip" />
   </Graphic>
-  <Graphic v-show="showLandscape" class="snrg-mountains" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-mountains-clip">
+  <div>
+    <template v-for="( quotation, index ) in quotations">
+      <blockquote v-if="index === current" v-html="quotation"></blockquote>
+    </template>
+    <button type="button" @click="menu.openOrClose">Lire le blog</button>
+  </div>
+  <Graphic class="snrg-mountains" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-mountains-clip">
     <mountains clip-id="snrg-starry-night-mountains-clip" />
   </Graphic>
-  <Graphic v-show="showLandscape" class="snrg-plain" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-plain-clip">
+  <Graphic class="snrg-plain" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-plain-clip">
     <plain clip-id="snrg-starry-night-plain-clip" />
   </Graphic>
   <Graphic class="snrg-forest" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-forest-clip">

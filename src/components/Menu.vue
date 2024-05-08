@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { inject, ref, computed } from 'vue'
   import { RouterLink, useRoute } from 'vue-router'
   import constants from '@/constants'
   import observers from '@/router/observers'
+  import type { IMenu } from '@/injection'
+  import { iMenu } from '@/injection'
   import MenuIcon from '@/components/icons/MenuIcon.vue'
   import BiographyIcon from '@/components/icons/BiographyIcon.vue'
   import SynergiaIcon from '@/components/icons/SynergiaIcon.vue'
@@ -12,22 +14,21 @@
   import HesychiaIcon from '@/components/icons/HesychiaIcon.vue'
   import AccountIcon from '@/components/icons/AccountIcon.vue'
 
-  const emit = defineEmits< { stateChanged: [ opened: boolean ] } >()
+  const menu = inject( iMenu ) as IMenu
 
   const route = useRoute()
 
-  const opened = ref( false )
-  const menuAnimation = ref( false )
+  const menuIconAnimated = ref( false )
 
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
   const isBiographyView = computed( () => ! route.name ? false : observers.isBiographyView( route.name.toString() ) )
   const isHelikiaView = computed( () => ! route.name ? false : observers.isHelikiaView( route.name.toString() ) )
   const isSynergiaView = computed( () => ! route.name ? false : observers.isSynergiaView( route.name.toString() ) )
 
-  const openOrClose = () => { if ( ! menuAnimation.value ) { opened.value = ! opened.value; emit( 'stateChanged', opened.value ) } }
-  const onMenuAnimation = ( inProgress: boolean ) => { menuAnimation.value = inProgress }
+  const openOrClose = () => { if ( ! menuIconAnimated.value ) { menu.openOrClose() } }
+  const onMenuIconAnimated = ( state: boolean ) => { menuIconAnimated.value = state }
 
-  const menu = computed( () => [
+  const buttons = computed( () => [
       {
           key: 2,
           icon: BiographyIcon,
@@ -96,8 +97,8 @@
 
 <template>
   <TransitionGroup name="menu" tag="nav" class="snrg-menu">
-    <button :key="1" class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="opened" @animation="onMenuAnimation" /></button>
-    <template v-for="button in menu" :key="button.key">
+    <button :key="1" class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="menu.opened.value" @animated="onMenuIconAnimated" /></button>
+    <template v-for="button in buttons" :key="button.key">
       <a v-if="button.condition && button.link && button.external" :href="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></a>
       <RouterLink v-else-if="button.condition && button.link && ! button.external" :to="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
       <button v-else-if="button.condition && ! button.link" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
@@ -112,7 +113,7 @@
       --snrg-header-account-hue: 75;
       --snrg-menu-button-height: 2rem;
       --snrg-menu-button-width: var(--snrg-menu-button-height);
-      --snrg-menu-button-gap: 0.5rem;
+      --snrg-menu-button-gap: 0.25rem;
       --snrg-menu-top: 1rem;
       --snrg-menu-left: 1rem;
       --snrg-header-lightness-1: (var(--snrg-background-lightness) - (var(--snrg-light-sign) * 30%));
@@ -139,11 +140,12 @@
       all: unset;
       cursor: default;
       display: inline-flex;
-      border-radius: 30%;
+      border-radius: 50%;
       width: var( --snrg-menu-button-width );
       height: var(--snrg-menu-button-height);
       justify-content: center;
       align-items: center;
+      background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), calc( var( --snrg-background-lightness ) - var( --snrg-light-sign ) * 20% ), 50% );
     }
 
   nav.snrg-menu :is(a, button) > svg {

@@ -22,9 +22,7 @@
 <template>
   <nav class="snrg-content-previewer">
     <div class="snrg-content-search">
-      <button type="button">T</button><!-- Filter text content -->
-      <button type="button">A</button><!-- Filter audio content -->
-      <button type="button">V</button><!-- Filter video content -->
+      <button type="button">A</button><!-- Show only audiovisual content -->
       <input type="search" />
     </div>
     <div class="snrg-content-list">

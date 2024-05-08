@@ -129,7 +129,7 @@
     /*
     background-size: cover;
 	  background-position: center;
-    background-color: hsl( var( --snrg-theme-hue ), var( --snrg-theme-saturation ), var( --snrg-theme-lightness ) );
+    background: hsl( var( --snrg-theme-hue ), var( --snrg-theme-saturation ), var( --snrg-theme-lightness ) );
     */
   }
 
@@ -174,7 +174,7 @@
     left: 0;
     right: 0;
     top: 0;
-    background-color: hsla( var( --snrg-background-hue ), var( --snrg-background-saturation ), calc( var( --snrg-background-lightness ) + ( -1 * var( --snrg-light-sign ) * 20% ) ), 0.6 );
+    background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), calc( var( --snrg-background-lightness ) + ( -1 * var( --snrg-light-sign ) * 20% ) ), 0.6 );
     /*backdrop-filter: blur( 4px );*/
   }
 

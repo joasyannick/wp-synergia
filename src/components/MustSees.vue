@@ -22,12 +22,17 @@
 
 <template>
   <nav class="snrg-must-see">
-    <article v-for="mustSee in mustSees">
+    <header>
+      <h1>Et si on passait de croyant à vivant&nbsp;?</h1>
+    </header>
+    <div>
+      <article v-for="mustSee in mustSees">
       <header>
         <h2 v-html="mustSee.title.rendered"></h2>
       </header>
       <div v-html="mustSee.content.rendered"></div>
     </article>
+    </div>
   </nav>
 </template>
 
@@ -35,10 +40,10 @@
   nav.snrg-must-see {
       position: relative;
       min-height: 100vh;
-      background-color: hsl(225,70%,10%);
+      background: hsl(225,70%,10%);
     }
 
-  nav.snrg-must-see > article > header > h2 {
+  nav.snrg-must-see > header > h1 {
       margin-top: 0;
     }
 </style>
