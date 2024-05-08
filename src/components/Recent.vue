@@ -19,7 +19,7 @@
       transform-style: preserve-3d;
     }
 
-  article.snrg-welcome:deep( svg.snrg-graphic ) {
+  article.snrg-welcome:deep( :is( svg.snrg-graphic, div.snrg-tagline ) ) {
       position: absolute;
       left: 0;
       top: 0;
@@ -28,7 +28,6 @@
     }
 
   article.snrg-welcome:deep( svg.snrg-graphic.snrg-sky ) {
-      /* -400px 5 */
       transform: translateZ( -160px ) scale( 2.6 ) /* scale = (perspective - distance) / perspective */
     }
 
@@ -40,9 +39,16 @@
       transform: translateZ( -80px ) scale( 1.8 );
     }
 
+  article.snrg-welcome:deep( div.snrg-taglines ) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
   article.snrg-welcome:deep( svg.snrg-graphic.snrg-mountains ) {
       transform: translateZ( -40px ) scale( 1.4 );
     }
+
   article.snrg-welcome:deep( svg.snrg-graphic.snrg-plain ) {
       transform: translateZ( -20px ) scale( 1.2 )
     }

@@ -211,7 +211,7 @@
   <Graphic class="snrg-stars" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-stars-clip">
     <stars :star-count="props.starCount" clip-id="snrg-starry-night-stars-clip" />
   </Graphic>
-  <div>
+  <div class="snrg-taglines">
     <template v-for="( quotation, index ) in quotations">
       <blockquote v-if="index === current" v-html="quotation"></blockquote>
     </template>
