@@ -111,68 +111,65 @@
       --snrg-header-paddy-hue: 225;
       --snrg-header-helikia-hue: 30;
       --snrg-header-account-hue: 75;
-      --snrg-menu-button-height: 2rem;
-      --snrg-menu-button-width: var(--snrg-menu-button-height);
+      --snrg-menu-button-width: var( --snrg-menu-height );
       --snrg-menu-button-gap: 0.25rem;
-      --snrg-menu-top: 1rem;
-      --snrg-menu-left: 1rem;
-      --snrg-header-lightness-1: (var(--snrg-background-lightness) - (var(--snrg-light-sign) * 30%));
-      --snrg-header-lightness-2: (var(--snrg-header-lightness-1) - (var(--snrg-light-sign) * 30%));
+      --snrg-header-lightness-1: ( var( --snrg-background-lightness ) - ( var( --snrg-light-sign ) * 30% ) );
+      --snrg-header-lightness-2: ( var( --snrg-header-lightness-1 ) - ( var( --snrg-light-sign ) * 30% ) );
       position: absolute;
-      left: 1rem;
-      top: 1rem;
+      left: var( --snrg-menu-left );
+      top: var( --snrg-menu-top );
       display: inline-flex;
     }
 
-  div#snrg-app[data-snrg-route^='/'] nav.snrg-menu {
-      --snrg-header-hue: var(--snrg-header-paddy-hue);
+  div#snrg-app[ data-snrg-route^='/' ] nav.snrg-menu {
+      --snrg-header-hue: var( --snrg-header-paddy-hue );
     }
 
-  div#snrg-app[data-snrg-route^='/helikia'] nav.snrg-menu {
-      --snrg-header-hue: var(--snrg-header-helikia-hue);
+  div#snrg-app[ data-snrg-route^='/helikia' ] nav.snrg-menu {
+      --snrg-header-hue: var( --snrg-header-helikia-hue );
     }
 
-  div#snrg-app[data-snrg-route^='/account'] nav.snrg-menu {
-      --snrg-header-hue: var(--snrg-header-account-hue);
+  div#snrg-app[ data-snrg-route^='/account' ] nav.snrg-menu {
+      --snrg-header-hue: var( --snrg-header-account-hu );
     }
 
-  nav.snrg-menu :is(a, button) {
+  nav.snrg-menu :is( a, button ) {
       all: unset;
       cursor: default;
       display: inline-flex;
       border-radius: 50%;
       width: var( --snrg-menu-button-width );
-      height: var(--snrg-menu-button-height);
+      height: var(--snrg-menu-height);
       justify-content: center;
       align-items: center;
       background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), calc( var( --snrg-background-lightness ) - var( --snrg-light-sign ) * 20% ), 50% );
     }
 
-  nav.snrg-menu :is(a, button) > svg {
+  nav.snrg-menu :is( a, button ) > svg {
       width: 70%;
       height: 70%;
     }
 
-  nav.snrg-menu > :is(a, button):not(:first-child) {
+  nav.snrg-menu > :is( a, button ):not( :first-child ) {
       margin-left: var( --snrg-menu-button-gap );
     }
 
-  nav.snrg-menu > :is(a, button).menu-enter-active {
+  nav.snrg-menu > :is( a, button ).menu-enter-active {
       transition: margin-left 1s ease-in 1s, width 1s ease-in 1s, opacity 1s ease-in 1s;
     }
 
-  nav.snrg-menu > :is(a, button).menu-leave-active {
+  nav.snrg-menu > :is( a, button ).menu-leave-active {
       transition: margin-left 1s ease-in, width 1s ease-in, opacity 1s ease-in;
     }
 
-  nav.snrg-menu > :is(a, button).menu-enter-from,
-  nav.snrg-menu > :is(a, button).menu-leave-to {
+  nav.snrg-menu > :is( a, button ).menu-enter-from,
+  nav.snrg-menu > :is( a, button ).menu-leave-to {
       width: 0;
       opacity: 0;
     }
 
-  nav.snrg-menu > :is(a, button):not(:first-child).menu-enter-from,
-  nav.snrg-menu > :is(a, button):not(:first-child).menu-leave-to {
+  nav.snrg-menu > :is( a, button ):not( :first-child ).menu-enter-from,
+  nav.snrg-menu > :is( a, button ):not( :first-child ).menu-leave-to {
       margin-left: 0;
     }
 </style>

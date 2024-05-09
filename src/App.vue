@@ -21,4 +21,4 @@
 </template>
 
 <style scoped>
-</style>@/injection
+</style>

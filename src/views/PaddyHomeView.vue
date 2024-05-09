@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import Recent from '@/components/Recent.vue'
+  import Welcome from '@/components/Welcome.vue'
   import MustSees from '@/components/MustSees.vue'
 </script>
 
 <template>
-  <Recent />
+  <Welcome />
   <MustSees />
 </template>
 

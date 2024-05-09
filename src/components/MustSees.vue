@@ -39,11 +39,19 @@
 <style scoped>
   nav.snrg-must-see {
       position: relative;
-      min-height: 100vh;
-      background: hsl(225,70%,10%);
+      margin-top: -10vh;
+    }
+
+  nav.snrg-must-see > header {
+      min-height: 10vh;
     }
 
   nav.snrg-must-see > header > h1 {
-      margin-top: 0;
+      margin: 0;
+    }
+
+  nav.snrg-must-see > div {
+      min-height: 100vh;
+      background: hsl(225,70%,10%);
     }
 </style>

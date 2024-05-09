@@ -7,6 +7,9 @@ div#snrg-app {
     --snrg-background-saturation: 0%;
     --snrg-text-hue: 210;
     --snrg-text-saturation: 29%;
+    --snrg-menu-height: 2rem;
+    --snrg-menu-top: 1rem;
+    --snrg-menu-left: 1rem;
     position: relative;
     background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
     font: 1rem/1.5rem 'Nunito Sans';

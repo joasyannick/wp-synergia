@@ -2,7 +2,7 @@ const constants = Object.freeze( {
     animation: {
         menu: {
             duration: {
-                onOpenOrClose: 2
+                onOpenOrClose: 2 // seconds
               }
           }
       },
