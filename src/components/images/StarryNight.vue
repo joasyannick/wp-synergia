@@ -232,4 +232,42 @@
 </template>
 
 <style scoped>
+  :is( svg.snrg-graphic, div.snrg-tagline ) {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width:100%;
+      height:100%;
+    }
+
+  svg.snrg-graphic.snrg-sky {
+      transform: translateZ( -160px ) scale( 2.6 ); /* scale = (perspective - distance) / perspective */
+    }
+
+  svg.snrg-graphic.snrg-sky:deep( g > rect.snrg-overlay ) {
+      mix-blend-mode: multiply;
+    }
+
+  svg.snrg-graphic.snrg-stars {
+      transform: translateZ( -80px ) scale( 1.8 );
+    }
+
+  div.snrg-taglines {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+    }
+
+  svg.snrg-graphic.snrg-mountains {
+      transform: translateZ( -40px ) scale( 1.4 );
+    }
+
+  svg.snrg-graphic.snrg-plain {
+      transform: translateZ( -20px ) scale( 1.2 )
+    }
+
+  svg.snrg-graphic.snrg-forest {
+      transform: translateZ( -10px ) scale( 1.1 );
+    }
 </style>
