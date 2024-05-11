@@ -18,7 +18,7 @@
     ]
   const current = ref( 0 )
 
-  setInterval( () => { for ( let before = current.value; before === current.value; ) current.value = Math.floor( Math.random() * quotations.length ) }, 7000 )
+  setInterval( () => { for ( let before = current.value; before === current.value; ) current.value = Math.floor( Math.random() * quotations.length ) }, 8000 )
 
   const sky = defineComponent(
       ( props: { clipId: string } ) => {
@@ -262,7 +262,7 @@
 
   div.snrg-taglines::before {
       content: '';
-      height: calc( var( --snrg-menu-top ) + var( --snrg-menu-height ) + 15% );
+      height: calc( var( --snrg-menu-top ) + var( --snrg-menu-height ) + 25% );
     }
 
   svg.snrg-graphic.snrg-mountains {
