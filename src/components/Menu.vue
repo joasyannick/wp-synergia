@@ -121,15 +121,15 @@
       display: inline-flex;
     }
 
-  div#snrg-app[ data-snrg-route^='/' ] nav.snrg-menu {
+  div#snrg-app[data-snrg-route^='/'] nav.snrg-menu {
       --snrg-header-hue: var( --snrg-header-paddy-hue );
     }
 
-  div#snrg-app[ data-snrg-route^='/helikia' ] nav.snrg-menu {
+  div#snrg-app[data-snrg-route^='/helikia'] nav.snrg-menu {
       --snrg-header-hue: var( --snrg-header-helikia-hue );
     }
 
-  div#snrg-app[ data-snrg-route^='/account' ] nav.snrg-menu {
+  div#snrg-app[data-snrg-route^='/account'] nav.snrg-menu {
       --snrg-header-hue: var( --snrg-header-account-hu );
     }
 
