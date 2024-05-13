@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   const maxCount = 3
-  const mustSees = ref( [] as any[] )
+  const programs = ref( [] as any[] )
   const dataReady = ref( false )
 
-  const fetchMustSee = async () => {
+  const fetchPrograms = async () => {
       try {
-        const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/snrg-must-sees?per_page=' + maxCount + '&_fields=title.rendered,content.rendered' )
-        mustSees.value = await response.json()
-        mustSees.value.forEach( ( mustSee ) => mustSee.content.rendered = mustSee.content.rendered.replace( /(<\/?)h(\d+)/g, ( match: string, token: string, level: string ) => token + 'h' + ( parseInt( level ) + 1 ) ) )
+        const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/snrg-programs?per_page=' + maxCount + '&_fields=title.rendered,content.rendered' )
+        programs.value = await response.json()
+        programs.value.forEach( ( program ) => program.content.rendered = program.content.rendered.replace( /(<\/?)h(\d+)/g, ( match: string, token: string, level: string ) => token + 'h' + ( parseInt( level ) + 1 ) ) )
         dataReady.value = true
       } catch ( exception ) {
         console.error( 'Failed to fetch must-see' )
@@ -17,41 +17,41 @@
       return dataReady.value
     }
 
-    fetchMustSee()
+  fetchPrograms()
 </script>
 
 <template>
-  <nav class="snrg-must-see">
+  <nav class="snrg-programs">
     <header>
       <h1>Et si on passait de croyant à vivant&nbsp;?</h1>
     </header>
     <p>J'ai fait la transition&nbsp;: j'ai trouvé et arpenté ce chemin resserré qui mène à la vie. Laissez-moi vous aider à y marcher.</p>
     <div>
-      <article v-for="mustSee in mustSees">
+      <article v-for="program in programs">
       <header>
-        <h2 v-html="mustSee.title.rendered"></h2>
+        <h2 v-html="program.title.rendered"></h2>
       </header>
-      <div v-html="mustSee.content.rendered"></div>
+      <div v-html="program.content.rendered"></div>
     </article>
     </div>
   </nav>
 </template>
 
 <style scoped>
-  nav.snrg-must-see {
+  nav.snrg-programs {
       position: relative;
       margin-top: -10vh;
     }
 
-  nav.snrg-must-see > header {
+  nav.snrg-programs > header {
       min-height: 10vh;
     }
 
-  nav.snrg-must-see > header > h1 {
+  nav.snrg-programs > header > h1 {
       margin: 0;
     }
 
-  nav.snrg-must-see > div {
+  nav.snrg-programs > div {
       min-height: 100vh;
       background: hsl(225,70%,10%);
     }

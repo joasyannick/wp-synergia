@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import Welcome from '@/components/Welcome.vue'
-  import MustSees from '@/components/MustSees.vue'
+  import Programs from '@/components/Programs.vue'
 </script>
 
 <template>
   <Welcome />
-  <MustSees />
+  <Programs />
 </template>
 
 <style scoped>

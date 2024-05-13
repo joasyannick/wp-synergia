@@ -4,8 +4,8 @@
     define( 'SNRG_MODULE_POST_TYPE', 'snrg_module' );
     define( 'SNRG_MODULE_BASE_IN_REST', 'snrg-modules' );
     define( 'SNRG_MODULE_LINK_IN_REST', 'snrg-module' );
-    define( 'SNRG_MUST_SEE_POST_TYPE', 'snrg_must_see' );
-    define( 'SNRG_MUST_SEE_BASE_IN_REST', 'snrg-must-sees' );
+    define( 'SNRG_PROGRAM_POST_TYPE', 'snrg_must_see' );
+    define( 'SNRG_PROGRAM_BASE_IN_REST', 'snrg-programs' );
     define( 'SNRG_SESSION_POST_TYPE', 'snrg_session' );
     define( 'SNRG_SESSION_BASE_IN_REST', 'snrg-sessions' );
     define( 'SNRG_MODULE_OF_SESSION_META', 'snrg_module_of_session' );
