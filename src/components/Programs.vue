@@ -25,8 +25,8 @@
     <header>
       <h1>Et si on passait de croyant à vivant&nbsp;?</h1>
     </header>
-    <p>J'ai fait la transition&nbsp;: j'ai trouvé et arpenté ce chemin resserré qui mène à la vie. Laissez-moi vous aider à y marcher.</p>
     <div>
+      <p>J'ai fait la transition&nbsp;: j'ai trouvé et arpenté ce chemin resserré qui mène à la vie. Laissez-moi vous aider à y marcher.</p>
       <article v-for="program in programs">
       <header>
         <h2 v-html="program.title.rendered"></h2>
@@ -54,5 +54,9 @@
   nav.snrg-programs > div {
       min-height: 100vh;
       background: hsl(225,70%,10%);
+    }
+
+  nav.snrg-programs > div > p:first-of-type {
+      margin-top: 0;
     }
 </style>
