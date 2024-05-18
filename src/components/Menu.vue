@@ -31,6 +31,7 @@
   const buttons = computed( () => [
       {
           key: 2,
+          class: 'snrg-biography-link',
           icon: BiographyIcon,
           label: 'Biographie',
           link: constants.route.paddy.biography.fullPath,
@@ -40,6 +41,7 @@
         },
       {
           key: 3,
+          class: 'snrg-synergia-link',
           icon: SynergiaIcon,
           label: 'Synergia',
           link: constants.route.helikia.synergia.fullPath,
@@ -49,6 +51,7 @@
         },
       {
           key: 4,
+          class: 'snrg-contact-link',
           icon: ContactIcon,
           label: 'Contact',
           link: '',
@@ -58,6 +61,7 @@
         },
       {
           key: 5,
+          class: 'snrg-home-link',
           icon: HomeIcon,
           label: 'Paddy Fontaine',
           link: constants.route.paddy.fullPath,
@@ -67,6 +71,7 @@
         },
       {
           key: 6,
+          class: 'snrg-helikia-link',
           icon: HelikiaIcon,
           label: 'Helikia',
           link: constants.route.helikia.fullPath,
@@ -76,6 +81,7 @@
         },
       {
           key: 7,
+          class: 'snrg-hesychia-link',
           icon: HesychiaIcon,
           label: 'Cap Hesychia',
           link: 'https://cap-hesychia.fr/',
@@ -85,6 +91,7 @@
         },
       {
           key: 8,
+          class: 'snrg-account-link',
           icon: AccountIcon,
           label: 'Compte',
           link: constants.route.account.fullPath,
@@ -99,18 +106,19 @@
   <TransitionGroup name="menu" tag="nav" class="snrg-menu">
     <button :key="1" class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="menu.opened.value" @animated="onMenuIconAnimated" /></button>
     <template v-for="button in buttons" :key="button.key">
-      <a v-if="button.condition && button.link && button.external" :href="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></a>
-      <RouterLink v-else-if="button.condition && button.link && ! button.external" :to="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
-      <button v-else-if="button.condition && ! button.link" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
+      <a v-if="button.condition && button.link && button.external" :class="button.class" :href="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></a>
+      <RouterLink v-else-if="button.condition && button.link && ! button.external" :class="button.class" :to="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
+      <button v-else-if="button.condition && ! button.link" :class="button.class" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
     </template>
   </TransitionGroup>
 </template>
 
 <style scoped>
   nav.snrg-menu {
-      --snrg-header-paddy-hue: 225;
-      --snrg-header-helikia-hue: 30;
-      --snrg-header-account-hue: 75;
+      --snrg-paddy-hue: var( --snrg-background-hue );
+      --snrg-helikia-hue: 30;
+      --snrg-hesychia-hue: 285;
+      --snrg-account-hue: 75;
       --snrg-menu-button-width: var( --snrg-menu-height );
       --snrg-menu-button-gap: 0.25rem;
       --snrg-header-lightness-1: ( var( --snrg-background-lightness ) - ( var( --snrg-light-sign ) * 30% ) );
@@ -121,16 +129,23 @@
       display: inline-flex;
     }
 
-  div#snrg-app[data-snrg-route^='/'] nav.snrg-menu {
-      --snrg-header-hue: var( --snrg-header-paddy-hue );
+  div#snrg-app[data-snrg-route^='/'] nav.snrg-menu,
+  nav.snrg-menu a.snrg-home-link {
+      --snrg-menu-hue: var( --snrg-paddy-hue );
     }
 
-  div#snrg-app[data-snrg-route^='/helikia'] nav.snrg-menu {
-      --snrg-header-hue: var( --snrg-header-helikia-hue );
+  div#snrg-app[data-snrg-route^='/helikia'] nav.snrg-menu,
+  nav.snrg-menu a.snrg-helikia-link {
+      --snrg-menu-hue: var( --snrg-helikia-hue );
     }
 
-  div#snrg-app[data-snrg-route^='/account'] nav.snrg-menu {
-      --snrg-header-hue: var( --snrg-header-account-hu );
+  nav.snrg-menu a.snrg-hesychia-link {
+      --snrg-menu-hue: var( --snrg-hesychia-hue );
+    }
+
+  div#snrg-app[data-snrg-route^='/account'] nav.snrg-menu,
+  nav.snrg-menu a.snrg-account-link {
+      --snrg-menu-hue: var( --snrg-account-hue );
     }
 
   nav.snrg-menu :is( a, button ) {
@@ -142,12 +157,13 @@
       height: var(--snrg-menu-height);
       justify-content: center;
       align-items: center;
-      background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), calc( var( --snrg-background-lightness ) - var( --snrg-light-sign ) * 20% ), 50% );
+      background: hsl( var( --snrg-menu-hue ), var( --snrg-background-saturation ), calc( var( --snrg-background-lightness ) - var( --snrg-light-sign ) * 15% ), 50% );
     }
 
   nav.snrg-menu :is( a, button ) > svg {
       width: 55%;
       height: 55%;
+      fill: hsl( var( --snrg-menu-hue ), var( --snrg-background-saturation ), var( --snrg-text-lightness ) );
     }
 
   nav.snrg-menu > :is( a, button ):not( :first-child ) {

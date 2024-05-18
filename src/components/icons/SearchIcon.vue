@@ -9,10 +9,10 @@
 
 <style scoped>
   svg.snrg-search-icon > path:nth-of-type(4) {
-      fill: hsl(var(--snrg-header-hue), 70%, calc(var(--snrg-header-lightness-1)));
+      fill: hsl(var(--snrg-menu-hue), 70%, calc(var(--snrg-header-lightness-1)));
     }
 
   svg.snrg-search-icon > path:not(:nth-of-type(4)) {
-      fill: hsl(var(--snrg-header-hue), 70%, calc(var(--snrg-header-lightness-2)));
+      fill: hsl(var(--snrg-menu-hue), 70%, calc(var(--snrg-header-lightness-2)));
     }
 </style>

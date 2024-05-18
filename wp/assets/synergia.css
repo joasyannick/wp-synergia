@@ -3,8 +3,8 @@ body {
   }
 
 div#snrg-app {
-    --snrg-background-hue: 0;
-    --snrg-background-saturation: 0%;
+    --snrg-background-hue: 225;
+    --snrg-background-saturation: 70%;
     --snrg-text-hue: 210;
     --snrg-text-saturation: 29%;
     --snrg-menu-height: 2rem;
@@ -24,7 +24,7 @@ div#snrg-app[data-snrg-theme='light'] {
 
 div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) {
     --snrg-light-sign: -1;
-    --snrg-background-lightness: 9.4%;
+    --snrg-background-lightness: 10%;
     --snrg-text-lightness: 92.2%;
     --snrg-dark-filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
   }

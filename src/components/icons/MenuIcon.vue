@@ -59,10 +59,6 @@
 </template>
 
 <style scoped>
-  svg.snrg-menu-icon > path {
-      fill: hsl( var( --snrg-text-hue ), var( --snrg-text-saturation ), var( --snrg-text-lightness ) );
-    }
-
   svg.snrg-menu-icon.snrg-opened > path:is(:nth-of-type(3), :nth-of-type(4)) {
       opacity: 0;
     }

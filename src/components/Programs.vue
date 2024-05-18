@@ -53,7 +53,7 @@
 
   nav.snrg-programs > div {
       min-height: 100vh;
-      background: hsl(225,70%,10%);
+      background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
     }
 
   nav.snrg-programs > div > p:first-of-type {
