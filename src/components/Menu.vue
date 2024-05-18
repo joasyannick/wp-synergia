@@ -30,7 +30,6 @@
 
   const buttons = computed( () => [
       {
-          key: 2,
           class: 'snrg-biography-link',
           icon: BiographyIcon,
           label: 'Biographie',
@@ -40,7 +39,6 @@
           onClick: () => { return }
         },
       {
-          key: 3,
           class: 'snrg-synergia-link',
           icon: SynergiaIcon,
           label: 'Synergia',
@@ -50,7 +48,6 @@
           onClick: () => { return }
         },
       {
-          key: 4,
           class: 'snrg-contact-link',
           icon: ContactIcon,
           label: 'Contact',
@@ -60,7 +57,6 @@
           onClick: () => { return }
         },
       {
-          key: 5,
           class: 'snrg-home-link',
           icon: HomeIcon,
           label: 'Paddy Fontaine',
@@ -70,7 +66,6 @@
           onClick: () => { return }
         },
       {
-          key: 6,
           class: 'snrg-helikia-link',
           icon: HelikiaIcon,
           label: 'Helikia',
@@ -80,7 +75,6 @@
           onClick: () => { return }
         },
       {
-          key: 7,
           class: 'snrg-hesychia-link',
           icon: HesychiaIcon,
           label: 'Cap Hesychia',
@@ -90,7 +84,6 @@
           onClick: () => { return }
         },
       {
-          key: 8,
           class: 'snrg-account-link',
           icon: AccountIcon,
           label: 'Compte',
@@ -103,9 +96,9 @@
 </script>
 
 <template>
-  <TransitionGroup name="menu" tag="nav" class="snrg-menu">
-    <button :key="1" class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="menu.opened.value" @animated="onMenuIconAnimated" /></button>
-    <template v-for="button in buttons" :key="button.key">
+  <TransitionGroup name="snrg" tag="nav" class="snrg-menu">
+    <button key="Menu" class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="menu.opened.value" @animated="onMenuIconAnimated" /></button>
+    <template v-for="button in buttons" :key="button.label">
       <a v-if="button.condition && button.link && button.external" :class="button.class" :href="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></a>
       <RouterLink v-else-if="button.condition && button.link && ! button.external" :class="button.class" :to="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
       <button v-else-if="button.condition && ! button.link" :class="button.class" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
@@ -157,7 +150,7 @@
       height: var(--snrg-menu-height);
       justify-content: center;
       align-items: center;
-      background: hsl( var( --snrg-menu-hue ), var( --snrg-background-saturation ), calc( var( --snrg-background-lightness ) - var( --snrg-light-sign ) * 15% ), 50% );
+      background: hsl( var( --snrg-menu-hue ), var( --snrg-background-saturation ), calc( var( --snrg-background-lightness ) - var( --snrg-light-sign ) * 15% ), 75% );
     }
 
   nav.snrg-menu :is( a, button ) > svg {
@@ -170,22 +163,22 @@
       margin-left: var( --snrg-menu-button-gap );
     }
 
-  nav.snrg-menu > :is( a, button ).menu-enter-active {
+  nav.snrg-menu > :is( a, button ).snrg-enter-active {
       transition: margin-left 1s ease-in 1s, width 1s ease-in 1s, opacity 1s ease-in 1s;
     }
 
-  nav.snrg-menu > :is( a, button ).menu-leave-active {
+  nav.snrg-menu > :is( a, button ).snrg-leave-active {
       transition: margin-left 1s ease-in, width 1s ease-in, opacity 1s ease-in;
     }
 
-  nav.snrg-menu > :is( a, button ).menu-enter-from,
-  nav.snrg-menu > :is( a, button ).menu-leave-to {
+  nav.snrg-menu > :is( a, button ).snrg-enter-from,
+  nav.snrg-menu > :is( a, button ).snrg-leave-to {
       width: 0;
       opacity: 0;
     }
 
-  nav.snrg-menu > :is( a, button ):not( :first-child ).menu-enter-from,
-  nav.snrg-menu > :is( a, button ):not( :first-child ).menu-leave-to {
+  nav.snrg-menu > :is( a, button ):not( :first-child ).snrg-enter-from,
+  nav.snrg-menu > :is( a, button ):not( :first-child ).snrg-leave-to {
       margin-left: 0;
     }
 </style>

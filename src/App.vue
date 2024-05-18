@@ -1,10 +1,12 @@
 <script setup lang="ts">
   import { ref, provide , watch } from 'vue'
   import { RouterView, useRoute } from 'vue-router'
+  import { useThemeStore } from '@/stores/theme'
   import { iMenu } from '@/injection'
   import AppHeader from '@/components/AppHeader.vue'
 
   const route = useRoute()
+  const theme = useThemeStore()
 
   const menuOpened = ref( false )
 

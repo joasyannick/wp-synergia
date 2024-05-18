@@ -212,9 +212,11 @@
     <stars :star-count="props.starCount" clip-id="snrg-starry-night-stars-clip" />
   </Graphic>
   <div class="snrg-taglines">
-    <template v-for="( quotation, index ) in quotations">
-      <blockquote v-if="index === current" v-html="quotation"></blockquote>
-    </template>
+    <TransitionGroup name="snrg">
+      <template v-for="( quotation, index ) in quotations">
+        <blockquote v-if="index === current" v-html="quotation" :key="quotation"></blockquote>
+      </template>
+    </TransitionGroup>
     <button type="button" @click="menu.openOrClose">Lire le blog</button>
   </div>
   <Graphic class="snrg-mountains" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-mountains-clip">
@@ -263,6 +265,16 @@
   div.snrg-taglines::before {
       content: '';
       height: calc( var( --snrg-menu-top ) + var( --snrg-menu-height ) + 25% );
+    }
+
+  div.snrg-taglines > blockquote.snrg-enter-active,
+  div.snrg-taglines > blockquote.snrg-leave-active {
+      transition: all 2s ease;
+    }
+
+  div.snrg-taglines > blockquote.snrg-enter-from,
+  div.snrg-taglines > blockquote.snrg-leave-to {
+      opacity: 0;
     }
 
   svg.snrg-graphic.snrg-mountains {
