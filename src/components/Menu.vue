@@ -9,7 +9,7 @@
   import BiographyIcon from '@/components/icons/BiographyIcon.vue'
   import SynergiaIcon from '@/components/icons/SynergiaIcon.vue'
   import ContactIcon from '@/components/icons/ContactIcon.vue'
-  import PaddyIcon from '@/components/icons/PaddyIcon.vue'
+  import HomeIcon from '@/components/icons/HomeIcon.vue'
   import HelikiaIcon from '@/components/icons/HelikiaIcon.vue'
   import HesychiaIcon from '@/components/icons/HesychiaIcon.vue'
   import AccountIcon from '@/components/icons/AccountIcon.vue'
@@ -58,7 +58,7 @@
         },
       {
           key: 5,
-          icon: PaddyIcon,
+          icon: HomeIcon,
           label: 'Paddy Fontaine',
           link: constants.route.paddy.fullPath,
           external: false,
@@ -146,8 +146,8 @@
     }
 
   nav.snrg-menu :is( a, button ) > svg {
-      width: 70%;
-      height: 70%;
+      width: 55%;
+      height: 55%;
     }
 
   nav.snrg-menu > :is( a, button ):not( :first-child ) {
