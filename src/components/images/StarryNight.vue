@@ -148,7 +148,7 @@
           </linearGradient>
           <filter id="snrg-starry-night-mountain-glow">
             <feDropShadow dx="0" dy="208" stdDeviation="208" flood-color="white" flood-opacity="80%">
-              <animate attributeName="stdDeviation" values="208;278;208" dur="4s" repeatCount="indefinite" /> 
+              <animate attributeName="stdDeviation" values="208;278;208" dur="3s" repeatCount="indefinite" /> 
             </feDropShadow>
           </filter>
           <linearGradient id="snrg-starry-night-mountain-gradient-2">
