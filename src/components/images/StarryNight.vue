@@ -58,7 +58,7 @@
           for (let i = 0; i < props.starCount; i++) {
             stars.push( { x: Math.random() * constants.starryNight.viewBoxWidth, y: Math.random() * constants.starryNight.viewBoxHeight } )
           }
-          const maxShootingStarY = 5070
+          const maxShootingStarY = 4790
           const shootingStarDistance = 7000
           const trailHalfHeight = 2/3 * constants.starryNight.twinklingStarRadius
           const trailLength = 0.25 * shootingStarDistance
@@ -221,12 +221,12 @@
   <Graphic class="snrg-mountains" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-mountains-clip">
     <mountains clip-id="snrg-starry-night-mountains-clip" />
   </Graphic>
-  <Graphic class="snrg-plain" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-plain-clip">
-    <plain clip-id="snrg-starry-night-plain-clip" />
-  </Graphic>
   <div class="snrg-blog-access">
     <p><button type="button" @click="menu.openOrClose">Lire le blog</button></p>
   </div>
+  <Graphic class="snrg-plain" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-plain-clip">
+    <plain clip-id="snrg-starry-night-plain-clip" />
+  </Graphic>
   <Graphic class="snrg-forest" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-forest-clip">
     <forest clip-id="snrg-starry-night-forest-clip" />
   </Graphic>
@@ -282,16 +282,21 @@
       transform: translateZ( -40px ) scale( 1.4 );
     }
 
-  svg.snrg-graphic.snrg-plain {
-      transform: translateZ( -20px ) scale( 1.2 );
-    }
-  
-  div.snrg-blog-access {
+   div.snrg-blog-access {
       display: flex;
       flex-flow: column nowrap;
       align-items: center;
       pointer-events: auto;
-      transform: translateZ( -15px ) scale( 1.15 );
+      transform: translateZ( -30px ) scale( 1.3 );
+    }
+
+  div.snrg-blog-access::before {
+      content: '';
+      height: calc( var( --snrg-menu-top ) + var( --snrg-menu-height ) + 45% );
+    }
+
+  svg.snrg-graphic.snrg-plain {
+      transform: translateZ( -20px ) scale( 1.2 );
     }
 
   svg.snrg-graphic.snrg-forest {

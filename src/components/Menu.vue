@@ -53,7 +53,7 @@
           label: 'Contact',
           link: '',
           external: false,
-          condition: true,
+          condition: isPaddyView.value,
           onClick: () => { return }
         },
       {
