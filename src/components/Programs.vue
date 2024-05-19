@@ -23,40 +23,25 @@
 <template>
   <nav class="snrg-programs">
     <header>
-      <h1>Et si on passait de croyant à vivant&nbsp;?</h1>
+      <h1>Nos programmes</h1>
     </header>
-    <div>
-      <p>J'ai fait la transition&nbsp;: j'ai trouvé et arpenté ce chemin resserré qui mène à la vie. Laissez-moi vous aider à y marcher.</p>
-      <article v-for="program in programs">
+    <article v-for="program in programs">
       <header>
         <h2 v-html="program.title.rendered"></h2>
       </header>
       <div v-html="program.content.rendered"></div>
     </article>
-    </div>
   </nav>
 </template>
 
 <style scoped>
   nav.snrg-programs {
       position: relative;
-      margin-top: -10vh;
-    }
-
-  nav.snrg-programs > header {
-      min-height: 10vh;
-    }
-
-  nav.snrg-programs > header > h1 {
-      margin: 0;
-    }
-
-  nav.snrg-programs > div {
       min-height: 100vh;
       background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
     }
 
-  nav.snrg-programs > div > p:first-of-type {
-      margin-top: 0;
+  nav.snrg-programs > header > h1 {
+      margin: 0;
     }
 </style>
