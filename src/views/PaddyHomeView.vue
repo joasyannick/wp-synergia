@@ -9,7 +9,7 @@
     <header>
       <h1>Et si on passait de croyant à vivant&nbsp;?</h1>
     </header>
-    <p>J'ai trouvé cette porte étroite et arpenté ce chemin resserré — désencombré de toute tradition humaine ou religieuse — qui mène à la vie. Laissez-moi vous aider à y marcher.</p>
+    <p>Nous avons trouvé cette porte étroite et arpenté ce chemin resserré — désencombré de toute tradition humaine ou religieuse — qui mène à la vie. Laissez-nous vous aider à y marcher.</p>
   </article>
   <Programs />
 </template>
