@@ -25,7 +25,7 @@
         posts.value = await response.json()
         posts.value.forEach( ( mustSee ) => mustSee.content.rendered = mustSee.content.rendered.replace( /(<\/?)h(\d+)/g, ( match: string, token: string, level: string ) => token + 'h' + ( parseInt( level ) + 1 ) ) )
       } catch ( exception ) {
-        console.error( 'Failed to fetch must-see' )
+        console.error( 'Failed to fetch programs' )
       }
     }
 

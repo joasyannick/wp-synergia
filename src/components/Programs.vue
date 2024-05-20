@@ -11,7 +11,7 @@
         programs.value.forEach( ( program ) => program.content.rendered = program.content.rendered.replace( /(<\/?)h(\d+)/g, ( match: string, token: string, level: string ) => token + 'h' + ( parseInt( level ) + 1 ) ) )
         dataReady.value = true
       } catch ( exception ) {
-        console.error( 'Failed to fetch must-see' )
+        console.error( 'Failed to fetch programs' )
         dataReady.value = false
       }
       return dataReady.value
