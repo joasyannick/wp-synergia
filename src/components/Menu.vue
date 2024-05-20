@@ -35,7 +35,7 @@
           label: 'Biographie',
           link: constants.route.paddy.biography.fullPath,
           external: false,
-          condition: isPaddyView.value && ! isBiographyView.value,
+          condition: ! menu.opened && isPaddyView.value && ! isBiographyView.value,
           onClick: () => { return }
         },
       {
@@ -44,7 +44,7 @@
           label: 'Synergia',
           link: constants.route.helikia.synergia.fullPath,
           external: false,
-          condition: isHelikiaView.value && ! isSynergiaView.value,
+          condition: ! menu.opened && isHelikiaView.value && ! isSynergiaView.value,
           onClick: () => { return }
         },
       {
@@ -53,7 +53,7 @@
           label: 'Contact',
           link: '',
           external: false,
-          condition: isPaddyView.value,
+          condition: ! menu.opened && isPaddyView.value,
           onClick: () => { return }
         },
       {
@@ -62,7 +62,7 @@
           label: 'Paddy Fontaine',
           link: constants.route.paddy.fullPath,
           external: false,
-          condition: true,
+          condition: ! menu.opened,
           onClick: () => { return }
         },
       {
@@ -71,7 +71,7 @@
           label: 'Helikia',
           link: constants.route.helikia.fullPath,
           external: false,
-          condition: true,
+          condition: ! menu.opened,
           onClick: () => { return }
         },
       {
@@ -80,7 +80,7 @@
           label: 'Cap Hesychia',
           link: 'https://cap-hesychia.fr/',
           external: true,
-          condition: true,
+          condition: ! menu.opened,
           onClick: () => { return }
         },
       {
@@ -89,7 +89,7 @@
           label: 'Compte',
           link: constants.route.account.fullPath,
           external: false,
-          condition: true,
+          condition: ! menu.opened,
           onClick: () => { return }
         }
   ] )

@@ -213,8 +213,8 @@
   </Graphic>
   <div class="snrg-taglines">
     <TransitionGroup name="snrg">
-      <template v-for="( quotation, index ) in quotations">
-        <blockquote v-if="index === current" v-html="quotation" :key="quotation"></blockquote>
+      <template v-for="( quotation, index ) in quotations" :key="quotation">
+        <blockquote v-if="index === current" v-html="quotation"></blockquote>
       </template>
     </TransitionGroup>
   </div>

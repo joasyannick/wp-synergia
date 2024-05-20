@@ -28,7 +28,7 @@
     <div class="snrg-content-list">
       <button type="button">P</button><!-- Previous page -->
       <button type="button">B</button><!-- Go back from a composite preview -->
-      <img v-for="item in props.previews" :src="item.thumbnail"/>
+      <img v-for="item in props.previews" :key="item.id" :src="item.thumbnail"/>
       <button type="button">N</button><!-- Next page -->
     </div>
     <article v-if="props.previews.length" class="snrg-content-description">

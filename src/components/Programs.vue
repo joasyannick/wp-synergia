@@ -25,7 +25,7 @@
     <header>
       <h1>Nos programmes</h1>
     </header>
-    <article v-for="program in programs">
+    <article v-for="program in programs" :key="program.id">
       <header>
         <h2 v-html="program.title.rendered"></h2>
       </header>
