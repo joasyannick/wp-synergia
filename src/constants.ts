@@ -12,7 +12,8 @@ const constants = Object.freeze( {
         viewBoxHeight: 9000,
         starRadius: 5,
         twinklingStarRadius: 20,
-        twinklingStarDuration: 4 // seconds
+        twinklingStarDuration: 4, // seconds
+        mountainGlowDuration: 4 // seconds
       },
     theme: {
         light : 'light',
