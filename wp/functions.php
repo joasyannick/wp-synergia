@@ -43,13 +43,13 @@
     function snrg_enqueue_styles() {
         $synergia_css = '/assets/synergia.css';
         $vue_css = '/assets/app/index.css';
-        wp_enqueue_style( 'snrg-synergia', get_template_directory_uri() . $synergia_css, array(), date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $synergia_css ) ) );
-        wp_enqueue_style( 'snrg-vue', get_template_directory_uri() . $vue_css, array( 'snrg-synergia' ), date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_css ) ) );
+        wp_enqueue_style( 'snrg-synergia', get_template_directory_uri() . $synergia_css, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $synergia_css ) ) );
+        wp_enqueue_style( 'snrg-vue', get_template_directory_uri() . $vue_css, [ 'snrg-synergia' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_css ) ) );
     }
 
     function snrg_enqueue_scripts() {
         $vue_js = '/assets/app/index.js';
-        wp_enqueue_script( 'snrg-vue', get_template_directory_uri() . $vue_js, array(), date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_js ) ), true );
+        wp_enqueue_script( 'snrg-vue', get_template_directory_uri() . $vue_js, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_js ) ), true );
     }
 
     add_action( 'wp_enqueue_scripts', 'snrg_add_fonts' );
@@ -59,19 +59,19 @@
     function snrg_enqueue_admin_styles() {
         wp_enqueue_style( 'select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css' );
         $admin_css = '/assets/admin.css';
-        wp_enqueue_style( 'snrg-admin', get_template_directory_uri() . $admin_css, array( 'select2' ), date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $admin_css ) ) );
+        wp_enqueue_style( 'snrg-admin', get_template_directory_uri() . $admin_css, [ 'select2' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $admin_css ) ) );
     }
 
     function snrg_enqueue_admin_scripts() {
-        wp_enqueue_script( 'select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array( 'jquery' ) );
+        wp_enqueue_script( 'select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', [ 'jquery' ] );
         $admin_js = '/assets/admin.js';
-        wp_enqueue_script( 'snrg-admin', get_template_directory_uri() . $admin_js, array( 'select2' ), date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $admin_js ) ) );
+        wp_enqueue_script( 'snrg-admin', get_template_directory_uri() . $admin_js, [ 'select2' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $admin_js ) ) );
     }
 
     add_action( 'admin_enqueue_scripts', 'snrg_enqueue_admin_styles' );
     add_action( 'admin_enqueue_scripts', 'snrg_enqueue_admin_scripts' );
 
-    class snrg_settings_manager {
+    class snrg_add_settings {
 
         private $capability = 'manage_options';
 
@@ -104,69 +104,69 @@
         ];
 
         function __construct() {
-            add_action( 'admin_init', [$this, 'add_settings'] );
-            add_action( 'admin_menu', [$this, 'add_settings_page'] );
+            add_action( 'admin_init', [ $this, 'add_settings' ] );
+            add_action( 'admin_menu', [ $this, 'add_settings_page' ] );
         }
 
-        function add_settings() : void {
-            register_setting( 'wp-synergia', 'wporg_options' );
-            add_settings_section( 'wp-synergia-section', __( '', 'wp-synergia' ), [$this, 'render_section'], 'wp-synergia' );
+        function add_settings() {
+            register_setting( SNRG_SETTINGS, SNRG_SETTINGS_DATA );
+            add_settings_section( SNRG_PAGE_SETTINGS, __( 'Page Settings', SNRG_DOMAIN ), [ $this, 'render_section' ], SNRG_SETTINGS );
             foreach( $this->fields as $field ) {
-                add_settings_field(  $field['id'], __( $field['label'], 'wp-synergia' ), [$this, 'render_field'], 'wp-synergia', 'wp-synergia-section', [ 'label_for' => $field['id'], 'class' => 'wporg_row', 'field' => $field, ] );
+                add_settings_field( $field[ 'id' ], __( $field[ 'label' ], SNRG_DOMAIN ), [ $this, 'render_field' ], SNRG_SETTINGS, SNRG_PAGE_SETTINGS, [ 'label_for' => $field[ 'id' ], 'field' => $field, ] );
             }
         }
 
-        function add_settings_page() : void {
-            add_menu_page( 'WP Synergia', 'WP Synergia', $this->capability, 'wp-synergia', [$this, 'render_settings_page'], 'dashicons-menu', '2' );
+        function add_settings_page() {
+            add_menu_page( 'WP Synergia', 'WP Synergia', $this->capability, SNRG_SETTINGS, [ $this, 'render_settings_page' ], 'dashicons-menu' );
         }
 
-        function render_settings_page() : void {
+        function render_settings_page() {
             if ( ! current_user_can( $this->capability ) ) {
                 return;
             }
             if ( isset( $_GET['settings-updated'] ) ) {
-                add_settings_error( 'wporg_messages', 'wporg_message', __( 'Settings Saved', 'wp-synergia' ), 'updated' );
+                add_settings_error( 'snrg_messages', 'snrg_message', __( 'Settings Saved', SNRG_DOMAIN ), 'updated' );
             }
-            settings_errors( 'wporg_messages' );
+            settings_errors( 'snrg_messages' );
             ?>
             <div class="wrap">
                 <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
                 <form action="options.php" method="post">
                     <?php
-                    settings_fields( 'wp-synergia' );
-                    do_settings_sections( 'wp-synergia' );
-                    submit_button( 'Save Settings' );
+                    settings_fields( SNRG_SETTINGS );
+                    do_settings_sections( SNRG_SETTINGS );
+                    submit_button( __( 'Save Settings', SNRG_DOMAIN ) );
                     ?>
                 </form>
             </div>
             <?php
         }
 
-        function render_field( array $args ) : void {
+        function render_field( $args ) {
             $field = $args['field'];
-            $options = get_option( 'wporg_options' );
+            $options = get_option( SNRG_SETTINGS_DATA );
             ?>
             <input
                 type="text"
                 id="<?php echo esc_attr( $field['id'] ); ?>"
-                name="wporg_options[<?php echo esc_attr( $field['id'] ); ?>]"
+                name="<?php echo SNRG_SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>"
                 value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>"
             >
             <p class="description">
-                <?php esc_html_e( $field['description'], 'wp-synergia' ); ?>
+                <?php esc_html_e( $field['description'], SNRG_DOMAIN ); ?>
             </p>
             <?php
         }
 
-        function render_section( array $args ) : void {
+        function render_section( $args ) {
             ?>
-            <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( '', 'wp-synergia' ); ?></p>
+            <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( '', SNRG_DOMAIN ); ?></p>
             <?php
         }
 
     }
 
-    new snrg_settings_manager();
+    new snrg_add_settings();
 
     function snrg_add_vue_js_html_attributes( $tag, $handle, $src ) {
         $prefix = 'snrg-vue';
@@ -181,8 +181,8 @@
     function snrg_register_post_types() {
         register_post_type(
             SNRG_PROGRAM_POST_TYPE,
-            array(
-                'labels' => array(
+            [
+                'labels' => [
                     'name' => __('Programs', SNRG_DOMAIN ),
                     'singular_name' => __( 'Program', SNRG_DOMAIN ),
                     'add_new' => __( 'Add New Program', SNRG_DOMAIN ),
@@ -210,19 +210,19 @@
                     'item_updated' => __( 'Program updated', SNRG_DOMAIN ),
                     'item_link' => __( 'Program Link', SNRG_DOMAIN ),
                     'item_link_description' => __( 'A link to a program', SNRG_DOMAIN ),
-                ),
+                ],
                 'menu_icon' => 'dashicons-pressthis',
                 'menu_position' => 20,
                 'public' => true,
-                'supports' => array( 'title', 'editor' ),
+                'supports' => [ 'title', 'editor' ],
                 'show_in_rest' => true,
                 'rest_base' => SNRG_PROGRAM_BASE_IN_REST,
-            )
+            ]
         );
         register_post_type(
             SNRG_MODULE_POST_TYPE,
-            array(
-                'labels' => array(
+            [
+                'labels' => [
                     'name' => __( 'Modules', SNRG_DOMAIN ),
                     'singular_name' => __( 'Module', SNRG_DOMAIN ),
                     'add_new' => __( 'Add New Module', SNRG_DOMAIN ),
@@ -250,19 +250,19 @@
                     'item_updated' => __( 'Module updated', SNRG_DOMAIN ),
                     'item_link' => __( 'Module Link', SNRG_DOMAIN ),
                     'item_link_description' => __( 'A link to a module', SNRG_DOMAIN ),
-                ),
+                ],
                 'menu_icon' => 'data:image/svg+xml;base64,' . base64_encode( file_get_contents( get_template_directory() . '/assets/icons/module.svg' ) ),
                 'menu_position' => 20,
                 'public' => true,
-                'supports' => array( 'title', 'thumbnail', 'excerpt' ),
+                'supports' => [ 'title', 'thumbnail', 'excerpt' ],
                 'show_in_rest' => true,
                 'rest_base' => SNRG_MODULE_BASE_IN_REST,
-            )
+            ]
         );
         register_post_type(
             SNRG_SESSION_POST_TYPE,
-            array(
-                'labels' => array(
+            [
+                'labels' => [
                     'name' => __('Sessions', SNRG_DOMAIN ),
                     'singular_name' => __( 'Session', SNRG_DOMAIN ),
                     'add_new' => __( 'Add New Session', SNRG_DOMAIN ),
@@ -290,39 +290,39 @@
                     'item_updated' => __( 'Session updated', SNRG_DOMAIN ),
                     'item_link' => __( 'Session Link', SNRG_DOMAIN ),
                     'item_link_description' => __( 'A link to a session', SNRG_DOMAIN ),
-                ),
+                ],
                 'menu_icon' => 'dashicons-microphone',
                 'menu_position' => 20,
                 'public' => true,
-                'supports' => array( 'title', 'editor', 'excerpt', 'custom-fields' ),
+                'supports' => [ 'title', 'editor', 'excerpt', 'custom-fields' ],
                 'show_in_rest' => true,
                 'rest_base' => SNRG_SESSION_BASE_IN_REST,
-            )
+            ]
         );
     }
 
     function snrg_register_meta() {
-        register_post_meta( SNRG_SESSION_POST_TYPE, SNRG_MODULE_OF_SESSION_META, array(
+        register_post_meta( SNRG_SESSION_POST_TYPE, SNRG_MODULE_OF_SESSION_META, [
                 'description' => __( 'Module of the session', SNRG_DOMAIN ),
                 'type' => 'integer',
                 'single' => true,
                 'default' => SNRG_DEFAULT_MODULE_OF_SESSION,
                 'show_in_rest' => true,
-            ) );
-        register_post_meta( SNRG_SESSION_POST_TYPE, SNRG_SESSION_NUMBER_META, array(
+            ] );
+        register_post_meta( SNRG_SESSION_POST_TYPE, SNRG_SESSION_NUMBER_META, [
                 'description' => __( 'Session number', SNRG_DOMAIN ),
                 'type' => 'integer',
                 'single' => true,
                 'default' => SNRG_DEFAULT_SESSION_NUMBER,
                 'show_in_rest' => true,
-            ) );
-        register_post_meta( SNRG_SESSION_POST_TYPE, SNRG_AUDIO_OF_SESSION_META, array(
+            ] );
+        register_post_meta( SNRG_SESSION_POST_TYPE, SNRG_AUDIO_OF_SESSION_META, [
                 'description' => __( 'Audio of the session', SNRG_DOMAIN ),
                 'type' => 'integer',
                 'single' => true,
                             'default' => SNRG_DEFAULT_AUDIO_OF_SESSION,
                 'show_in_rest' => true,
-            ) );
+            ] );
     }
 
     add_action( 'init', 'snrg_register_post_types' );
@@ -331,7 +331,7 @@
     function snrg_sessions_in_rest( $response, $post, $request ) {
         $module = get_post( get_post_meta( $post->ID, SNRG_MODULE_OF_SESSION_META, true ) );
         if ( $module ):
-            $response->add_link( SNRG_MODULE_LINK_IN_REST, esc_url( rest_url( SNRG_WP_BASE_IN_REST . '/' . SNRG_MODULE_BASE_IN_REST . '/' . $module->ID ) ), array( 'embeddable' => true ) );
+            $response->add_link( SNRG_MODULE_LINK_IN_REST, esc_url( rest_url( SNRG_WP_BASE_IN_REST . '/' . SNRG_MODULE_BASE_IN_REST . '/' . $module->ID ) ), [ 'embeddable' => true ] );
         endif;
         return $response;
     }
@@ -339,7 +339,7 @@
     add_filter( 'rest_prepare_' . SNRG_SESSION_POST_TYPE, 'snrg_sessions_in_rest', 10, 3 );
 
     function snrg_session_columns( $columns ) {
-        $new_columns = array();
+        $new_columns = [];
         foreach ( $columns as $column => $value ):
             if ( 'date' === $column ):
                 $new_columns[ SNRG_MODULE_OF_SESSION_COLUMN ] = __( 'Module', SNRG_DOMAIN );
@@ -371,13 +371,13 @@
     add_action( 'manage_snrg_session_posts_custom_column' , 'snrg_session_column_values', 10, 2 );
 
     function snrg_extend_rest_api() {
-        register_rest_route( SNRG_REST_ROUTE, SNRG_HOME_IMAGE_ROUTE, array(
+        register_rest_route( SNRG_REST_ROUTE, SNRG_HOME_IMAGE_ROUTE, [
                 'methods' => WP_REST_Server::READABLE,
                 'callback' => function( $request ) {
                     return rest_ensure_response( esc_url( get_template_directory_uri() ) . SNRG_HOME_IMAGE_PATH );
                 },
                 'permission_callback' => '__return_true'
-            ) );
+            ] );
     }
 
     add_action( 'rest_api_init', 'snrg_extend_rest_api' );

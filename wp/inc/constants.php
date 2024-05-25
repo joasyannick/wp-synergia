@@ -1,5 +1,8 @@
 <?php
     define( 'SNRG_DOMAIN', 'synergia' );
+    define( 'SNRG_SETTINGS', 'snrg-settings' );
+    define( 'SNRG_PAGE_SETTINGS', 'snrg-page-settings' );
+    define( 'SNRG_SETTINGS_DATA', 'snrg_settings' );
     define( 'SNRG_WP_BASE_IN_REST', 'wp/v2' );
     define( 'SNRG_MODULE_POST_TYPE', 'snrg_module' );
     define( 'SNRG_MODULE_BASE_IN_REST', 'snrg-modules' );
