@@ -26,7 +26,7 @@
 
           const fetchSkyImage = async () => {
               try {
-                const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'synergia/v1/home/image' )
+                const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'synergia/v1/home-image' )
                 image.value = await response.json()
               } catch ( exception ) {
                 console.error( 'Failed to fetch the stary night image' )

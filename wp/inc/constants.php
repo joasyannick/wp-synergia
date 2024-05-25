@@ -3,6 +3,11 @@
     define( 'SNRG_SETTINGS', 'snrg-settings' );
     define( 'SNRG_PAGE_SETTINGS', 'snrg-page-settings' );
     define( 'SNRG_SETTINGS_DATA', 'snrg_settings' );
+    define( 'SNRG_SETTING_INTRODUCTION_PAGE', 'introduction_page' );
+    define( 'SNRG_SETTING_BIOGRAPHY_PAGE', 'biography_page' );
+    define( 'SNRG_SETTING_CONTACT_PAGE', 'contact_page' );
+    define( 'SNRG_SETTING_HELIKIA_PAGE', 'helikia_page' );
+    define( 'SNRG_SETTING_LOGIN_PAGE', 'login_page' );
     define( 'SNRG_WP_BASE_IN_REST', 'wp/v2' );
     define( 'SNRG_MODULE_POST_TYPE', 'snrg_module' );
     define( 'SNRG_MODULE_BASE_IN_REST', 'snrg-modules' );
@@ -20,6 +25,6 @@
     define( 'SNRG_MODULE_OF_SESSION_COLUMN', 'module' );
     define( 'SNRG_SESSION_NUMBER_COLUMN', 'number' );
     define( 'SNRG_REST_ROUTE', 'synergia/v1' );
-    define( 'SNRG_HOME_IMAGE_ROUTE', '/home/image' );
+    define( 'SNRG_HOME_IMAGE_IN_REST', '/home-image' );
     define( 'SNRG_HOME_IMAGE_PATH', '/assets/home.jpg' );
 ?>

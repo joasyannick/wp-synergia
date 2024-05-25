@@ -77,23 +77,23 @@
 
         private $fields = [
             [
-                'id' => 'introduction_page',
+                'id' => SNRG_SETTING_INTRODUCTION_PAGE,
                 'label' => 'Introduction Page',
             ],
             [
-                'id' => 'biography_page',
+                'id' => SNRG_SETTING_BIOGRAPHY_PAGE,
                 'label' => 'Biography Page',
             ],
             [
-                'id' => 'contact_page',
+                'id' => SNRG_SETTING_CONTACT_PAGE,
                 'label' => 'Contact Page',
             ],
             [
-                'id' => 'helikia_page',
+                'id' => SNRG_SETTING_HELIKIA_PAGE,
                 'label' => 'Helikia Page',
             ],
             [
-                'id' => 'login_page',
+                'id' => SNRG_SETTING_LOGIN_PAGE,
                 'label' => 'Login Page',
             ],
         ];
@@ -141,7 +141,7 @@
             $field = $args['field'];
             $options = get_option( SNRG_SETTINGS_DATA );
             ?>
-            <input type="number" max="999999999" placeholder="<?php _e( 'ID number', SNRG_DOMAIN ); ?>" id="<?php echo esc_attr( $field['id'] ); ?>" name="<?php echo SNRG_SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>" value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>" required />
+            <input type="number" min="1" max="999999999" placeholder="<?php _e( 'ID number', SNRG_DOMAIN ); ?>" id="<?php echo esc_attr( $field['id'] ); ?>" name="<?php echo SNRG_SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>" value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>" required />
             <?php
         }
 
@@ -358,13 +358,24 @@
     add_action( 'manage_snrg_session_posts_custom_column' , 'snrg_session_column_values', 10, 2 );
 
     function snrg_extend_rest_api() {
-        register_rest_route( SNRG_REST_ROUTE, SNRG_HOME_IMAGE_ROUTE, [
+        register_rest_route( SNRG_REST_ROUTE, SNRG_HOME_IMAGE_IN_REST, [
                 'methods' => WP_REST_Server::READABLE,
                 'callback' => function( $request ) {
                     return rest_ensure_response( esc_url( get_template_directory_uri() ) . SNRG_HOME_IMAGE_PATH );
                 },
                 'permission_callback' => '__return_true'
             ] );
+        $settings = [ SNRG_SETTING_INTRODUCTION_PAGE, SNRG_SETTING_BIOGRAPHY_PAGE, SNRG_SETTING_CONTACT_PAGE, SNRG_SETTING_HELIKIA_PAGE, SNRG_SETTING_LOGIN_PAGE ];
+        foreach ( $settings as $setting ) {
+            register_rest_route( SNRG_REST_ROUTE, str_replace( '_', '-', $setting ), [
+                    'methods' => WP_REST_Server::READABLE,
+                    'callback' => function( $request ) use ( $setting ) {
+                        $options = get_option( SNRG_SETTINGS_DATA );
+                        return rest_ensure_response( isset( $options[ $setting ] ) ? $options[ $setting ] : '0' );
+                    },
+                    'permission_callback' => '__return_true'
+                ] );
+        }
     }
 
     add_action( 'rest_api_init', 'snrg_extend_rest_api' );
