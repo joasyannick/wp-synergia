@@ -77,29 +77,24 @@
 
         private $fields = [
             [
-                'id' => 'introduction-page',
+                'id' => 'introduction_page',
                 'label' => 'Introduction Page',
-                'description' => 'ID of the page introducing the website',
             ],
             [
-                'id' => 'biography-page',
+                'id' => 'biography_page',
                 'label' => 'Biography Page',
-                'description' => 'ID of the page containing the biography',
             ],
             [
-                'id' => 'contact-page',
+                'id' => 'contact_page',
                 'label' => 'Contact Page',
-                'description' => 'ID of the page containing the contact form',
             ],
             [
-                'id' => 'helikia-page',
+                'id' => 'helikia_page',
                 'label' => 'Helikia Page',
-                'description' => 'ID of the page presenting Helikia',
             ],
             [
-                'id' => 'login-page',
+                'id' => 'login_page',
                 'label' => 'Login Page',
-                'description' => 'ID of the login page',
             ],
         ];
 
@@ -146,15 +141,7 @@
             $field = $args['field'];
             $options = get_option( SNRG_SETTINGS_DATA );
             ?>
-            <input
-                type="text"
-                id="<?php echo esc_attr( $field['id'] ); ?>"
-                name="<?php echo SNRG_SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>"
-                value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>"
-            >
-            <p class="description">
-                <?php esc_html_e( $field['description'], SNRG_DOMAIN ); ?>
-            </p>
+            <input type="number" max="999999999" placeholder="<?php _e( 'ID number', SNRG_DOMAIN ); ?>" id="<?php echo esc_attr( $field['id'] ); ?>" name="<?php echo SNRG_SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>" value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>" required />
             <?php
         }
 
