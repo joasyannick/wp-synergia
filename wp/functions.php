@@ -98,6 +98,10 @@
                 'id' => SETTING_LOGIN_PAGE,
                 'label' => 'Login Page',
             ],
+            [
+                'id' => SETTING_HESYCHIA_URL,
+                'label' => 'Cap Hesychia URL',
+            ],
         ];
 
         function __construct() {
@@ -109,7 +113,7 @@
             register_setting( SETTINGS, SETTINGS_DATA );
             add_settings_section( PAGE_SETTINGS, __( 'Page Settings', DOMAIN ), [ $this, 'render_section' ], SETTINGS );
             foreach( $this->fields as $field ) {
-                add_settings_field( $field[ 'id' ], __( $field[ 'label' ], DOMAIN ), [ $this, 'render_field' ], SETTINGS, PAGE_SETTINGS, [ 'label_for' => $field[ 'id' ], 'field' => $field, ] );
+                add_settings_field( $field[ 'id' ], __( $field[ 'label' ], DOMAIN ), [ $this, 'render_field' ], SETTINGS, PAGE_SETTINGS, [ 'label_for' => str_replace( '_', '-', $field[ 'id' ] ), 'field' => $field, ] );
             }
         }
 
@@ -142,9 +146,15 @@
         function render_field( $args ) {
             $field = $args['field'];
             $options = get_option( SETTINGS_DATA );
+            if ( $field['id'] == SETTING_HESYCHIA_URL ) {
             ?>
-            <input type="number" min="1" max="999999999" placeholder="<?php _e( 'ID number', DOMAIN ); ?>" id="<?php echo esc_attr( $field['id'] ); ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>" value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>" required />
+            <input type="url" id="<?php echo str_replace( '_', '-', esc_attr( $field['id'] ) ); ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>" value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>" placeholder="https://example.com" pattern="https://.*" size="30" required />
             <?php
+            } else {
+            ?>
+            <input type="number" id="<?php echo str_replace( '_', '-', esc_attr( $field['id'] ) ); ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>" value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>" min="1" max="999999999" placeholder="<?php _e( 'ID number', DOMAIN ); ?>" required />
+            <?php
+            }
         }
 
         function render_section( $args ) {
@@ -366,13 +376,13 @@
                 },
                 'permission_callback' => '__return_true'
             ] );
-        $settings = [ SETTING_INTRODUCTION_PAGE, SETTING_BIOGRAPHY_PAGE, SETTING_CONTACT_PAGE, SETTING_HELIKIA_PAGE, SETTING_LOGIN_PAGE ];
+        $settings = [ SETTING_INTRODUCTION_PAGE, SETTING_BIOGRAPHY_PAGE, SETTING_CONTACT_PAGE, SETTING_HELIKIA_PAGE, SETTING_LOGIN_PAGE, SETTING_HESYCHIA_URL ];
         foreach ( $settings as $setting ) {
             register_rest_route( REST_ROUTE, str_replace( '_', '-', $setting ), [
                     'methods' => \WP_REST_Server::READABLE,
                     'callback' => function( $request ) use ( $setting ) {
                         $options = get_option( SETTINGS_DATA );
-                        return rest_ensure_response( isset( $options[ $setting ] ) ? $options[ $setting ] : '0' );
+                        return rest_ensure_response( isset( $options[ $setting ] ) ? $options[ $setting ] : ( $setting == SETTING_HESYCHIA_URL ? '' : '0' ) );
                     },
                     'permission_callback' => '__return_true'
                 ] );

@@ -10,6 +10,7 @@
     define( 'SETTING_CONTACT_PAGE', 'contact_page' );
     define( 'SETTING_HELIKIA_PAGE', 'helikia_page' );
     define( 'SETTING_LOGIN_PAGE', 'login_page' );
+    define( 'SETTING_HESYCHIA_URL', 'hesychia_url' );
     define( 'WP_BASE_IN_REST', 'wp/v2' );
     define( 'MODULE_POST_TYPE', 'snrg_module' );
     define( 'MODULE_BASE_IN_REST', 'snrg-modules' );
