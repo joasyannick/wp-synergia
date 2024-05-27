@@ -3,14 +3,14 @@
   import Welcome from '@/components/Welcome.vue'
   import Programs from '@/components/Programs.vue'
 
-  const introduction = ref( null as any )
+  const introduction = ref( null as null | { title: string, content: string } )
 
   const fetchIntroductionPage = async () => {
       try {
+        introduction.value = { title: 'Et si on passait de croyant à vivant&nbsp;?', content: '<p>Nous avons trouvé cette porte étroite et arpenté ce chemin resserré, désencombré de toute tradition humaine ou religieuse, qui mène à la vie. Laissez-nous vous aider à y marcher.</p>' }
         let response = await fetch( import.meta.env.VITE_WP_REST_URL + 'synergia/v1/introduction-page' )
-        let pageId = await response.json()
-        pageId = parseInt( pageId )
-        console.log( pageId )
+        let json = await response.json()
+        const pageId = parseInt( json )
         if ( pageId === 0 ) {
           return
         }
@@ -18,9 +18,10 @@
         if ( ! response.ok ) {
           return
         }
-        introduction.value = await response.json()
+        json = await response.json()
+        introduction.value = { title: json.title.rendered, content: json.content.rendered }
       } catch ( exception ) {
-        console.error( 'Failed to fetch the stary night image' )
+        console.error( exception )
       }
     }
 
@@ -30,12 +31,10 @@
 <template>
   <Welcome />
   <article class="snrg-introduction">
-    <header>
-      <h1 v-if="introduction">{{ introduction.title.rendered }}</h1>
-      <h1 v-else>Et si on passait de croyant à vivant&nbsp;?</h1>
+    <header v-if="introduction">
+      <h1 v-html="introduction.title"></h1>
     </header>
-    <div v-if="introduction" v-html="introduction.content.rendered"></div>
-    <div v-else><p>Nous avons trouvé cette porte étroite et arpenté ce chemin resserré, désencombré de toute tradition humaine ou religieuse, qui mène à la vie. Laissez-nous vous aider à y marcher.</p></div>
+    <div v-if="introduction" v-html="introduction.content"></div>
   </article>
   <Programs />
 </template>
