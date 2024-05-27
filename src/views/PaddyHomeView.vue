@@ -7,17 +7,12 @@
 
   const fetchIntroductionPage = async () => {
       try {
-        const defaultIntroduction = { title: 'Et si on passait de croyant à vivant&nbsp;?', content: '<p>Nous avons trouvé cette porte étroite et arpenté ce chemin resserré, désencombré de toute tradition humaine ou religieuse, qui mène à la vie. Laissez-nous vous aider à y marcher.</p>' }
         let response = await fetch( import.meta.env.VITE_WP_REST_URL + 'synergia/v1/introduction-page' )
         let json = await response.json()
         const pageId = parseInt( json )
-        if ( pageId === 0 ) {
-          introduction.value = defaultIntroduction
-          return
-        }
         response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/pages/' + pageId + '?_fields=title.rendered,content.rendered' )
         if ( ! response.ok ) {
-          introduction.value = defaultIntroduction
+          introduction.value = { title: 'Et si on passait de croyant à vivant&nbsp;?', content: '<p>Nous avons trouvé cette porte étroite et arpenté ce chemin resserré, désencombré de toute tradition humaine ou religieuse, qui mène à la vie. Laissez-nous vous aider à y marcher.</p>' }
           return
         }
         json = await response.json()
