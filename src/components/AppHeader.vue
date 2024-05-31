@@ -31,16 +31,28 @@
 
   // Fetch content data
   //const previews = [] // Test le cas vide
+  // Refresh posts when the menu is open.
   const previews = [ { cardinality: 'one', title: 'Hellow World!', description: 'Test post', thumbnail: '', background: '', media: new Set( [ Media.TEXT ] ), url: '' } ] as ContentPreview[]
 </script>
 
 <template>
   <header class="snrg-header">
     <Menu />
-    <ContentPreviewer v-if="isHelikiaView" v-show="menu.opened.value" :previews="previews" />
-    <ContentPreviewer v-else v-show="menu.opened.value" :previews="previews" />
+    <Transition name="snrg">
+      <ContentPreviewer v-if="isHelikiaView" v-show="menu.opened.value" :previews="previews" />
+      <ContentPreviewer v-else v-show="menu.opened.value" :previews="previews" />
+    </Transition>
   </header>
 </template>
 
 <style scoped>
+nav.snrg-content-previewer.snrg-enter-active,
+nav.snrg-content-previewer.snrg-leave-active {
+  transition: opacity 2s ease-in-out;
+}
+
+nav.snrg-content-previewer.snrg-enter-from,
+nav.snrg-content-previewer.snrg-leave-to {
+  opacity: 0;
+}
 </style>

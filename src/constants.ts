@@ -1,17 +1,13 @@
 const constants = Object.freeze( {
-    animation: {
-        menu: {
-            duration: {
-                onOpenOrClose: 2 // seconds
-              }
-          }
+    menu: {
+        duration: 5 // second
       },
     starryNight: {
         starCount: 300,
         viewBoxWidth: 16000,
         viewBoxHeight: 9000,
         starRadius: 5,
-        twinklingStarRadius: 20,
+        twinklingStarRadius: 15,
         twinklingStarDuration: 4, // seconds
         mountainGlowDuration: 4 // seconds
       },

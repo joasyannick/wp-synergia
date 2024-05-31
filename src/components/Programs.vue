@@ -1,20 +1,16 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   const maxCount = 3
-  const programs = ref( [] as any[] )
-  const dataReady = ref( false )
+  const programs = ref( [] as { id: number, title: string, content: string }[] )
 
   const fetchPrograms = async () => {
       try {
-        const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/snrg-programs?per_page=' + maxCount + '&_fields=title.rendered,content.rendered' )
-        programs.value = await response.json()
-        programs.value.forEach( ( program ) => program.content.rendered = program.content.rendered.replace( /(<\/?)h(\d+)/g, ( match: string, token: string, level: string ) => token + 'h' + ( parseInt( level ) + 1 ) ) )
-        dataReady.value = true
+        const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/snrg-programs?per_page=' + maxCount + '&_fields=id,title.rendered,content.rendered' )
+        const json = await response.json()
+        json.forEach( ( program: any ) => programs.value.push( { id: program.id, title: program.title.rendered, content: program.content.rendered.replace( /(<\/?)h(\d+)/g, ( match: string, token: string, level: string ) => token + 'h' + ( parseInt( level ) + 1 ) ) } ) ) 
       } catch ( exception ) {
         console.error( 'Failed to fetch programs' )
-        dataReady.value = false
       }
-      return dataReady.value
     }
 
   fetchPrograms()
@@ -27,9 +23,9 @@
     </header>
     <article v-for="program in programs" :key="program.id">
       <header>
-        <h2 v-html="program.title.rendered"></h2>
+        <h2 v-html="program.title"></h2>
       </header>
-      <div v-html="program.content.rendered"></div>
+      <div v-html="program.content"></div>
     </article>
   </nav>
 </template>

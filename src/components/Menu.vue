@@ -18,6 +18,8 @@
 
   const route = useRoute()
 
+  const cssStyle = { '--snrg-menu-transition-duration': ( Math.round(0.5 * constants.menu.duration * 1000) / 1000 ) + 's' }
+
   const menuIconAnimated = ref( false )
 
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
@@ -96,7 +98,7 @@
 </script>
 
 <template>
-  <TransitionGroup name="snrg" tag="nav" class="snrg-menu">
+  <TransitionGroup name="snrg" tag="nav" class="snrg-menu" :style="cssStyle">
     <button class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="menu.opened.value" @animated="onMenuIconAnimated" /></button>
     <template v-for="button in buttons" :key="button.label">
       <a v-if="button.condition && button.link && button.external" :class="button.class" :href="button.link" :data-snrg-label="button.label" target="_blank" rel="noopener noreferrer"><component :is="button.icon" /></a>
@@ -164,11 +166,11 @@
     }
 
   nav.snrg-menu > :is( a, button ).snrg-enter-active {
-      transition: margin-left 1s ease-in 1s, width 1s ease-in 1s, opacity 1s ease-in 1s;
+      transition: margin-left var( --snrg-menu-transition-duration ) ease-in var( --snrg-menu-transition-duration ), width var( --snrg-menu-transition-duration ) ease-in var( --snrg-menu-transition-duration ), opacity var( --snrg-menu-transition-duration ) ease-in var( --snrg-menu-transition-duration );
     }
 
   nav.snrg-menu > :is( a, button ).snrg-leave-active {
-      transition: margin-left 1s ease-in, width 1s ease-in, opacity 1s ease-in;
+      transition: margin-left var( --snrg-menu-transition-duration ) ease-in, width var( --snrg-menu-transition-duration ) ease-in, opacity var( --snrg-menu-transition-duration ) ease-in;
     }
 
   nav.snrg-menu > :is( a, button ).snrg-enter-from,
