@@ -8,7 +8,7 @@
 
   const emit = defineEmits< { animated: [ animated: boolean ] } >()
 
-  const duration = Math.round(0.5 * constants.menu.duration * 1000) / 1000
+  const duration = Math.round(0.5 * constants.menu.animation * 1000) / 1000
 
   const openingTranslation = ref< SVGAnimateTransformElement | null >( null )
   const openingRotation = ref< SVGAnimateTransformElement | null >( null )
@@ -16,10 +16,10 @@
   const closingTranslation = ref< SVGAnimateTransformElement | null >( null )
 
   onMounted( () => {
-      openingTranslation.value?.addEventListener( 'beginEvent', () => emit( 'animated', true ) )
-      openingRotation.value?.addEventListener( 'endEvent', () => emit( 'animated', false ) )
-      closingRotation.value?.addEventListener( 'beginEvent', () => emit( 'animated', true ) )
-      closingTranslation.value?.addEventListener( 'endEvent', () => emit( 'animated', false ) )
+      openingTranslation.value!.addEventListener( 'beginEvent', () => emit( 'animated', true ) )
+      openingRotation.value!.addEventListener( 'endEvent', () => emit( 'animated', false ) )
+      closingRotation.value!.addEventListener( 'beginEvent', () => emit( 'animated', true ) )
+      closingTranslation.value!.addEventListener( 'endEvent', () => emit( 'animated', false ) )
     } )
 
   watch( () => menu.opened.value, ( now, before ) => {

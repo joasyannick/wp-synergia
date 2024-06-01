@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { inject, ref, computed } from 'vue'
   import { useRoute } from 'vue-router'
+  import constants from '@/constants'
   import observers from '@/router/observers'
   import { Media } from '@/types'
   import type { ContentPreview } from '@/types'
@@ -14,6 +15,8 @@
   const route = useRoute()
 
   const maxCount = 3
+  const cssStyle = { '--snrg-menu-transition-duration': ( Math.round(0.5 * constants.menu.animation * 1000) / 1000 ) + 's' }
+
   const posts = ref( [] as any[] )
   const modules = ref( [] as any[] )
 
@@ -36,7 +39,7 @@
 </script>
 
 <template>
-  <header class="snrg-header">
+  <header class="snrg-header" :style="cssStyle">
     <Menu />
     <Transition name="snrg">
       <ContentPreviewer v-if="isHelikiaView" v-show="menu.opened.value" :previews="previews" />
@@ -46,13 +49,4 @@
 </template>
 
 <style scoped>
-nav.snrg-content-previewer.snrg-enter-active,
-nav.snrg-content-previewer.snrg-leave-active {
-  transition: opacity 2s ease-in-out;
-}
-
-nav.snrg-content-previewer.snrg-enter-from,
-nav.snrg-content-previewer.snrg-leave-to {
-  opacity: 0;
-}
 </style>

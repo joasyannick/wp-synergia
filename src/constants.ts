@@ -1,6 +1,6 @@
 const constants = Object.freeze( {
     menu: {
-        duration: 5 // second
+        animation: 1 // second
       },
     starryNight: {
         starCount: 300,

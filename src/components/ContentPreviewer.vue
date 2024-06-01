@@ -45,4 +45,17 @@
       height: 100vh;
       background: black;
     }
+
+  nav.snrg-content-previewer.snrg-enter-active {
+      transition: opacity var( --snrg-menu-transition-duration ) ease-in-out var( --snrg-menu-transition-duration );
+    }
+
+  nav.snrg-content-previewer.snrg-leave-active {
+      transition: opacity var( --snrg-menu-transition-duration ) ease-in-out;
+    }
+
+  nav.snrg-content-previewer.snrg-enter-from,
+  nav.snrg-content-previewer.snrg-leave-to {
+      opacity: 0;
+    }
 </style>

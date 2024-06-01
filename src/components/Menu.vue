@@ -18,8 +18,6 @@
 
   const route = useRoute()
 
-  const cssStyle = { '--snrg-menu-transition-duration': ( Math.round(0.5 * constants.menu.duration * 1000) / 1000 ) + 's' }
-
   const menuIconAnimated = ref( false )
 
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
@@ -98,7 +96,7 @@
 </script>
 
 <template>
-  <TransitionGroup name="snrg" tag="nav" class="snrg-menu" :style="cssStyle">
+  <TransitionGroup name="snrg" tag="nav" class="snrg-menu">
     <button class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="menu.opened.value" @animated="onMenuIconAnimated" /></button>
     <template v-for="button in buttons" :key="button.label">
       <a v-if="button.condition && button.link && button.external" :class="button.class" :href="button.link" :data-snrg-label="button.label" target="_blank" rel="noopener noreferrer"><component :is="button.icon" /></a>
@@ -121,6 +119,7 @@
       position: absolute;
       left: var( --snrg-menu-left );
       top: var( --snrg-menu-top );
+      z-index: 1;
       display: inline-flex;
     }
 
