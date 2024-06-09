@@ -46,7 +46,7 @@
         $synergia_css = '/assets/synergia.css';
         $vue_css = '/assets/app/index.css';
         wp_enqueue_style( 'snrg-synergia', get_template_directory_uri() . $synergia_css, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $synergia_css ) ) );
-        wp_enqueue_style( 'snrg-vue', get_template_directory_uri() . $vue_css, [ '-synergia' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_css ) ) );
+        wp_enqueue_style( 'snrg-vue', get_template_directory_uri() . $vue_css, [ 'snrg-synergia' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_css ) ) );
     }
 
     function enqueue_scripts() {
