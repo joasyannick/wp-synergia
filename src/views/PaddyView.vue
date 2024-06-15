@@ -4,7 +4,11 @@
 
 <template>
   <main class="snrg-paddy">
-    <RouterView></RouterView>
+    <RouterView v-slot="{ Component }">
+      <KeepAlive>
+        <component :is="Component" />
+      </KeepAlive>
+    </RouterView>
   </main>
 </template>
 

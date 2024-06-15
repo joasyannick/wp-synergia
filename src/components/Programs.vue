@@ -1,19 +1,9 @@
 <script setup lang="ts">
   import { ref } from 'vue'
-  const maxCount = 3
-  const programs = ref( [] as { id: number, title: string, content: string }[] )
+  import constants from '@/constants'
 
-  const fetchPrograms = async () => {
-      try {
-        const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/snrg-programs?per_page=' + maxCount + '&_fields=id,title.rendered,content.rendered' )
-        const json = await response.json()
-        json.forEach( ( program: any ) => programs.value.push( { id: program.id, title: program.title.rendered, content: program.content.rendered.replace( /(<\/?)h(\d+)/g, ( match: string, token: string, level: string ) => token + 'h' + ( parseInt( level ) + 1 ) ) } ) ) 
-      } catch ( exception ) {
-        console.error( 'Failed to fetch programs' )
-      }
-    }
-
-  fetchPrograms()
+  const programs = ref( [ { id: -1, slug:'', title: 'Programme n°1', excerpt: '', content: '<p>Un programme.</p>' }, { id: -2, slug:'', title: 'Programme n°2', excerpt: '', content: '<p>Un autre programme.</p>' } ] )
+  constants.function.fetchAllPosts( 'snrg-programs', false, true, programs.value )
 </script>
 
 <template>

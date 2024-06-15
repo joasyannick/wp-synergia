@@ -1,34 +1,30 @@
 <script setup lang="ts">
   import { ref } from 'vue'
+  import constants from '@/constants'
   import Welcome from '@/components/Welcome.vue'
   import Programs from '@/components/Programs.vue'
 
-  const introduction = ref( null as null | { title: string, content: string } )
+  const introduction = ref( { title: 'Bienvenue', content: '<p>Présenter le site.</p>' } )
 
-  const fetchIntroductionPage = async () => {
-      try {
-        let response = await fetch( import.meta.env.VITE_WP_REST_URL + 'synergia/v1/introduction-page' )
-        let json = await response.json()
-        const pageId = parseInt( json )
-        response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/pages/' + pageId + '?_fields=title.rendered,content.rendered' )
-        if ( ! response.ok ) {
-          introduction.value = { title: 'Et si on passait de croyant à vivant&nbsp;?', content: '<p>Nous avons trouvé cette porte étroite et arpenté ce chemin resserré, désencombré de toute tradition religieuse ou culturelle, qui mène à la vie. Laissez-nous vous aider à y marcher.</p>' }
-          return
+  const fetchIntroduction = async ( postType: string ) => {
+    try {
+        const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/' + postType + '?slug=' + constants.route.paddy.introduction + '&_fields=title.rendered,content.rendered' )
+        const json = await response.json()
+        if ( json.length ) {
+          introduction.value = { title: json[0].title.rendered, content: json[0].content.rendered }
         }
-        json = await response.json()
-        introduction.value = { title: json.title.rendered, content: json.content.rendered }
       } catch ( exception ) {
-        console.error( exception )
+        console.error( 'Failed to fetch the introduction in ' + postType + ': ' + exception )
       }
     }
 
-  fetchIntroductionPage()
+  Promise.all( [ fetchIntroduction( 'pages' ), fetchIntroduction( 'posts' ) ] )
 </script>
 
 <template>
   <Welcome />
   <article class="snrg-introduction">
-    <header v-if="introduction">
+    <header>
       <h1 v-html="introduction.title"></h1>
     </header>
     <div v-if="introduction" v-html="introduction.content"></div>

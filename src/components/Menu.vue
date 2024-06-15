@@ -19,6 +19,7 @@
   const route = useRoute()
 
   const menuIconAnimated = ref( false )
+  const hesychiaUrl = ref( '' )
 
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
   const isBiographyView = computed( () => ! route.name ? false : observers.isBiographyView( route.name.toString() ) )
@@ -27,6 +28,18 @@
 
   const openOrClose = () => { if ( ! menuIconAnimated.value ) { menu.openOrClose() } }
   const onMenuIconAnimated = ( state: boolean ) => { menuIconAnimated.value = state }
+
+  const fetchHesychiaUrl = async () => {
+    try {
+        const request = import.meta.env.VITE_WP_REST_URL + 'synergia/v1/hesychia-url'
+        const response = await fetch( request )
+        hesychiaUrl.value = await response.json()
+      } catch ( exception ) {
+        console.error( 'Failed to fetch the URL of Cap Hesychia' )
+      }
+  }
+
+  fetchHesychiaUrl()
 
   const buttons = computed( () => [
       {
@@ -78,7 +91,7 @@
           class: 'snrg-hesychia-link',
           icon: HesychiaIcon,
           label: 'Cap Hesychia',
-          link: 'https://cap-hesychia.fr/',
+          link: hesychiaUrl.value,
           external: true,
           condition: ! menu.opened.value,
           onClick: () => { return }
@@ -92,12 +105,12 @@
           condition: ! menu.opened.value,
           onClick: () => { return }
         }
-  ] )
+    ] )
 </script>
 
 <template>
   <TransitionGroup name="snrg" tag="nav" class="snrg-menu">
-    <button class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="menu.opened.value" @animated="onMenuIconAnimated" /></button>
+    <button key="Menu" class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="menu.opened.value" @animated="onMenuIconAnimated" /></button>
     <template v-for="button in buttons" :key="button.label">
       <a v-if="button.condition && button.link && button.external" :class="button.class" :href="button.link" :data-snrg-label="button.label" target="_blank" rel="noopener noreferrer"><component :is="button.icon" /></a>
       <RouterLink v-else-if="button.condition && button.link && ! button.external" :class="button.class" :to="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
@@ -152,6 +165,10 @@
       justify-content: center;
       align-items: center;
       background: hsl( var( --snrg-menu-hue ), var( --snrg-background-saturation ), calc( var( --snrg-background-lightness ) - var( --snrg-light-sign ) * 15% ), 75% );
+    }
+
+    nav.snrg-menu a {
+      cursor: pointer;
     }
 
   nav.snrg-menu :is( a, button ) > svg {
