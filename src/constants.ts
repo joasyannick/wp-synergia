@@ -22,14 +22,14 @@ const constants = Object.freeze( {
             path: '/',
             fullPath: '/',
             biography: {
-                name: 'biography',
-                path: 'biography',
-                fullPath: '/biography'
+                name: 'bio',
+                path: 'bio',
+                fullPath: '/bio'
               },
             post: {
                 name: 'post',
                 path: ':post',
-                fullPath: '/:post'
+                fullPath: '/blog/:post'
               }
           },
         helikia: {
@@ -53,9 +53,9 @@ const constants = Object.freeze( {
               }
           },
         account: {
-            name: 'account',
-            path: '/account',
-            fullPath: '/account'
+            name: 'compte',
+            path: '/compte',
+            fullPath: '/compte'
           }
       }
   } )
