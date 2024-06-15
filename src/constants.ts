@@ -61,7 +61,7 @@ const constants = Object.freeze( {
           }
       },
     function: {
-        fetchPost: async ( postType: string, slug: string, withExcerpt: boolean, withContent: boolean, defaultPost: { id: number, title: string, excerpt: string, content: string } ) => {
+        fetchPost: async ( postType: string, slug: string, withExcerpt: boolean, withContent: boolean, defaultPost: { id: number, title: string, excerpt: string, content: string } ): Promise< { id: number, title: string, excerpt: string, content: string } > => {
             try {
               const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/' + postType + '?slug=' + slug + '&_fields=id,title.rendered' + ( withExcerpt ? ',excerpt.rendered' : '' ) + ( withContent ? ',content.rendered' : '' ) )
               const json = await response.json()
@@ -73,7 +73,7 @@ const constants = Object.freeze( {
             }
             return defaultPost
           },
-        fetchAllPosts: async ( postType: string, withExcerpt: boolean, withContent: boolean, defaultPosts: { id: number, slug: string, title: string, excerpt: string, content: string }[] ) => {
+        fetchAllPosts: async ( postType: string, withExcerpt: boolean, withContent: boolean, defaultPosts: { id: number, slug: string, title: string, excerpt: string, content: string }[] ): Promise< { id: number, slug: string, title: string, excerpt: string, content: string }[] > => {
             try {
               const posts = [] as { id: number, slug: string, title: string, excerpt: string, content: string }[]
               for ( let [ page, more ] = [ 1, true ]; more; page++ ) {
@@ -85,11 +85,10 @@ const constants = Object.freeze( {
               if ( posts.length ) {
                 return posts
               }
-              return defaultPosts
             } catch ( exception ) {
-              console.error( 'Failed to fetch posts: ' + exception )
-              return defaultPosts
+              console.error( 'Failed to fetch "' + postType + '": ' + exception )
             }
+            return defaultPosts
           }
       }
   } )

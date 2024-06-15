@@ -4,8 +4,9 @@
   import constants from '@/constants'
 
   const slug = useRoute().params.slug as string
-  const module = ref ( await constants.function.fetchPost( 'snrg-modules', slug, false, true, { id: -1, title: '', excerpt: '', content: '' } ) )
-</script>
+  const module = ref( { id: -1, title: '', excerpt: '', content: '' } )
+  constants.function.fetchPost( 'posts', slug, false, true, module.value )
+      .then( result => module.value = result.id !== -1 ? result : module.value )</script>
 
 <template>
   <section v-if="module" class="snrg-module">

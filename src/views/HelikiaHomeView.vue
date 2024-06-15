@@ -3,8 +3,8 @@
   import constants from '@/constants'
 
   const helikia = ref ( { id: -1, title: 'Helikia', excerpt: '', content: "<p>Parler d'Helikia.</p>" } )
-  const posts = await Promise.all( [ constants.function.fetchPost( 'pages', constants.route.helikia.name, false, true, helikia.value ), constants.function.fetchPost( 'posts', constants.route.helikia.name, false, true, helikia.value ) ] )
-  posts.filter( post => post.id !== -1 ).forEach( post => helikia.value = post )
+  Promise.all( [ constants.function.fetchPost( 'pages', constants.route.helikia.name, false, true, helikia.value ), constants.function.fetchPost( 'posts', constants.route.helikia.name, false, true, helikia.value ) ] )
+      .then( results => results.filter( result => result.id !== -1 ).forEach( result => helikia.value = result ) )
 </script>
 
 <template>

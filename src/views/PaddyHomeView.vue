@@ -4,21 +4,9 @@
   import Welcome from '@/components/Welcome.vue'
   import Programs from '@/components/Programs.vue'
 
-  const introduction = ref( { title: 'Bienvenue', content: '<p>Présenter le site.</p>' } )
-
-  const fetchIntroduction = async ( postType: string ) => {
-    try {
-        const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/' + postType + '?slug=' + constants.route.paddy.introduction + '&_fields=title.rendered,content.rendered' )
-        const json = await response.json()
-        if ( json.length ) {
-          introduction.value = { title: json[0].title.rendered, content: json[0].content.rendered }
-        }
-      } catch ( exception ) {
-        console.error( 'Failed to fetch the introduction in ' + postType + ': ' + exception )
-      }
-    }
-
-  Promise.all( [ fetchIntroduction( 'pages' ), fetchIntroduction( 'posts' ) ] )
+  const introduction = ref( { id: -1, title: 'Bienvenue', excerpt: '', content: '<p>Présenter le site.</p>' } )
+  Promise.all( [ constants.function.fetchPost( 'pages', constants.route.paddy.introduction, false, true, introduction.value ), constants.function.fetchPost( 'posts', constants.route.paddy.introduction, false, true, introduction.value ) ] )
+      .then( results => results.filter( result => result.id !== -1 ).forEach( result => introduction.value = result ) )
 </script>
 
 <template>
@@ -27,7 +15,7 @@
     <header>
       <h1 v-html="introduction.title"></h1>
     </header>
-    <div v-if="introduction" v-html="introduction.content"></div>
+    <div v-html="introduction.content"></div>
   </article>
   <Programs />
 </template>
