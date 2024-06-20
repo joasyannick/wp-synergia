@@ -22,12 +22,17 @@
 
 <style scoped>
   nav.snrg-programs {
-      position: relative;
-      min-height: 100vh;
-      background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
-    }
+    position: relative;
+    min-height: 100vh;
+    background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
+  }
 
   nav.snrg-programs > header > h1 {
-      margin: 0;
-    }
+    font-family: 'Roboto';
+    margin: 0;
+  }
+
+  nav.snrg-programs > article > header > h2 {
+    font-family: 'Roboto';
+  }
 </style>

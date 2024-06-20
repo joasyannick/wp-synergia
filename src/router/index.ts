@@ -6,7 +6,6 @@ import BiographyView from '@/views/BiographyView.vue'
 import HelikiaView from '@/views/HelikiaView.vue'
 import HelikiaHomeView from '@/views/HelikiaHomeView.vue'
 import ModuleView from '@/views/ModuleView.vue'
-import SessionView from '@/views/SessionView.vue'
 import SynergiaView from '@/views/SynergiaView.vue'
 import PostView from '@/views/PostView.vue'
 import AccountView from '@/views/AccountView.vue'
@@ -53,11 +52,6 @@ const router = createRouter( {
                     path: constants.route.helikia.module.path,
                     name: constants.route.helikia.module.name,
                     component: ModuleView
-                  },
-                {
-                    path: constants.route.helikia.session.path,
-                    name: constants.route.helikia.session.name,
-                    component: SessionView
                   }
               ]
           },

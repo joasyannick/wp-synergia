@@ -5,136 +5,121 @@
   import type { IMenu } from '@/injection'
   import { iMenu } from '@/injection'
   import Graphic from '@/components/images/Graphic.vue'
+  import Slogans from '@/components/Slogans.vue'
 
   const menu = inject( iMenu ) as IMenu
 
   const props = defineProps< { starCount: number } >()
 
-  const quotations = [
-      'Je ne crois pas en Dieu, je le vis.',
-      'Je vis, non plus moi, Christ vit en moi.',
-      "Christ ne se croit pas seulement, il s'expérimente.",
-      "L'évangile ne se prêche pas seulement, il se démontre."
-    ]
-  const current = ref( 0 )
+  const sky = defineComponent( ( props: { clipId: string } ) => {
+      const image = ref( '' )
 
-  setInterval( () => { for ( let before = current.value; before === current.value; ) current.value = Math.floor( Math.random() * quotations.length ) }, 8000 )
-
-  const sky = defineComponent(
-      ( props: { clipId: string } ) => {
-          const image = ref( '' )
-
-          const fetchSkyImage = async () => {
-              try {
-                const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'synergia/v1/home-image' )
-                image.value = await response.json()
-              } catch ( exception ) {
-                console.error( 'Failed to fetch the stary night image' )
-              }
-            }
-
-          fetchSkyImage()
-
-          return () => (
-              <g class="snrg-sky" clip-path={ 'url(#' + props.clipId + ')' }>
-                <defs>
-                  <linearGradient id="snrg-starry-night-sky-gradient" gradientTransform="rotate(90)">
-                    <stop style="stop-color:hsl(225,100%,25%)" offset="0%" />
-                    <stop style="stop-color:hsl(200,100%,50%)" offset="44.6%" />
-                    <stop style="stop-color:hsl(190,100%,50%)" offset="66.3%" />
-                  </linearGradient>
-                </defs>
-                <image href={ image.value } width={ constants.starryNight.viewBoxWidth } height={ constants.starryNight.viewBoxHeight } />
-                <rect style="fill:url(#snrg-starry-night-sky-gradient)" class="snrg-overlay" x="0" y="0" width={ constants.starryNight.viewBoxWidth } height={ constants.starryNight.viewBoxHeight } />
-              </g>
-            )
-        },
-      { props: ['clipId' ] }
-    )
-
-  const stars = defineComponent(
-      ( props: { starCount: number, clipId: string } ) => {
-          const stars: { x: number, y: number }[] = []
-          for (let i = 0; i < props.starCount; i++) {
-            stars.push( { x: Math.random() * constants.starryNight.viewBoxWidth, y: Math.random() * constants.starryNight.viewBoxHeight } )
+      const fetchSkyImage = async () => {
+          try {
+            const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'synergia/v1/home-image' )
+            image.value = await response.json()
+          } catch ( exception ) {
+            console.error( 'Failed to fetch the stary night image' )
           }
-          const maxShootingStarY = 4790
-          const shootingStarDistance = 7000
-          const trailHalfHeight = 2/3 * constants.starryNight.twinklingStarRadius
-          const trailLength = 0.25 * shootingStarDistance
-          const shootingStarDelay = 10 // seconds
-          const shootingStarDuration = 2 // seconds
-          const shootingStarNow = ref( false )
-          let shootingStarTimeout = 0
+        }
 
-          const sleep = ( delay: number ) => new Promise( ( resolve ) => setTimeout( resolve, delay ) )
-          const toRadians = ( degrees: number ) => degrees * ( Math.PI / 180 )
+      fetchSkyImage()
 
-          const shootingStar: Ref< { x: number, y: number, angle: number } > = ref( { x: 0, y: 0, angle: 0 } )
-          const shootingStarOpacityRef = ref< SVGAnimateElement | null >( null )
-          const shootingStarMotionRef = ref< SVGAnimateMotionElement | null >( null )
+      return () => (
+          <g class="snrg-sky" clip-path={ 'url(#' + props.clipId + ')' }>
+            <defs>
+              <linearGradient id="snrg-starry-night-sky-gradient" gradientTransform="rotate(90)">
+                <stop style="stop-color:hsl(225,100%,25%)" offset="0%" />
+                <stop style="stop-color:hsl(200,100%,50%)" offset="44.6%" />
+                <stop style="stop-color:hsl(190,100%,50%)" offset="66.3%" />
+              </linearGradient>
+            </defs>
+            <image href={ image.value } width={ constants.starryNight.viewBoxWidth } height={ constants.starryNight.viewBoxHeight } />
+            <rect style="fill:url(#snrg-starry-night-sky-gradient)" class="snrg-overlay" x="0" y="0" width={ constants.starryNight.viewBoxWidth } height={ constants.starryNight.viewBoxHeight } />
+          </g>
+        )
+    }, { props: ['clipId' ] } )
 
-          const shootingStarEnd = computed( () => {
-              return { x: shootingStarDistance * Math.cos( toRadians( shootingStar.value.angle ) ), y: shootingStarDistance * Math.sin( toRadians( shootingStar.value.angle ) ) }
-            } )
+  const stars = defineComponent( ( props: { starCount: number, clipId: string } ) => {
+      const stars: { x: number, y: number }[] = []
+      for (let i = 0; i < props.starCount; i++) {
+        stars.push( { x: Math.random() * constants.starryNight.viewBoxWidth, y: Math.random() * constants.starryNight.viewBoxHeight } )
+      }
+      const maxShootingStarY = 4790
+      const shootingStarDistance = 7000
+      const trailHalfHeight = 2/3 * constants.starryNight.twinklingStarRadius
+      const trailLength = 0.25 * shootingStarDistance
+      const shootingStarDelay = 10 // seconds
+      const shootingStarDuration = 2 // seconds
+      const shootingStarNow = ref( false )
+      let shootingStarTimeout = 0
 
-          watch(
-              shootingStarNow,
-              ( now, before ) => {
-                  if ( ! now ) {
-                    const delay = shootingStarDelay + ( Math.random() < 0.5 ? 1 : -1 ) * Math.random() * 0.8 * shootingStarDelay
-                    shootingStarTimeout = setTimeout(
-                        async () => {
-                            shootingStarNow.value = true
-                            const x = Math.random() * constants.starryNight.viewBoxWidth
-                            const y = Math.random() * maxShootingStarY
-                            let angle = Math.random() * 90
-                            if ( x > constants.starryNight.viewBoxWidth / 2 ) {
-                              angle += 90
-                            }
-                            const sign = y <= maxShootingStarY / 2 ? 1 : -1
-                            shootingStar.value = { x: x, y: y, angle: sign * angle }
-                            shootingStarOpacityRef.value?.beginElement()
-                            shootingStarMotionRef.value?.beginElement()
-                            await sleep( shootingStarDuration * 1000 )
-                            shootingStarNow.value = false
-                          },
-                        delay * 1000
-                      )
-                  }
-                },
-              { immediate: true }
-            )
-          
-          onUnmounted( () => clearTimeout( shootingStarTimeout ) )
+      const sleep = ( delay: number ) => new Promise( ( resolve ) => setTimeout( resolve, delay ) )
+      const toRadians = ( degrees: number ) => degrees * ( Math.PI / 180 )
 
-          return () => (
-              <g class="snrg-stars" clip-path={ 'url(#' + props.clipId + ')' }>
-                <g class="snrg-shooting-star" style="opacity:0" transform={ 'rotate(' + ( shootingStar.value.angle + 180 ) + ',' + shootingStar.value.x + ',' + shootingStar.value.y + ')' }>
-                  <defs>
-                    <linearGradient id="snrg-starry-night-trail-gradient">
-                      <stop style="stop-color:hsl(210,100%,90%)" offset="0%" />
-                      <stop style="stop-color:hsl(210,100%,90%,0%)" offset="100%" />
-                    </linearGradient>
-                  </defs>
-                  <path id="snrg-starry-night-star-path" style="visibility:hidden" d={ 'M0,0l' + shootingStarEnd.value.x + ',' + shootingStarEnd.value.y } />
-                  <circle style="fill:hsl(210,100%,90%)" cx={ shootingStar.value.x } cy={ shootingStar.value.y } r={ constants.starryNight.twinklingStarRadius } />
-                  <rect style="fill:url(#snrg-starry-night-trail-gradient)" x={ shootingStar.value.x } y={ shootingStar.value.y - trailHalfHeight } width={ trailLength } height={ 2 * trailHalfHeight } />
-                  <animate ref={ shootingStarOpacityRef } attributeType="CSS" attributeName="opacity" begin="indefinite" from="0" to="0" values="0;1;0" keyTimes="0;0.5;1" dur={ shootingStarDuration + 's' } />
-                  <animateMotion ref={ shootingStarMotionRef } begin="indefinite" dur={ shootingStarDuration + 's' }>
-                    <mpath href="#snrg-starry-night-star-path" />
-                  </animateMotion>
-                </g>
-                { stars.map( ( { x, y }, index ) => (
-                    <circle style="fill:hsl(210,100%,90%,66%)" cx={ x } cy={ y }>
-                      <animate  attributeName="r" from={ constants.starryNight.starRadius } to={ constants.starryNight.starRadius } values={ constants.starryNight.starRadius + ';' + constants.starryNight.twinklingStarRadius + ';' + constants.starryNight.starRadius } keyTimes="0;0.5;1" begin={ ( index % constants.starryNight.twinklingStarDuration ) + 's' } dur={ constants.starryNight.twinklingStarDuration + 's' } repeatCount="indefinite" />
-                    </circle>
-                  ) ) }
-              </g>
-            )
-        },
-      { props: [ 'starCount', 'clipId' ] }
-    )
+      const shootingStar: Ref< { x: number, y: number, angle: number } > = ref( { x: 0, y: 0, angle: 0 } )
+      const shootingStarOpacityRef = ref< SVGAnimateElement | null >( null )
+      const shootingStarMotionRef = ref< SVGAnimateMotionElement | null >( null )
+
+      const shootingStarEnd = computed( () => {
+          return { x: shootingStarDistance * Math.cos( toRadians( shootingStar.value.angle ) ), y: shootingStarDistance * Math.sin( toRadians( shootingStar.value.angle ) ) }
+        } )
+
+      watch(
+          shootingStarNow,
+          ( now, before ) => {
+              if ( ! now ) {
+                const delay = shootingStarDelay + ( Math.random() < 0.5 ? 1 : -1 ) * Math.random() * 0.8 * shootingStarDelay
+                shootingStarTimeout = setTimeout(
+                    async () => {
+                        shootingStarNow.value = true
+                        const x = Math.random() * constants.starryNight.viewBoxWidth
+                        const y = Math.random() * maxShootingStarY
+                        let angle = Math.random() * 90
+                        if ( x > constants.starryNight.viewBoxWidth / 2 ) {
+                          angle += 90
+                        }
+                        const sign = y <= maxShootingStarY / 2 ? 1 : -1
+                        shootingStar.value = { x: x, y: y, angle: sign * angle }
+                        shootingStarOpacityRef.value?.beginElement()
+                        shootingStarMotionRef.value?.beginElement()
+                        await sleep( shootingStarDuration * 1000 )
+                        shootingStarNow.value = false
+                      },
+                    delay * 1000
+                  )
+              }
+            },
+          { immediate: true }
+        )
+      
+      onUnmounted( () => clearTimeout( shootingStarTimeout ) )
+
+      return () => (
+          <g class="snrg-stars" clip-path={ 'url(#' + props.clipId + ')' }>
+            <g class="snrg-shooting-star" style="opacity:0" transform={ 'rotate(' + ( shootingStar.value.angle + 180 ) + ',' + shootingStar.value.x + ',' + shootingStar.value.y + ')' }>
+              <defs>
+                <linearGradient id="snrg-starry-night-trail-gradient">
+                  <stop style="stop-color:hsl(210,100%,90%)" offset="0%" />
+                  <stop style="stop-color:hsl(210,100%,90%,0%)" offset="100%" />
+                </linearGradient>
+              </defs>
+              <path id="snrg-starry-night-star-path" style="visibility:hidden" d={ 'M0,0l' + shootingStarEnd.value.x + ',' + shootingStarEnd.value.y } />
+              <circle style="fill:hsl(210,100%,90%)" cx={ shootingStar.value.x } cy={ shootingStar.value.y } r={ constants.starryNight.twinklingStarRadius } />
+              <rect style="fill:url(#snrg-starry-night-trail-gradient)" x={ shootingStar.value.x } y={ shootingStar.value.y - trailHalfHeight } width={ trailLength } height={ 2 * trailHalfHeight } />
+              <animate ref={ shootingStarOpacityRef } attributeType="CSS" attributeName="opacity" begin="indefinite" from="0" to="0" values="0;1;0" keyTimes="0;0.5;1" dur={ shootingStarDuration + 's' } />
+              <animateMotion ref={ shootingStarMotionRef } begin="indefinite" dur={ shootingStarDuration + 's' }>
+                <mpath href="#snrg-starry-night-star-path" />
+              </animateMotion>
+            </g>
+            { stars.map( ( { x, y }, index ) => (
+                <circle style="fill:hsl(210,100%,90%,66%)" cx={ x } cy={ y }>
+                  <animate  attributeName="r" from={ constants.starryNight.starRadius } to={ constants.starryNight.starRadius } values={ constants.starryNight.starRadius + ';' + constants.starryNight.twinklingStarRadius + ';' + constants.starryNight.starRadius } keyTimes="0;0.5;1" begin={ ( index % constants.starryNight.twinklingStarDuration ) + 's' } dur={ constants.starryNight.twinklingStarDuration + 's' } repeatCount="indefinite" />
+                </circle>
+              ) ) }
+          </g>
+        )
+    }, { props: [ 'starCount', 'clipId' ] } )
 
   const mountains = defineComponent( ( props: { clipId: string } ) => () => (
       <g class="snrg-mountains" clip-path={ 'url(#' + props.clipId + ')' }>
@@ -211,13 +196,7 @@
   <Graphic class="snrg-stars" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-stars-clip">
     <stars :star-count="props.starCount" clip-id="snrg-starry-night-stars-clip" />
   </Graphic>
-  <div class="snrg-taglines">
-    <TransitionGroup name="snrg">
-      <template v-for="( quotation, index ) in quotations" :key="quotation">
-        <blockquote v-if="index === current" v-html="quotation"></blockquote>
-      </template>
-    </TransitionGroup>
-  </div>
+  <Slogans />
   <Graphic class="snrg-mountains" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-mountains-clip">
     <mountains clip-id="snrg-starry-night-mountains-clip" />
   </Graphic>
@@ -236,70 +215,48 @@
 </template>
 
 <style scoped>
-  :is( svg.snrg-graphic, div.snrg-taglines, div.snrg-blog-access ) {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width:100%;
-      height:100%;
-    }
+  :is( svg.snrg-graphic, div.snrg-slogans, div.snrg-blog-access ) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width:100%;
+    height:100%;
+  }
 
   svg.snrg-graphic.snrg-sky {
-      transform: translateZ( -160px ) scale( 2.6 ); /* scale = (perspective - distance) / perspective */
-    }
+    transform: translateZ( -160px ) scale( 2.6 ); /* scale = (perspective - distance) / perspective */
+  }
 
   svg.snrg-graphic.snrg-sky:deep( g > rect.snrg-overlay ) {
-      mix-blend-mode: multiply;
-    }
+    mix-blend-mode: multiply;
+  }
 
   svg.snrg-graphic.snrg-stars {
-      transform: translateZ( -80px ) scale( 1.8 );
-    }
-
-  div.snrg-taglines {
-      display: flex;
-      flex-flow: column nowrap;
-      align-items: center;
-      transform: translateZ( -60px ) scale( 1.6 );
-    }
-
-  div.snrg-taglines::before {
-      content: '';
-      height: calc( var( --snrg-menu-top ) + var( --snrg-menu-height ) + 25% );
-    }
-
-  div.snrg-taglines > blockquote.snrg-enter-active,
-  div.snrg-taglines > blockquote.snrg-leave-active {
-      transition: all 2s ease;
-    }
-
-  div.snrg-taglines > blockquote.snrg-enter-from,
-  div.snrg-taglines > blockquote.snrg-leave-to {
-      opacity: 0;
-    }
+    transform: translateZ( -80px ) scale( 1.8 );
+  }
 
   svg.snrg-graphic.snrg-mountains {
-      transform: translateZ( -40px ) scale( 1.4 );
-    }
+    transform: translateZ( -40px ) scale( 1.4 );
+  }
 
-   div.snrg-blog-access {
-      display: flex;
-      flex-flow: column nowrap;
-      align-items: center;
-      pointer-events: auto;
-      transform: translateZ( -30px ) scale( 1.3 );
-    }
+  div.snrg-blog-access {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    pointer-events: auto;
+    transform: translateZ( -30px ) scale( 1.3 );
+  }
 
   div.snrg-blog-access::before {
-      content: '';
-      height: calc( var( --snrg-menu-top ) + var( --snrg-menu-height ) + 45% );
-    }
+    content: '';
+    height: calc( var( --snrg-menu-top ) + var( --snrg-menu-height ) + 45% );
+  }
 
   svg.snrg-graphic.snrg-plain {
-      transform: translateZ( -20px ) scale( 1.2 );
-    }
+    transform: translateZ( -20px ) scale( 1.2 );
+  }
 
   svg.snrg-graphic.snrg-forest {
-      transform: translateZ( -10px ) scale( 1.1 );
-    }
+    transform: translateZ( -10px ) scale( 1.1 );
+  }
 </style>

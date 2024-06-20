@@ -1,41 +1,27 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
   import constants from '@/constants'
-  import Welcome from '@/components/Welcome.vue'
+  import StarryNight from '@/components/images/StarryNight.vue'
+  import Introduction from '@/components/Introduction.vue'
   import Programs from '@/components/Programs.vue'
-
-  const introduction = ref( { id: -1, title: 'Bienvenue', excerpt: '', content: '<p>Présenter le site.</p>' } )
-  Promise.all( [ constants.function.fetchPost( 'pages', constants.route.paddy.introduction, false, true, introduction.value ), constants.function.fetchPost( 'posts', constants.route.paddy.introduction, false, true, introduction.value ) ] )
-      .then( results => results.filter( result => result.id !== -1 ).forEach( result => introduction.value = result ) )
 </script>
 
 <template>
-  <Welcome />
-  <article class="snrg-introduction">
-    <header>
-      <h1 v-html="introduction.title"></h1>
-    </header>
-    <div v-html="introduction.content"></div>
-  </article>
+  <aside class="snrg-starry-night">
+    <StarryNight :star-count="constants.starryNight.starCount" />
+  </aside>
+  <Introduction />
   <Programs />
 </template>
 
 <style scoped>
-  article.snrg-introduction {
-      position: relative;
-      margin-top: -10vh;
-      background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
-    }
-  
-  article.snrg-introduction > div > p:last-child {
-    margin-bottom: 0;
+  aside.snrg-starry-night {
+    position: relative;
+    left: 50%;
+    /* Fit a div of ( w0, h0 ) size into a div of ( w, h ) size in a cover way */
+    width: max(100vw, 100vh * 16 / 9); /* max( w, h * w0 / h0 ) */
+    height: max(100vw * 9 / 16, 100vh); /* max( w * h0 / w0, h ) */
+    transform: translateX(-50%);
+    transform-style: preserve-3d;
+    pointer-events: none;
   }
-
-  article.snrg-introduction > header {
-      min-height: 10vh;
-    }
-
-  article.snrg-introduction > header > h1 {
-      margin: 0;
-    }
 </style>

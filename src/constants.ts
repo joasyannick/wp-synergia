@@ -47,11 +47,6 @@ const constants = Object.freeze( {
                 name: 'module',
                 path: ':module',
                 fullPath: '/helikia/:module'
-              },
-            session: {
-                name: 'session',
-                path: ':module/:session',
-                fullPath: '/helikia/:module/:session'
               }
           },
         account: {
