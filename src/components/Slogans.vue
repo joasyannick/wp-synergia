@@ -28,14 +28,14 @@
     flex-flow: column nowrap;
     align-items: center;
     transform: translateZ( -60px ) scale( 1.6 );
-    font-family: 'Roboto';
-    font-weight: 100;
-    font-size: 2vw;
   }
 
   div.snrg-slogans > blockquote {
     position: absolute;
     top: calc( var( --snrg-menu-top ) + var( --snrg-menu-height ) + 25% );
+    font-family: 'Roboto';
+    font-size: var( --SNRG-ROBOTO-SIZE );
+    font-weight: 100;
   }
 
   div.snrg-slogans > blockquote.snrg-enter-active {

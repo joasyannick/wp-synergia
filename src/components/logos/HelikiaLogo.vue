@@ -72,7 +72,7 @@
 
 <style scoped>
   div#snrg-app[data-snrg-theme='dark'] svg.snrg-helikia-logo > g.snrg-helikia-logo-text {
-    filter: var(--snrg-dark-filter);
+    filter: var(--SNRG-DARK-FILTER);
   }
 
   div#snrg-app[data-snrg-theme='dark'] svg.snrg-helikia-logo > g.snrg-helikia-logo-image {

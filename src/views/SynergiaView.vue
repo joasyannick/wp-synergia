@@ -46,7 +46,7 @@
   }
 
   div#snrg-app[data-snrg-theme='dark'] section.snrg-synergia > div.snrg-synergia-map {
-    filter: var(--snrg-dark-filter);
+    filter: var(--SNRG-DARK-FILTER);
   }
 </style>
   

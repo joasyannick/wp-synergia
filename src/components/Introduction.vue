@@ -20,7 +20,7 @@
   article.snrg-introduction {
     position: relative;
     margin-top: -10vh;
-    background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
+    background: hsl( var( --SNRG-BACKGROUND-HUE ), var( --SNRG-BACKGROUND-SATURATION ), var( --snrg-background-lightness ) );
   }
   
   article.snrg-introduction > div > p:last-child {
@@ -32,7 +32,11 @@
   }
 
   article.snrg-introduction > header > h1 {
-    font-family: 'Roboto';
     margin: 0;
+  }
+
+  article.snrg-introduction :is(h1, h2, h3, h4, h5, h6) {
+    font-family: 'Roboto';
+    font-weight: 500;
   }
 </style>

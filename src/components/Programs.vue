@@ -24,15 +24,15 @@
   nav.snrg-programs {
     position: relative;
     min-height: 100vh;
-    background: hsl( var( --snrg-background-hue ), var( --snrg-background-saturation ), var( --snrg-background-lightness ) );
+    background: hsl( var( --SNRG-BACKGROUND-HUE ), var( --SNRG-BACKGROUND-SATURATION ), var( --snrg-background-lightness ) );
   }
 
   nav.snrg-programs > header > h1 {
-    font-family: 'Roboto';
     margin: 0;
   }
 
-  nav.snrg-programs > article > header > h2 {
+  nav.snrg-programs :is(h1, h2, h3, h4, h5, h6) {
     font-family: 'Roboto';
+    font-weight: 500;
   }
 </style>

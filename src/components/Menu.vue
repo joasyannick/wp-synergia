@@ -120,7 +120,7 @@
 
 <style scoped>
   nav.snrg-menu {
-      --snrg-paddy-hue: var( --snrg-background-hue );
+      --snrg-paddy-hue: var( --SNRG-BACKGROUND-HUE );
       --snrg-helikia-hue: 30;
       --snrg-hesychia-hue: 285;
       --snrg-account-hue: 75;
@@ -163,7 +163,7 @@
       height: var(--snrg-menu-height);
       justify-content: center;
       align-items: center;
-      background: hsl( var( --snrg-menu-hue ), var( --snrg-background-saturation ), calc( var( --snrg-background-lightness ) - var( --snrg-light-sign ) * 15% ), 75% );
+      background: hsl( var( --snrg-menu-hue ), var( --SNRG-BACKGROUND-SATURATION ), calc( var( --snrg-background-lightness ) - var( --snrg-light-sign ) * 15% ), 75% );
     }
 
     nav.snrg-menu a {
@@ -173,7 +173,7 @@
   nav.snrg-menu :is( a, button ) > svg {
       width: 55%;
       height: 55%;
-      fill: hsl( var( --snrg-menu-hue ), var( --snrg-background-saturation ), var( --snrg-text-lightness ) );
+      fill: hsl( var( --snrg-menu-hue ), var( --SNRG-BACKGROUND-SATURATION ), var( --snrg-text-lightness ) );
     }
 
   nav.snrg-menu > :is( a, button ):not( :first-child ) {
