@@ -1,11 +1,34 @@
 <template>
   <main class="snrg-account">
+    <h1>Brown jars prevented the mixture from freezing too quickly</h1>
+    <h2>Brown jars prevented the mixture from freezing too quickly</h2>
+    <h3>Brown jars prevented the mixture from freezing too quickly</h3>
+    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus <span class="alt">et magnis dis parturient montes,</span>, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna.</p>
+    <p>xxxxxxxxxxxxxxxxxxxxxxxxxxxxx<span class="alt">xxxxxxxxxxxxxxxxx</span>xxxxxx</p>
   </main>
 </template>
 
 <style scoped>
   main.snrg-account {
-      position: relative;
-      z-index: 0;
-    }
+    position: relative;
+    z-index: 0;
+  }
+
+  main.snrg-account h1 {
+    margin-top: 4rem;
+    font-size: calc(1.2 * 1.2 * 1.2 * 1.2 * 0.9rem);
+  }
+
+  main.snrg-account h2 {
+    font-size: calc(1.2 * 1.2 * 0.9rem);
+  }
+
+  main.snrg-account :is(h3, h4, h5, h6) {
+    font-size: 0.9rem;
+  }
+
+  main.snrg-account span.alt {
+    font-size: 0.9rem;
+    font-family: 'Roboto';
+  }
 </style>

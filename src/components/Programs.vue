@@ -30,9 +30,4 @@
   nav.snrg-programs > header > h1 {
     margin: 0;
   }
-
-  nav.snrg-programs :is(h1, h2, h3, h4, h5, h6) {
-    font-family: 'Roboto';
-    font-weight: 500;
-  }
 </style>
