@@ -23,8 +23,13 @@
 <style scoped>
   nav.snrg-programs {
     position: relative;
+    margin-left: calc(-1 * var(--snrg-main-padding));
+    box-sizing: border-box;
+    width: 100vw;
     min-height: 100vh;
-    background: hsl( var( --SNRG-BACKGROUND-HUE ), var( --SNRG-BACKGROUND-SATURATION ), var( --snrg-background-lightness ) );
+    background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
+    padding-left: inherit;
+    padding-right: inherit;
   }
 
   nav.snrg-programs > header > h1 {

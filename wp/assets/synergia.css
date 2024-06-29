@@ -1,5 +1,12 @@
 html {
-  font: 16px/calc(5/3) 'Nunito Sans';
+  --SNRG-ROBOTO-RATIO: 0.9;
+  --SNRG-MAJOR-SECOND: 1.125;
+  --SNRG-MINOR-THIRD: 1.2;
+  --SNRG-GOLDEN-RATIO: 1.618;
+  --snrg-nunito-sans-scale: 18;
+  --snrg-nunito-sans-size: (var(--snrg-nunito-sans-scale) * 1px);
+  --snrg-roboto-size: (var(--snrg-nunito-sans-size) * var(--SNRG-ROBOTO-RATIO));
+  font: calc(var(--snrg-nunito-sans-size))/var(--SNRG-GOLDEN-RATIO) 'Nunito Sans';
 }
 
 body {
@@ -7,7 +14,6 @@ body {
 }
 
 div#snrg-app {
-  --SNRG-ROBOTO-SIZE: 0.9rem;
   --SNRG-BACKGROUND-HUE: 225;
   --SNRG-BACKGROUND-SATURATION: 70%;
   --SNRG-TEXT-HUE: 210;
@@ -22,15 +28,28 @@ div#snrg-app {
 }
 
 div#snrg-app :is(button, h1, h2, h3, h4, h5, h6) {
-  font-family: 'Roboto';
+  font-family: 'Roboto', sans-serif;
 }
 
 div#snrg-app :is(h1, h2, h3, h4, h5, h6) {
+  --snrg-scale-factor: var(--SNRG-MAJOR-SECOND);
   font-weight: 500;
-} 
+}
 
-div#snrg-app button {
-  font-size: var(--SNRG-ROBOTO-SIZE);
+div#snrg-app h1 {
+  font-size: calc(var(--snrg-roboto-size) * var(--snrg-scale-factor) * var(--snrg-scale-factor) * var(--snrg-scale-factor) * var(--snrg-scale-factor) * var(--snrg-scale-factor) * var(--snrg-scale-factor));
+}
+
+div#snrg-app h2 {
+  font-size: calc(var(--snrg-roboto-size) * var(--snrg-scale-factor) * var(--snrg-scale-factor) * var(--snrg-scale-factor) * var(--snrg-scale-factor));
+}
+
+div#snrg-app h3 {
+  font-size: calc(var(--snrg-roboto-size) * var(--snrg-scale-factor) * var(--snrg-scale-factor));
+}
+
+div#snrg-app :is(button, h4, h5, h6) {
+  font-size: calc(var(--snrg-roboto-size));
 }
 
 div#snrg-app[data-snrg-theme='light'] {
@@ -55,10 +74,23 @@ div#snrg-app > header {
 div#snrg-app > main {
   position: relative;
   z-index: 0;
+  box-sizing: border-box;
   width: 100vw;
   height: 100vh;
   overflow: hidden auto;
+  --snrg-main-padding: 1rem;
+  padding-left: calc(var(--snrg-main-padding));
+  padding-right: calc(var(--snrg-main-padding));
 }
 
-@media screen and (min-width: 320px) {
+@media screen and (min-width: 396px) { /* 396px = 22 * var(--snrg-nunito-sans-size) is the closest value to 400px */
+  div#snrg-app > main {
+    --snrg-main-padding: (1rem + (100vw - 396px) * (1188/6 - 18) / (1188 - 396));
+  }
+}
+
+@media screen and (min-width: 1188px) { /* 1188px = 396px * 3 */
+  div#snrg-app > main {
+    --snrg-main-padding: ((1rem + (1188px - 396px) * (1188/6 - 18) / (1188 - 396)) + (100vw - 1188px) * (1194/6 - 1188/6) / (1194 - 1188));
+  }
 }

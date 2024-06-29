@@ -19,8 +19,13 @@
 <style scoped>
   article.snrg-introduction {
     position: relative;
+    margin-left: calc(-1 * var(--snrg-main-padding));
     margin-top: -10vh;
+    box-sizing: border-box;
+    width: 100vw;
     background: hsl( var( --SNRG-BACKGROUND-HUE ), var( --SNRG-BACKGROUND-SATURATION ), var( --snrg-background-lightness ) );
+    padding-left: inherit;
+    padding-right: inherit;
   }
   
   article.snrg-introduction > div > p:last-child {
