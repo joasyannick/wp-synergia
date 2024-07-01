@@ -19,7 +19,7 @@
 <style scoped>
   article.snrg-introduction {
     position: relative;
-    margin-left: calc(-1 * var(--snrg-main-padding));
+    margin-left: calc(-1 * var(--snrg-padding));
     margin-top: -10vh;
     box-sizing: border-box;
     width: 100vw;

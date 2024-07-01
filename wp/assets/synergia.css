@@ -3,8 +3,9 @@ html {
   --SNRG-MAJOR-SECOND: 1.125;
   --SNRG-MINOR-THIRD: 1.2;
   --SNRG-GOLDEN-RATIO: 1.618;
-  --snrg-nunito-sans-scale: 18;
-  --snrg-nunito-sans-size: (var(--snrg-nunito-sans-scale) * 1px);
+  --SNRG-NUNITO-SANS-SIZE-UNTIL-1188PX: 18px;
+  --SNRG-PADDING-UNTIL-396PX: 1rem;
+  --snrg-nunito-sans-size: var(--SNRG-NUNITO-SANS-SIZE-UNTIL-1188PX);
   --snrg-roboto-size: (var(--snrg-nunito-sans-size) * var(--SNRG-ROBOTO-RATIO));
   font: calc(var(--snrg-nunito-sans-size))/var(--SNRG-GOLDEN-RATIO) 'Nunito Sans';
 }
@@ -72,25 +73,35 @@ div#snrg-app > header {
 }
 
 div#snrg-app > main {
+  --snrg-padding: var(--SNRG-PADDING-UNTIL-396PX);
   position: relative;
   z-index: 0;
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
   overflow: hidden auto;
-  --snrg-main-padding: 1rem;
-  padding-left: calc(var(--snrg-main-padding));
-  padding-right: calc(var(--snrg-main-padding));
+  padding-left: calc(var(--snrg-padding));
+  padding-right: calc(var(--snrg-padding));
 }
 
-@media screen and (min-width: 396px) { /* 396px = 22 * var(--snrg-nunito-sans-size) is the closest value to 400px */
-  div#snrg-app > main {
-    --snrg-main-padding: (1rem + (100vw - 396px) * (1188/6 - 18) / (1188 - 396));
+@media screen and (min-width: 396px) {
+  html {
+    --SNRG-PADDING-COEFFICIENT-UNTIL-1188PX: ((1188/6 - 18) / (1188 - 396));
+  }
+
+  div#snrg-app > main {  
+    --snrg-padding: (var(--SNRG-PADDING-UNTIL-396PX) + (100vw - 396px) * var(--SNRG-PADDING-COEFFICIENT-UNTIL-1188PX));
   }
 }
 
-@media screen and (min-width: 1188px) { /* 1188px = 396px * 3 */
+@media screen and (min-width: 1188px) {
+  html {
+    --SNRG-PADDING-AT-1188PX: (var(--SNRG-PADDING-UNTIL-396PX) + (1188px - 396px) * var(--SNRG-PADDING-COEFFICIENT-UNTIL-1188PX));
+    --SNRG-PADDING-COEFFICIENT-AT-1188PX: ((1194/6 - 1188/6) / (1194 - 1188));
+    /* Need to stripe units */
+    /*--snrg-nunito-sans-size: (var(--SNRG-NUNITO-SANS-SIZE-UNTIL-1188PX) + (100vw - 1188px) * ((1 - 2 * var(--SNRG-PADDING-COEFFICIENT-AT-1188PX)) * var(--SNRG-NUNITO-SANS-SIZE-UNTIL-1188PX)) / (1188 - 2 * var(--SNRG-PADDING-AT-1188PX)));*/
+  }
   div#snrg-app > main {
-    --snrg-main-padding: ((1rem + (1188px - 396px) * (1188/6 - 18) / (1188 - 396)) + (100vw - 1188px) * (1194/6 - 1188/6) / (1194 - 1188));
+    --snrg-padding: (var(--SNRG-PADDING-AT-1188PX) + (100vw - 1188px) * var(--SNRG-PADDING-COEFFICIENT-AT-1188PX));
   }
 }

@@ -23,7 +23,7 @@
 <style scoped>
   nav.snrg-programs {
     position: relative;
-    margin-left: calc(-1 * var(--snrg-main-padding));
+    margin-left: calc(-1 * var(--snrg-padding));
     box-sizing: border-box;
     width: 100vw;
     min-height: 100vh;
