@@ -47,10 +47,8 @@
             preg_match( '@^' . SLUG_FOR_HELIKIA_PAGE . '/([^/]+)/?$@', $route, $matches ) ||
             preg_match( '@^' . SLUG_FOR_BLOG_PAGE . '/([^/]+)/?$@', $route, $matches )
           ):
-          /* Slugs must be unique across post types. These slugs have special meaning for the theme:
-           * bio, compte, contact, helikia, intro.
-           */
-          if ( get_posts( [ 'name' => $matches[ 1 ], 'post_type' => [ 'post', 'page', MODULE_POST_TYPE ], 'post_status' => 'publish', 'posts_per_page' => 1 ] ) ):
+          // Slugs must be unique across post types. Slugs starting with 'snrg-' are reserved for the theme.
+          if ( substr( $matches[ 1 ], 0, 5 ) !== 'snrg-' && get_posts( [ 'name' => $matches[ 1 ], 'post_type' => [ 'post', 'page', MODULE_POST_TYPE ], 'post_status' => 'publish', 'posts_per_page' => 1 ] ) ):
             return locate_template( 'singular.php' );
           endif;
         endif;

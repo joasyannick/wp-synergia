@@ -16,15 +16,6 @@
 
   main.snrg-account h1 {
     margin-top: 4rem;
-    font-size: calc(1.2 * 1.2 * 1.2 * 1.2 * 0.9rem);
-  }
-
-  main.snrg-account h2 {
-    font-size: calc(1.2 * 1.2 * 0.9rem);
-  }
-
-  main.snrg-account :is(h3, h4, h5, h6) {
-    font-size: 0.9rem;
   }
 
   main.snrg-account span.alt {
