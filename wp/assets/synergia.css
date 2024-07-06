@@ -3,7 +3,6 @@ body {
 }
 
 div#snrg-app {
-  --SNRG-GOLDEN-RATIO: 1.618;
   --SNRG-BACKGROUND-HUE: 225;
   --SNRG-BACKGROUND-SATURATION: 70%;
   --SNRG-TEXT-HUE: 210;

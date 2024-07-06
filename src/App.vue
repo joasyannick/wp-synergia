@@ -54,14 +54,15 @@
 
   $major-second: 1.125;
   $minor-third: 1.2;
+  $line-height: math.div( 5, 3 );
   $snrg-padding-until-396px: 18px;
-  $snrg-padding-at-1188px: snrg-fluid-value( $snrg-padding-until-396px, 1188px, 396px, $snrg-padding-until-396px, 1188px, math.div( 1188px, 6 ) );
-  $snrg-padding-coefficient-at-1188px: snrg-fluid-coefficient( 396px, $snrg-padding-until-396px, 1188px, math.div( 1188px, 6 ) );
-  $snrg-nunito-sans-size-until-1188px: 18px;
+  $snrg-padding-at-1584px: snrg-fluid-value( $snrg-padding-until-396px, 1584px, 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) );
+  $snrg-padding-coefficient-at-1584px: snrg-fluid-coefficient( 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) );
+  $snrg-nunito-sans-size-until-1584px: 18px;
   $snrg-roboto-ratio: 0.9;
 
   :is(header.snrg-header, main) {
-    font: $snrg-nunito-sans-size-until-1188px/var(--SNRG-GOLDEN-RATIO) 'Nunito Sans';
+    font: #{ $snrg-nunito-sans-size-until-1584px }/#{ $line-height } 'Nunito Sans';
   }
 
   header.snrg-header {
@@ -94,44 +95,44 @@
   @each $heading-level in 3, 2, 1 {
     $snrg-heading-coefficient: $major-second * $major-second * $snrg-heading-coefficient;
     :is(header.snrg-header, main) h#{ $heading-level } {
-      font-size: $snrg-nunito-sans-size-until-1188px * $snrg-roboto-ratio * $snrg-heading-coefficient;
+      font-size: $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio * $snrg-heading-coefficient;
     }
   }
 
   :is(header.snrg-header, main) :is(button, h4, h5, h6) {
-    font-size: $snrg-nunito-sans-size-until-1188px * $snrg-roboto-ratio;
+    font-size: $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio;
   }
 
   @media screen and (min-width: 396px) {
     main {
-      padding-left: calc( snrg-fluid-expression( $snrg-padding-until-396px, 100vw, 396px, $snrg-padding-until-396px, 1188px, math.div( 1188px, 6 ) ) );
-      padding-right: calc( snrg-fluid-expression( $snrg-padding-until-396px, 100vw, 396px, $snrg-padding-until-396px, 1188px, math.div( 1188px, 6 ) ) );
+      padding-left: calc( snrg-fluid-expression( $snrg-padding-until-396px, 100vw, 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) ) );
+      padding-right: calc( snrg-fluid-expression( $snrg-padding-until-396px, 100vw, 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) ) );
     }
     
     $snrg-initial-heading-coefficient: 1;
     $snrg-final-heading-coefficient: 1;
     @each $heading-level in 3, 2, 1 {
       $snrg-initial-heading-coefficient: $major-second * $major-second * $snrg-initial-heading-coefficient;
-      $snrg-initial-heading-size: $snrg-nunito-sans-size-until-1188px * $snrg-roboto-ratio * $snrg-initial-heading-coefficient;
+      $snrg-initial-heading-size: $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio * $snrg-initial-heading-coefficient;
       $snrg-final-heading-coefficient: $minor-third * $minor-third * $snrg-final-heading-coefficient;
-      $snrg-final-heading-size: $snrg-nunito-sans-size-until-1188px * $snrg-roboto-ratio * $snrg-final-heading-coefficient;
+      $snrg-final-heading-size: $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio * $snrg-final-heading-coefficient;
       :is(header.snrg-header, main) h#{ $heading-level } {
-        font-size: calc( snrg-fluid-expression( $snrg-initial-heading-size, 100vw, 396px, $snrg-initial-heading-size, 1188px, $snrg-final-heading-size ) );
+        font-size: calc( snrg-fluid-expression( $snrg-initial-heading-size, 100vw, 396px, $snrg-initial-heading-size, 1584px, $snrg-final-heading-size ) );
       }
     }
   }
 
-  @media screen and (min-width: 1188px) {
+  @media screen and (min-width: 1584px) {
     :is(header.snrg-header, main) {
-      font-size: calc( snrg-font-size-expression( $snrg-nunito-sans-size-until-1188px, $snrg-padding-coefficient-at-1188px, $snrg-padding-at-1188px, 100vw, 1188px ) );
+      font-size: calc( snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) );
     }
 
     main {
-      padding-left: calc( snrg-fluid-expression(  $snrg-padding-at-1188px, 100vw, 1188px, math.div( 1188px, 6 ), 1194px, math.div( 1194px, 6 ) ) );
-      padding-right: calc( snrg-fluid-expression(  $snrg-padding-at-1188px, 100vw, 1188px, math.div( 1188px, 6 ), 1194px, math.div( 1194px, 6 ) ) );
+      padding-left: calc( snrg-fluid-expression(  $snrg-padding-at-1584px, 100vw, 1584px, math.div( 1584px, 4 ), 1588px, math.div( 1588px, 4 ) ) );
+      padding-right: calc( snrg-fluid-expression(  $snrg-padding-at-1584px, 100vw, 1584px, math.div( 1584px, 4 ), 1588px, math.div( 1588px, 4 ) ) );
     }
 
-    $snrg-heading-font-size: #{ $snrg-roboto-ratio } + ' * ( ' + snrg-font-size-expression( $snrg-nunito-sans-size-until-1188px, $snrg-padding-coefficient-at-1188px, $snrg-padding-at-1188px, 100vw, 1188px ) + ' )';
+    $snrg-heading-font-size: #{ $snrg-roboto-ratio } + ' * ( ' + snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) + ' )';
     @each $heading-level in 3, 2, 1 {
       $snrg-heading-font-size: #{ $minor-third } + ' * ' + #{ $minor-third } + ' * ' + $snrg-heading-font-size;
       :is(header.snrg-header, main) h#{ $heading-level } {
@@ -140,7 +141,7 @@
     }
 
     :is(header.snrg-header, main) :is(button, h4, h5, h6) {
-      font-size: #{ $snrg-roboto-ratio } + ' * ' + '( ' + snrg-font-size-expression( $snrg-nunito-sans-size-until-1188px, $snrg-padding-coefficient-at-1188px, $snrg-padding-at-1188px, 100vw, 1188px ) + ' )';
+      font-size: #{ $snrg-roboto-ratio } + ' * ' + '( ' + snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) + ' )';
     }
   }
 </style>
