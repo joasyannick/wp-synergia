@@ -10,8 +10,10 @@
 
 <style scoped>
   main.snrg-account {
-    position: relative;
-    z-index: 0;
+    box-sizing: border-box;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden auto;
   }
 
   main.snrg-account h1 {

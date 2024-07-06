@@ -15,7 +15,9 @@
 
 <style scoped>
   main.snrg-helikia {
-      position: relative;
-      z-index: 0;
-    }
+    box-sizing: border-box;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden auto;
+  }
 </style>

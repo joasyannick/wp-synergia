@@ -1,5 +1,17 @@
+html {
+  font: 18px/calc(5/3) 'Nunito Sans';
+}
+
 body {
   margin: 0;
+}
+
+:is(button, h1, h2, h3, h4, h5, h6) {
+  font-family: 'Roboto', sans-serif;
+}
+
+:is(h1, h2, h3, h4, h5, h6) {
+  font-weight: 500;
 }
 
 div#snrg-app {

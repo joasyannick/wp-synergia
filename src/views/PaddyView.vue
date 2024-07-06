@@ -13,7 +13,11 @@
 </template>
 
 <style scoped>
-  div#snrg-app[data-snrg-route='/'] main.snrg-paddy {
-      perspective: 100px;
-    }
+  main.snrg-paddy {
+    box-sizing: border-box;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden auto;
+    perspective: 100px;
+  }
 </style>
