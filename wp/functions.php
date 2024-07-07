@@ -313,6 +313,47 @@
 
 
 
+  //-----------
+  // TAXONOMIES
+  //-----------
+
+
+  function register_taxonomies() {
+    // TODO: Define a 'Module' taxonomy for sessions.
+    // Terms are created/removed automatically when modules are created/removed.
+    // Use capabilites to prevent users from creating/modifying/removing terms.
+
+    register_taxonomy( SERIES_TAXONOMY, [ 'post', MODULE_POST_TYPE ], [
+        'labels' => [
+            'name' => __( 'Series', DOMAIN ),
+            'singular_name' => __( 'Series', DOMAIN ),
+            'search_items' => __( 'Search Series', DOMAIN ),
+            'popular_items' => __( 'Popular Series', DOMAIN ),
+            'all_items' => __( 'All Series', DOMAIN ),
+            'edit_item' => __( 'Edit Series', DOMAIN ),
+            'view_item' => __( 'View Series', DOMAIN ),
+            'update_item' => __( 'Update Series', DOMAIN ),
+            'add_new_item' => __( 'Add New Series', DOMAIN ),
+            'new_item_name' => __( 'New Series Name', DOMAIN ),
+            'separate_items_with_commas' => __( 'Separate series with commas', DOMAIN ),
+            'add_or_remove_items' => __( 'Add or remove series', DOMAIN ),
+            'choose_from_most_used' => __( 'Choose from the most used series', DOMAIN ),
+            'not_found' => __( 'No series found', DOMAIN ),
+            'no_terms' => __( 'No series', DOMAIN ),
+            'item_link' => __( 'Series Link', DOMAIN ),
+            'item_link_description' => __( 'A link to a series', DOMAIN ),
+            'menu_name' => __( 'Series', DOMAIN ),
+          ],
+        'public' => true,
+        'hierarchical' => false,
+        'show_in_rest' => true,
+        'rest_base' => SERIES_BASE_IN_REST,
+      ] );
+  }
+
+  add_action( 'init', 'snrg\register_taxonomies' );
+
+
   //---------
   // REST API
   //---------

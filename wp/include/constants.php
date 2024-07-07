@@ -31,6 +31,8 @@
     define( 'DEFAULT_AUDIO_OF_SESSION', 0 );
     define( 'MODULE_OF_SESSION_COLUMN', 'module' );
     define( 'SESSION_NUMBER_COLUMN', 'number' );
+    define( 'SERIES_TAXONOMY', 'snrg_series' );
+    define( 'SERIES_BASE_IN_REST', 'snrg-series' );
     define( 'REST_ROUTE', 'synergia/v1' );
     define( 'HOME_IMAGE_IN_REST', '/home-image' );
     define( 'HOME_IMAGE_PATH', '/assets/home.jpg' );
