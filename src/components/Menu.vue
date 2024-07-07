@@ -5,9 +5,11 @@
   import observers from '@/router/observers'
   import type { IMenu } from '@/injection'
   import { iMenu } from '@/injection'
+  import { useThemeStore } from '@/stores/theme'
   import MenuIcon from '@/components/icons/MenuIcon.vue'
   import BiographyIcon from '@/components/icons/BiographyIcon.vue'
   import SynergiaIcon from '@/components/icons/SynergiaIcon.vue'
+  import ThemeIcon from '@/components/icons/ThemeIcon.vue'
   import ContactIcon from '@/components/icons/ContactIcon.vue'
   import HomeIcon from '@/components/icons/HomeIcon.vue'
   import HelikiaIcon from '@/components/icons/HelikiaIcon.vue'
@@ -17,6 +19,7 @@
   const menu = inject( iMenu ) as IMenu
 
   const route = useRoute()
+  const theme = useThemeStore()
 
   const menuIconAnimated = ref( false )
   const hesychiaUrl = ref( '' )
@@ -25,6 +28,7 @@
   const isBiographyView = computed( () => ! route.name ? false : observers.isBiographyView( route.name.toString() ) )
   const isHelikiaView = computed( () => ! route.name ? false : observers.isHelikiaView( route.name.toString() ) )
   const isSynergiaView = computed( () => ! route.name ? false : observers.isSynergiaView( route.name.toString() ) )
+  const isAccountView = computed( () => ! route.name ? false : observers.isAccountView( route.name.toString() ) )
 
   const openOrClose = () => { if ( ! menuIconAnimated.value ) { menu.openOrClose() } }
   const onMenuIconAnimated = ( state: boolean ) => { menuIconAnimated.value = state }
@@ -60,7 +64,16 @@
           onClick: () => { return }
         },
       {
-          class: 'snrg-contact-link',
+          class: 'snrg-theme-button',
+          icon: ThemeIcon,
+          label: 'Mode nuit',
+          link: '',
+          external: false,
+          condition: ! menu.opened.value && isAccountView.value,
+          onClick: () => { theme.doSwitch() }
+        },
+      {
+          class: 'snrg-contact-button',
           icon: ContactIcon,
           label: 'Contact',
           link: '',

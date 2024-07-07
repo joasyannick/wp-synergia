@@ -57,6 +57,7 @@ const router = createRouter( {
           },
         {
             path: constants.route.account.path,
+            name: constants.route.account.name,
             component: AccountView,
           }
       ]
