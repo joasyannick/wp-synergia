@@ -35,7 +35,7 @@
 
   const fetchHesychiaUrl = async () => {
     try {
-        const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'synergia/v1/hesychia-url' )
+        const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/hesychia-url' )
         hesychiaUrl.value = await response.json()
       } catch ( exception ) {
         console.error( 'Failed to fetch the URL of Cap Hesychia' )
@@ -70,7 +70,7 @@
           link: '',
           external: false,
           condition: ! menu.opened.value && isAccountView.value,
-          onClick: () => { theme.doSwitch() }
+          onClick: () => { theme.toggle() }
         },
       {
           class: 'snrg-contact-button',

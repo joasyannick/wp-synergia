@@ -3,7 +3,7 @@
   import constants from '@/constants'
 
   const programs = ref( [ { id: -1, slug:'', title: 'Programme n°1', excerpt: '', content: '<p>Un programme.</p>' }, { id: -2, slug:'', title: 'Programme n°2', excerpt: '', content: '<p>Un autre programme.</p>' } ] )
-  constants.function.fetchAllPosts( 'snrg-programs', false, true, programs.value )
+  constants.function.fetchAllPosts( import.meta.env.VITE_WP_REST_URL, 'snrg-programs', false, true, programs.value ).then( results => programs.value = results )
 </script>
 
 <template>

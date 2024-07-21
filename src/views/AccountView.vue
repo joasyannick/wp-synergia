@@ -10,6 +10,7 @@
 
 <style scoped>
   main.snrg-account {
+    position: relative;
     box-sizing: border-box;
     width: 100vw;
     height: 100vh;

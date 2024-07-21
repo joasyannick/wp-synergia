@@ -8,7 +8,7 @@
 
   const fetchComments = async () => {
       try {
-        const response = await fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/comments?per_page=' + maxComments + '&_fields=post,author_name,date_gmt,content.rendered,link' )
+        const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/wp/v2/comments?per_page=' + maxComments + '&_fields=post,author_name,date_gmt,content.rendered,link' )
         const fetchedComments = await response.json()
         for ( let maxPosts = 3, posts = [] as any[], commentIndex = 0 ; posts.length < maxPosts && commentIndex < fetchedComments.length ; commentIndex++ ) {
           if ( ! posts.includes( fetchedComments[ commentIndex ].post ) ) {
@@ -17,7 +17,7 @@
           }
         }
         const posts = await Promise.all( comments.value.map( ( comment ) =>
-            fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/posts/' + comment.post + '?_embed=wp:featuredmedia&_fields=title.rendered,_embedded,_links' )
+            fetch( import.meta.env.VITE_WP_REST_URL + '/wp/v2/posts/' + comment.post + '?_embed=wp:featuredmedia&_fields=title.rendered,_embedded,_links' )
               .then( ( response ) => response.json() )
           ) )
         comments.value.forEach( ( comment, index ) => comment.post = posts[ index ] )

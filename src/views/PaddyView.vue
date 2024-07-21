@@ -14,6 +14,7 @@
 
 <style scoped>
   main.snrg-paddy {
+    position: relative;
     box-sizing: border-box;
     width: 100vw;
     height: 100vh;

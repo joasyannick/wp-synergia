@@ -10,16 +10,9 @@ export const useThemeStore = defineStore( 'theme', () => {
   
   const isLight = computed( () => theme.value === constants.theme.light )
 
-  const onThemeChanged = ( theme : string ) => {
-      localStorage.setItem( constants.theme.storageKey, theme )
-      document.getElementById( 'snrg-app' )!.dataset.snrgTheme = theme
-    }
+  const toggle = () => theme.value = isLight.value ? constants.theme.dark : constants.theme.light
 
-  const doSwitch = () => theme.value = isLight.value ? constants.theme.dark : constants.theme.light
+  watch( theme, async ( now ) => { localStorage.setItem( constants.theme.storageKey, now ); document.getElementById( 'snrg-app' )!.dataset.snrgTheme = now }, { immediate: true } )
 
-  watch( theme, async ( now ) => onThemeChanged( now ) )
-
-  onThemeChanged( theme.value )
-
-  return { isLight, doSwitch }
+  return { isLight, toggle }
 } )

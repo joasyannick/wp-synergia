@@ -45,9 +45,9 @@
   const fetchBackground = async () => {
       try {
         [ lightBackground.value, darkBackground.value ] = await Promise.all( [
-            fetch( import.meta.env.VITE_WP_REST_URL + 'synergia/v1/welcome/image/light' )
+            fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/welcome/image/light' )
               .then( ( response ) => response.json() ),
-            fetch( import.meta.env.VITE_WP_REST_URL + 'synergia/v1/welcome/image/dark' )
+            fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/welcome/image/dark' )
               .then( ( response ) => response.json() )
           ] )
         background.value = themeStore.isLight ? lightBackground.value : darkBackground.value
@@ -57,13 +57,13 @@
     }
   const fetchPosts = async () => {
       try {
-        const request = import.meta.env.VITE_WP_REST_URL + 'wp/v2/posts?per_page=' + postsPerPage + '&page=' + ( page.value + 1 ) + '&_embed=author,wp:featuredmedia&_fields=id,slug,date_gmt,excerpt.rendered,link,title.rendered,_embedded,_links'
+        const request = import.meta.env.VITE_WP_REST_URL + '/wp/v2/posts?per_page=' + postsPerPage + '&page=' + ( page.value + 1 ) + '&_embed=author,wp:featuredmedia&_fields=id,slug,date_gmt,excerpt.rendered,link,title.rendered,_embedded,_links'
         const response = await fetch( categories.value.length ? request + '&categories=' + categories.value.map( ( category ) => category.id ).join( ',' ) : request )
         postCount.value = parseInt( response.headers.get( 'x-wp-total' )!, 10 )
         pageCount.value = parseInt( response.headers.get( 'x-wp-totalPages' )!, 10 )
         posts.value = await response.json()
         posts.value.forEach( ( post ) =>
-            fetch( import.meta.env.VITE_WP_REST_URL + 'wp/v2/comments?post=' + post.id )
+            fetch( import.meta.env.VITE_WP_REST_URL + '/wp/v2/comments?post=' + post.id )
               .then( ( response ) => post.commentCount = parseInt( response.headers.get( 'x-wp-total' )!, 10 ) )
           )
         dataReady.value = true

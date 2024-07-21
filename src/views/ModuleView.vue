@@ -5,7 +5,7 @@
 
   const slug = useRoute().params.slug as string
   const module = ref( { id: -1, title: '', excerpt: '', content: '' } )
-  constants.function.fetchPost( 'posts', slug, false, true, module.value )
+  constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'posts', slug, false, true, module.value )
       .then( result => module.value = result.id !== -1 ? result : module.value )</script>
 
 <template>

@@ -3,7 +3,7 @@
   import constants from '@/constants'
 
   const biography = ref ( { id: -1, title: 'Biographie', excerpt: '', content: '<p>Raconter son histoire.</p>' } )
-  Promise.all( [ constants.function.fetchPost( 'pages', constants.route.paddy.biography.name, false, true, biography.value ), constants.function.fetchPost( 'posts', constants.route.paddy.biography.name, false, true, biography.value ) ] )
+  Promise.all( [ constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'pages', constants.route.paddy.biography.name, false, true, biography.value ), constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'posts', constants.route.paddy.biography.name, false, true, biography.value ) ] )
       .then( results => results.filter( result => result.id !== -1 ).forEach( result => biography.value = result ) )
 </script>
 
