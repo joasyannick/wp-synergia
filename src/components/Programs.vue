@@ -2,8 +2,11 @@
   import { ref } from 'vue'
   import constants from '@/constants'
 
-  const programs = ref( [ { id: -1, slug:'', title: 'Programme n°1', excerpt: '', content: '<p>Un programme.</p>' }, { id: -2, slug:'', title: 'Programme n°2', excerpt: '', content: '<p>Un autre programme.</p>' } ] )
-  constants.function.fetchAllPosts( import.meta.env.VITE_WP_REST_URL, 'snrg-programs', false, true, programs.value ).then( results => programs.value = results )
+  const programs = ref( [] as { id: number, slug: string, title: string, data: Map< string, any > }[] )
+
+  const options = new Map()
+  options.set( 'content.rendered', true )
+  constants.function.fetchAllPosts( import.meta.env.VITE_WP_REST_URL, 'snrg-programs', options ).then( results => programs.value = results )
 </script>
 
 <template>
@@ -11,11 +14,14 @@
     <header>
       <h1>Nos programmes</h1>
     </header>
-    <article v-for="program in programs" :key="program.id">
+    <article v-if="programs.length" v-for="program in programs" :key="program.id">
       <header>
         <h2 v-html="program.title"></h2>
       </header>
-      <div v-html="program.content"></div>
+      <div v-if="program.data.get( 'content.rendered' )" v-html="program.data.get( 'content.rendered' )"></div>
+    </article>
+    <article v-else>
+      <p>Pas de programme pour le moment.</p>
     </article>
   </nav>
 </template>

@@ -2,17 +2,26 @@
   import { ref } from 'vue'
   import constants from '@/constants'
 
-  const introduction = ref( { id: -1, title: 'Bienvenue', excerpt: '', content: '<p>Présenter le site.</p>' } )
-  Promise.all( [ constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'pages', constants.route.paddy.introduction, false, true, introduction.value ), constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'posts', constants.route.paddy.introduction, false, true, introduction.value ) ] )
-      .then( results => results.filter( result => result.id !== -1 ).forEach( result => introduction.value = result ) )
+  const introduction = ref( null as null | { id: number, title: string, data: Map< string, any > } )
+
+  const options = new Map()
+  options.set( 'content.rendered', true )
+  Promise.all( [
+      constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'pages', constants.page.introduction, options ),
+      constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'posts', constants.page.introduction, options )
+    ] ).then( results => results.filter( result => result ).forEach( result => introduction.value = result ) )
 </script>
 
 <template>
   <article class="snrg-introduction">
     <header>
-      <h1 v-html="introduction.title"></h1>
+      <h1 v-if="introduction" v-html="introduction.title"></h1>
+      <h1 v-else>Bienvenue</h1>
     </header>
-    <div v-html="introduction.content"></div>
+    <div v-if="introduction && introduction.data.get( 'content.rendered' )" v-html="introduction.data.get( 'content.rendered' )"></div>
+    <div v-else>
+      <p>Présenter le site.</p>
+    </div>
   </article>
 </template>
 

@@ -2,13 +2,26 @@
   import { ref } from 'vue'
   import constants from '@/constants'
 
-  const posts = ref( [] as { id: number, slug: string, title: string, excerpt: string, content: string }[] )
+  const posts = ref( [] as { id: number, slug: string, title: string, data: Map< string, any > }[] )
 
-  constants.function.fetchAllPosts( 'https://paddyfontaine.fr/wp-json', 'posts', true, false, [] ).then( results => posts.value = results )
+  const options = new Map()
+  options.set( 'excerpt.rendered', true )
+  options.set( 'wp:featuredmedia', true )
+  constants.function.fetchAllPosts( 'https://paddyfontaine.fr/wp-json', 'posts', options ).then( results => posts.value = results )
 </script>
 
 <template>
   <nav class="snrg-posts">
+    <header>
+      <h1>Blog</h1>
+    </header>
+    <article v-for="post in posts" :key="post.id">
+      <header>
+        <h1 v-html="post.title"></h1>
+      </header>
+      <aside><img v-if="post.data.get( 'wp:featuredmedia' )" :src="post.data.get( 'wp:featuredmedia' )" /></aside>
+      <div v-if="post.data.get( 'excerpt.rendered' )" v-html="post.data.get( 'excerpt.rendered' )"></div>
+    </article>
   </nav>
 </template>
 

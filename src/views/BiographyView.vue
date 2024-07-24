@@ -2,17 +2,25 @@
   import { ref } from 'vue'
   import constants from '@/constants'
 
-  const biography = ref ( { id: -1, title: 'Biographie', excerpt: '', content: '<p>Raconter son histoire.</p>' } )
-  Promise.all( [ constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'pages', constants.route.paddy.biography.name, false, true, biography.value ), constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'posts', constants.route.paddy.biography.name, false, true, biography.value ) ] )
-      .then( results => results.filter( result => result.id !== -1 ).forEach( result => biography.value = result ) )
+  const biography = ref ( null as null | { id: number, title: string, data: Map< string, any > } )
+
+  const options = new Map()
+  options.set( 'content.rendered', true )
+  Promise.all( [
+      constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'pages', constants.page.biography, options ),
+      constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'posts', constants.page.biography, options )
+    ] ).then( results => results.filter( result => result ).forEach( result => biography.value = result ) )
 </script>
 
 <template>
   <section class="snrg-biography">
     <header>
-      <h2 v-html="biography.title"></h2>
+      <h1 v-if="biography" v-html="biography.title"></h1>
+      <h1 v-else>Biographie</h1>
     </header>
-    <div v-html="biography.content">
+    <div v-if="biography && biography.data.get( 'content.rendered' )" v-html="biography.data.get( 'content.rendered' )"></div>
+    <div v-else>
+      <p>>Raconter son histoire.</p>
     </div>
   </section>
 </template>

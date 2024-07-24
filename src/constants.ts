@@ -1,3 +1,43 @@
+const buildRequestParameters = ( options: Map< string, boolean >, parameters: string[] ): void => {
+    const embedded = options.get( 'wp:featuredmedia' ) || options.get( 'wp:term' )
+    if ( embedded ) {
+      parameters.push( '&_embed=' )
+      const embed = [] as string[]
+      if ( options.get( 'wp:featuredmedia' ) ) {
+        embed.push( 'wp:featuredmedia' )
+      }
+      if ( options.get( 'wp:term' ) ) {
+        embed.push( 'wp:term' )
+      }
+      parameters.push( embed.join( ',' ) )
+    }
+    parameters.push( '&_fields=id,slug,date_gmt,title.rendered' )
+    if ( options.get( 'excerpt.rendered' ) ) {
+      parameters.push( ',excerpt.rendered' )
+    }
+    if ( options.get( 'content.rendered' ) ) {
+      parameters.push( ',content.rendered' )
+    }
+    if ( embedded ) {
+      parameters.push( ',_links,_embedded' )
+    }
+  }
+
+const buildPostData = ( options: Map< string, boolean >, post: any, data: Map< string, any > ): void => {
+    if ( options.get( 'excerpt.rendered' ) && post.excerpt.rendered ) {
+      data.set( 'excerpt.rendered', post.excerpt.rendered )
+    }
+    if ( options.get( 'content.rendered' ) && post.content.rendered ) {
+      data.set( 'content.rendered', post.content.rendered )
+    }
+    if ( options.get( 'wp:featuredmedia' ) && post._embedded[ 'wp:featuredmedia' ] && post._embedded[ 'wp:featuredmedia' ].length && post._embedded[ 'wp:featuredmedia' ][ 0 ].source_url ) {
+      data.set( 'wp:featuredmedia', post._embedded[ 'wp:featuredmedia' ][ 0 ].source_url )
+    }
+    if ( options.get( 'wp:term' ) && post._embedded[ 'wp:term' ] ) {
+      data.set( 'wp:term', post._embedded[ 'wp:term' ] )
+    }
+  }
+
 const constants = Object.freeze( {
     menu: {
         animation: 1 // second
@@ -26,8 +66,6 @@ const constants = Object.freeze( {
                 path: 'bio',
                 fullPath: '/bio'
               },
-            contact: 'contact',
-            introduction: 'intro',
             post: {
                 name: 'post',
                 path: ':post',
@@ -55,37 +93,56 @@ const constants = Object.freeze( {
             fullPath: '/compte'
           }
       },
+    page: {
+        biography: 'snrg-biography',
+        helikia: 'snrg-helikia',
+        introduction: 'snrg-introduction'
+      },
     function: {
-        fetchPost: async ( url: string, postType: string, slug: string, withExcerpt: boolean, withContent: boolean, defaultPost: { id: number, title: string, excerpt: string, content: string } ): Promise< { id: number, title: string, excerpt: string, content: string } > => {
+        fetchPost: async ( url: string, postType: string, slug: string, options: Map< string, boolean > ): Promise< null | { id: number, date_gmt: string, title: string, data: Map< string, any > } > => {
             try {
-              const response = await fetch( url + '/wp/v2/' + postType + '?slug=' + slug + '&_fields=id,title.rendered' + ( withExcerpt ? ',excerpt.rendered' : '' ) + ( withContent ? ',content.rendered' : '' ) )
+              const request = [ url, '/wp/v2/', postType, '?slug=', slug ]
+              buildRequestParameters( options, request )
+              console.log( request.join( '' ) )
+              const response = await fetch( request.join( '' ) )
               const json = await response.json()
               if ( json.length ) {
-                return { id: json[0].id, title: json[0].title.rendered, excerpt: withExcerpt ? json[0].excerpt.rendered : '', content: withContent ? json[0].content.rendered : '' }
+                const data = new Map() as Map< string, string >
+                buildPostData( options, json[0], data )
+                return { id: json[0].id, date_gmt: json[0].date_gmt, title: json[0].title.rendered, data }
               }
             } catch ( exception ) {
-              console.error( 'Failed to fetch "' + slug  + '" in "' + postType + '": ' + exception )
+              console.error( `Failed to fetch "${ slug }" in "${ postType }": ${ exception }` )
             }
-            return defaultPost
+            return null
           },
-        fetchAllPosts: async ( url: string, postType: string, withExcerpt: boolean, withContent: boolean, defaultPosts: { id: number, slug: string, title: string, excerpt: string, content: string }[] ): Promise< { id: number, slug: string, title: string, excerpt: string, content: string }[] > => {
+        fetchAllPosts: async ( url: string, postType: string, options: Map< string, boolean > ): Promise< { id: number, slug: string, date_gmt: string, title: string, data: Map< string, any > }[] > => {
             try {
-              const posts = [] as { id: number, slug: string, title: string, excerpt: string, content: string }[]
+              const posts = [] as { id: number, slug: string, date_gmt: string, title: string, data: Map< string, string > }[]
               for ( let [ page, more ] = [ 1, true ]; more; page++ ) {
-                const response = await fetch( url + '/wp/v2/' + postType +'?per_page=100&page=' + page + '&_fields=id,slug,title.rendered' + ( withExcerpt ? ',excerpt.rendered' : '' ) + ( withContent ? ',content.rendered' : '' ) )
+                const request = [ url, '/wp/v2/', postType, '?per_page=100&page=', page.toString() ]
+                buildRequestParameters( options, request )
+                console.log( request.join( '' ) )
+                const response = await fetch( request.join( '' ) )
                 const json = await response.json()
-                json.forEach( ( post: any ) => posts.push( { id: post.id, slug: post.slug, title: post.title.rendered, excerpt: withExcerpt ? post.excerpt.rendered : '', content: withContent ? post.content.rendered : '' } ) )
+                json.forEach( ( post: any ) =>  {
+                    const data = new Map() as Map< string, any >
+                    buildPostData( options, post, data )
+                    posts.push( { id: post.id, slug: post.slug, date_gmt: json[0].date_gmt, title: post.title.rendered, data } )
+                  } )
                 more = page < parseInt( response.headers.get( 'X-WP-TotalPages' )! )
               }
               if ( posts.length ) {
                 return posts
               }
             } catch ( exception ) {
-              console.error( 'Failed to fetch "' + postType + '": ' + exception )
+              console.error( `Failed to fetch "${ postType }": ${ exception }` )
             }
-            return defaultPosts
+            return []
           }
       }
   } )
+
+// https://paddyfontaine.fr/wp-json/wp/v2/posts?per_page=100&page=1&_embed=wp:featuredmedia,wp:term&_fields=id,slug,date_gmt,title.rendered,excerpt.rendered,content.rendered,_links,_embedded
 
 export default constants

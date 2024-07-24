@@ -4,17 +4,21 @@
   import constants from '@/constants'
 
   const slug = useRoute().params.slug as string
-  const post = ref( { id: -1, title: '', excerpt: '', content: '' } )
-  constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'posts', slug, false, true, post.value )
-      .then( result => post.value = result.id !== -1 ? result : post.value )
+
+  const post = ref( null as null | { id: number, title: string, data: Map< string, any > } )
+
+  const options = new Map()
+  options.set( 'content.rendered', true )
+  constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'posts', slug, options )
+      .then( result => post.value = result ? result : post.value )
 </script>
 
 <template>
   <section v-if="post" class="snrg-post">
     <header>
-      <h2 v-html="post.title"></h2>
+      <h1 v-html="post.title"></h1>
     </header>
-    <div v-html="post.content"></div>
+    <div v-if="post.data.get( 'content.rendered' )" v-html="post.data.get( 'content.rendered' )"></div>
   </section>
 </template>
 
