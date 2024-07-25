@@ -5,6 +5,50 @@
 
 
 
+  //-----------
+  // CSS AND JS
+  //-----------
+
+
+  function add_jquery() {
+    wp_enqueue_script( 'jquery' );
+  }
+
+  add_action( 'init', 'snrg\add_jquery' );
+
+  function add_fonts() {
+    wp_enqueue_style( 'google-font-nunito-sans', 'https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap' );
+    wp_enqueue_style( 'google-font-roboto', 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap' );
+  }
+
+  function enqueue_styles() {
+    $synergia_style = '/assets/synergia.css';
+    $vue_style = '/assets/app/index.css';
+    wp_enqueue_style( 'snrg-synergia', get_template_directory_uri() . $synergia_style, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $synergia_style ) ) );
+    wp_enqueue_style( 'snrg-vue', get_template_directory_uri() . $vue_style, [ 'snrg-synergia' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_style ) ) );
+  }
+
+  function enqueue_scripts() {
+    $vue_script = '/assets/app/index.js';
+    wp_enqueue_script( 'snrg-vue', get_template_directory_uri() . $vue_script, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_script ) ), true );
+  }
+
+  add_action( 'wp_enqueue_scripts', 'snrg\add_fonts' );
+  add_action( 'wp_enqueue_scripts', 'snrg\enqueue_styles' );
+  add_action( 'wp_enqueue_scripts', 'snrg\enqueue_scripts' );
+
+  function add_vue_js_html_attributes( $tag, $handle, $src ) {
+    $prefix = 'snrg-vue';
+    if ( substr($handle, 0, strlen( $prefix ) ) === $prefix ) {
+      return preg_replace( '/(type\s*=\s*["\']).*?(["\'])/', '$1module$2', $tag, 1 );
+    }
+    return $tag;
+  }
+
+  add_filter( 'script_loader_tag', 'snrg\add_vue_js_html_attributes' , 10, 3 );
+
+
+
   //--------
   // ROUTING
   //--------
@@ -39,7 +83,7 @@
   function change_template_selection( $template ) {
     $route = get_query_var( 'route' );
     if ( $route ):
-      if ( $route != '404' ):
+      if ( $route !== '404' ):
         $matches = [];
         if ( preg_match( '@^(' . SLUG_FOR_BIOGRAPHY_PAGE . ')/?$@', $route, $matches ) ||
             preg_match( '@^(' . SLUG_FOR_ACCOUNT_PAGE . ')/?$@', $route, $matches ) ||
@@ -71,14 +115,24 @@
 
 
   function render_section( $args ) { ?>
-    <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( '', DOMAIN ); ?></p>
+    <p><?php esc_html_e( 'Please enter the following settings', DOMAIN ); ?>:</p>
   <?php }
 
   function render_field( $args ) {
     $field = $args['field'];
     $options = get_option( SETTINGS_DATA );
-    if ( $field[ 'type' ] == SETTINGS_TYPE_FOR_URLS ): ?>
-      <input type="url" id="<?php echo str_replace( '_', '-', esc_attr( $field['id'] ) ); ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>" value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>" placeholder="https://example.com" pattern="https://.*" size="30" required />
+    if ( $field[ 'type' ] === SETTINGS_TYPE_FOR_URLS ): ?>
+      <input type="url" id="snrg-<?php echo str_replace( '_', '-', esc_attr( $field['id'] ) ); ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>" value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>" placeholder="https://example.com" pattern="https://.*" size="30" required />
+    <?php elseif ( $field[ 'type' ] === SETTINGS_TYPE_FOR_TEXT_ARRAYS ): ?>
+      <?php if ( isset( $options[ $field['id'] ] ) && ! empty( $options[ $field['id'] ] ) ): ?>
+        <?php foreach ( $options[ $field['id'] ] as $index => $value )  { ?>
+          <div class="snrg-slogan">
+            <input type="text" id="snrg-<?php echo str_replace( '_', '-', esc_attr( $field['id'] ) ) . '-' . $index; ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . '][]'; ?>" value="<?php echo esc_attr( $value ); ?>" size="30" required />
+            <button type="button" class="snrg-remove-slogan">–</button>
+          </div>
+        <?php } ?>
+      <?php endif; ?>
+      <button type="button" id="snrg-add-slogan"><?php esc_html_e( 'Add New', DOMAIN ); ?></button>
     <?php endif;
   }
 
@@ -102,14 +156,26 @@
 
   function add_settings() {
     register_setting( SETTINGS, SETTINGS_DATA );
-    add_settings_section( SETTINGS_SECTION_FOR_URLS, __( 'Page Settings', DOMAIN ), 'snrg\render_section', SETTINGS );
-    foreach( SETTINGS_FIELDS as $field ) {
-      add_settings_field( $field[ 'id' ], __( $field[ 'label' ], DOMAIN ), 'snrg\render_field', SETTINGS, SETTINGS_SECTION_FOR_URLS, [ 'label_for' => str_replace( '_', '-', $field[ 'id' ] ), 'field' => $field ] );
+    add_settings_section( SETTINGS_SECTION, __( 'Settings', DOMAIN ), 'snrg\render_section', SETTINGS );
+    foreach ( SETTINGS_FIELDS as $field ) {
+      add_settings_field( $field[ 'id' ], __( $field[ 'label' ], DOMAIN ), 'snrg\render_field', SETTINGS, SETTINGS_SECTION, [ 'label_for' => str_replace( '_', '-', $field[ 'id' ] ), 'field' => $field ] );
     }
   }
 
+  function enqueue_styles_for_options_page() {
+    $style = '/assets/options.css';
+    wp_enqueue_style( 'snrg-options', get_template_directory_uri() . $style, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $style ) ) );
+  }
+
+  function enqueue_scripts_for_options_page() {
+    $script = '/assets/options.js';
+    wp_enqueue_script( 'snrg-options', get_template_directory_uri() . $script, [ 'jquery' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $script ) ), true );
+  }
+
   function add_settings_page() {
-    add_menu_page( 'WP Synergia', 'WP Synergia', CAPABILITY_REQUIRED_FOR_SETTINGS, SETTINGS, 'snrg\render_settings_page', 'dashicons-menu' );
+    $theme_page_hook = add_menu_page( 'WP Synergia', 'WP Synergia', CAPABILITY_REQUIRED_FOR_SETTINGS, SETTINGS, 'snrg\render_settings_page', 'dashicons-menu' );
+    add_action( 'load-' . $theme_page_hook, 'snrg\enqueue_styles_for_options_page' );
+    add_action( 'load-' . $theme_page_hook, 'snrg\enqueue_scripts_for_options_page' );
   }
 
   add_action( 'admin_init', 'snrg\add_settings' );
@@ -373,7 +439,7 @@
           'methods' => \WP_REST_Server::READABLE,
           'callback' => function( $request ) use ( $setting ) {
             $options = get_option( SETTINGS_DATA );
-            return rest_ensure_response( isset( $options[ $setting ] ) ? $options[ $setting ] : ( $setting == SETTING_FOR_HESYCHIA_URL ? '' : '0' ) );
+            return rest_ensure_response( isset( $options[ $setting ] ) ? $options[ $setting ] : ( $setting === SETTING_FOR_HESYCHIA_URL ? '' : '0' ) );
           },
           'permission_callback' => '__return_true'
         ] );
@@ -381,58 +447,4 @@
   }
 
   add_action( 'rest_api_init', 'snrg\extend_rest_api' );
-
-
-
-  //-----------
-  // CSS AND JS
-  //-----------
-
-
-  function add_fonts() {
-    wp_enqueue_style( 'google-font-nunito-sans', 'https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap' );
-    wp_enqueue_style( 'google-font-roboto', 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap' );
-  }
-
-  function enqueue_styles() {
-    $synergia_css = '/assets/synergia.css';
-    $vue_css = '/assets/app/index.css';
-    wp_enqueue_style( 'snrg-synergia', get_template_directory_uri() . $synergia_css, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $synergia_css ) ) );
-    wp_enqueue_style( 'snrg-vue', get_template_directory_uri() . $vue_css, [ 'snrg-synergia' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_css ) ) );
-  }
-
-  function enqueue_scripts() {
-    $vue_js = '/assets/app/index.js';
-    wp_enqueue_script( 'snrg-vue', get_template_directory_uri() . $vue_js, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_js ) ), true );
-  }
-
-  add_action( 'wp_enqueue_scripts', 'snrg\add_fonts' );
-  add_action( 'wp_enqueue_scripts', 'snrg\enqueue_styles' );
-  add_action( 'wp_enqueue_scripts', 'snrg\enqueue_scripts' );
-
-  function enqueue_admin_styles() {
-    wp_enqueue_style( 'select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css' );
-    $admin_css = '/assets/admin.css';
-    wp_enqueue_style( 'snrg-admin', get_template_directory_uri() . $admin_css, [ 'select2' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $admin_css ) ) );
-  }
-
-  function enqueue_admin_scripts() {
-    wp_enqueue_script( 'select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', [ 'jquery' ] );
-    $admin_js = '/assets/admin.js';
-    wp_enqueue_script( 'snrg-admin', get_template_directory_uri() . $admin_js, [ 'select2' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $admin_js ) ) );
-  }
-
-  add_action( 'admin_enqueue_scripts', 'snrg\enqueue_admin_styles' );
-  add_action( 'admin_enqueue_scripts', 'snrg\enqueue_admin_scripts' );
-
-
-  function add_vue_js_html_attributes( $tag, $handle, $src ) {
-    $prefix = 'snrg-vue';
-    if ( substr($handle, 0, strlen( $prefix ) ) === $prefix ) {
-      return preg_replace( '/(type\s*=\s*["\']).*?(["\'])/', '$1module$2', $tag, 1 );
-    }
-    return $tag;
-  }
-
-  add_filter( 'script_loader_tag', 'snrg\add_vue_js_html_attributes' , 10, 3 );
 ?>
