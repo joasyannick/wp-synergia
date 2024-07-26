@@ -2,12 +2,24 @@
   import { ref } from 'vue'
   import constants from '@/constants'
 
+  const defaultImage = ref( '' )
   const posts = ref( [] as { id: number, slug: string, title: string, data: Map< string, any > }[] )
 
+  const fetchDefaultImage = async () => {
+      try {
+        const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/default-image' )
+        defaultImage.value = await response.json()
+      } catch ( exception ) {
+        console.error( 'Failed to fetch the default featured image' )
+      }
+    }
+  
+  fetchDefaultImage()
   const options = new Map()
   options.set( 'excerpt.rendered', true )
   options.set( 'wp:featuredmedia', true )
   constants.function.fetchAllPosts( 'https://paddyfontaine.fr/wp-json', 'posts', options ).then( results => posts.value = results )
+
 </script>
 
 <template>
@@ -19,7 +31,10 @@
       <header>
         <h1 v-html="post.title"></h1>
       </header>
-      <aside><img v-if="post.data.get( 'wp:featuredmedia' )" :src="post.data.get( 'wp:featuredmedia' )" /></aside>
+      <aside>
+        <img v-if="post.data.get( 'wp:featuredmedia' )" :src="post.data.get( 'wp:featuredmedia' )" style="width:400px; height:auto" />
+        <img v-else :src="defaultImage" style="width:400px; height:auto" />
+      </aside>
       <div v-if="post.data.get( 'excerpt.rendered' )" v-html="post.data.get( 'excerpt.rendered' )"></div>
     </article>
   </nav>

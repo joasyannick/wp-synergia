@@ -50,5 +50,7 @@
   define( 'SERIES_BASE_IN_REST', 'snrg-series' );
   define( 'REST_ROUTE', 'synergia/v1' );
   define( 'HOME_IMAGE_IN_REST', '/home-image' );
-  define( 'HOME_IMAGE_PATH', '/assets/home.jpg' );
+  define( 'HOME_IMAGE_PATH', '/assets/images/home.jpg' );
+  define( 'DEFAULT_IMAGE_IN_REST', '/default-image' );
+  define( 'DEFAULT_IMAGE_PATH', '/assets/images/default.jpg' );
 ?>

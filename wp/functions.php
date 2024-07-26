@@ -1,7 +1,7 @@
 <?php
   namespace snrg;
 
-  require_once get_template_directory() . '/include/constants.php';
+  require_once get_template_directory() . '/inc/constants.php';
 
 
 
@@ -430,6 +430,13 @@
         'methods' => \WP_REST_Server::READABLE,
         'callback' => function( $request ) {
           return rest_ensure_response( esc_url( get_template_directory_uri() ) . HOME_IMAGE_PATH );
+        },
+        'permission_callback' => '__return_true'
+      ] );
+    register_rest_route( REST_ROUTE, DEFAULT_IMAGE_IN_REST, [
+        'methods' => \WP_REST_Server::READABLE,
+        'callback' => function( $request ) {
+          return rest_ensure_response( esc_url( get_template_directory_uri() ) . DEFAULT_IMAGE_PATH );
         },
         'permission_callback' => '__return_true'
       ] );
