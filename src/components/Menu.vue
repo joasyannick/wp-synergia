@@ -29,21 +29,6 @@
   const isHelikiaView = computed( () => ! route.name ? false : observers.isHelikiaView( route.name.toString() ) )
   const isSynergiaView = computed( () => ! route.name ? false : observers.isSynergiaView( route.name.toString() ) )
   const isAccountView = computed( () => ! route.name ? false : observers.isAccountView( route.name.toString() ) )
-
-  const openOrClose = () => { if ( ! menuIconAnimated.value ) { menu.openOrClose() } }
-  const onMenuIconAnimated = ( state: boolean ) => { menuIconAnimated.value = state }
-
-  const fetchHesychiaUrl = async () => {
-    try {
-        const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/hesychia-url' )
-        hesychiaUrl.value = await response.json()
-      } catch ( exception ) {
-        console.error( 'Failed to fetch the URL of Cap Hesychia' )
-      }
-  }
-
-  fetchHesychiaUrl()
-
   const buttons = computed( () => [
       {
           class: 'snrg-biography-link',
@@ -118,6 +103,19 @@
           onClick: () => { return }
         }
     ] )
+
+  const openOrClose = () => { if ( ! menuIconAnimated.value ) { menu.openOrClose() } }
+  const onMenuIconAnimated = ( state: boolean ) => { menuIconAnimated.value = state }
+  const fetchHesychiaUrl = async () => {
+      try {
+          const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/hesychia-url' )
+          hesychiaUrl.value = await response.json()
+        } catch ( exception ) {
+          console.error( 'Failed to fetch the URL of Cap Hesychia' )
+        }
+    }
+
+  fetchHesychiaUrl()
 </script>
 
 <template>

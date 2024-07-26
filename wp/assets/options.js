@@ -19,7 +19,7 @@
         $( 'button#snrg-add-slogan' ).on( 'click', function( event ) {
             event.preventDefault()
             $( '<div>' ).addClass( 'snrg-slogan' ).html(
-                '<input type="text" id="snrg-slogan-' + ( $( 'div.snrg-slogan' ).length ) + '" name="snrg_settings[slogan][]"  value="" placeholder="Example" required />' +
+                '<input type="text" id="snrg-slogan-' + ( $( 'div.snrg-slogan' ).length ) + '" name="snrg_settings[slogans][]"  value="" placeholder="Example" required />' +
                 '<button type="button" class="snrg-remove-slogan">-</button>'
               ).insertBefore( 'button#snrg-add-slogan' )
             snrgRefreshEventListeners()

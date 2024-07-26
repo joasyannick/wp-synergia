@@ -1,15 +1,22 @@
 <script setup lang="ts">
   import { ref } from 'vue'
 
-  const slogans = [
-      'Je ne crois pas en Dieu, je le vis.',
-      'Je vis, non plus moi, Christ vit en moi.',
-      "Christ ne se croit pas seulement, il s'expérimente.",
-      "L'évangile ne se prêche pas seulement, il se démontre."
-    ]
+  const slogans = ref( [] as string[] )
   const current = ref( 0 )
 
-  setInterval( () => { for ( let before = current.value; before === current.value; ) current.value = Math.floor( Math.random() * slogans.length ) }, 12000 )
+  const fetchSlogans = async () => {
+      try {
+          const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/slogans' )
+          slogans.value = await response.json()
+          if ( slogans.value.length ) {
+            setInterval( () => { for ( let before = current.value; before === current.value; ) current.value = Math.floor( Math.random() * slogans.value.length ) }, 12000 )
+          }
+        } catch ( exception ) {
+          console.error( 'Failed to fetch slogans' )
+        }
+    }
+
+  fetchSlogans()
 </script>
 
 <template>

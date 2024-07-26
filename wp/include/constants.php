@@ -3,16 +3,26 @@
 
   define( 'DOMAIN', 'synergia' );
   define( 'CAPABILITY_REQUIRED_FOR_SETTINGS', 'manage_options' );
-  define( 'SETTINGS', 'snrg-settings' );
+  define( 'SETTINGS_ID', 'snrg-settings' );
   define( 'SETTINGS_DATA', 'snrg_settings' );
-  define( 'SETTINGS_SECTION', 'snrg-settings-section' );
+  define( 'SETTINGS_SECTION_ID', 'snrg-settings-section' );
+  define( 'SETTING_KEY', 'key' );
+  define( 'SETTING_ID', 'id' );
+  define( 'SETTING_LABEL', 'label' );
+  define( 'SETTING_REST_ROUTE', 'rest_route' );
+  define( 'SETTING_DEFAULT', 'default' );
+  define( 'SETTING_TYPE', 'type' );
   define( 'SETTINGS_TYPE_FOR_URLS', 'url' );
   define( 'SETTINGS_TYPE_FOR_TEXT_ARRAYS', 'text_array' );
-  define( 'SETTING_FOR_HESYCHIA_URL', 'hesychia_url' );
-  define( 'SETTING_FOR_SLOGANS', 'slogan' );
-  define( 'SETTINGS_FIELDS', [
-      [ 'id' => SETTING_FOR_HESYCHIA_URL, 'label' => 'Cap Hesychia URL', 'type' => SETTINGS_TYPE_FOR_URLS ],
-      [ 'id' => SETTING_FOR_SLOGANS, 'label' => 'Slogans', 'type' => SETTINGS_TYPE_FOR_TEXT_ARRAYS ]
+  define( 'SETTING_KEY_FOR_HESYCHIA_URL', 'hesychia_url' );
+  define( 'SETTING_ID_FOR_HESYCHIA_URL', 'snrg-hesychia-url' );
+  define( 'SETTING_REST_ROUTE_FOR_HESYCHIA_URL', '/hesychia-url' );
+  define( 'SETTING_KEY_FOR_SLOGANS', 'slogans' );
+  define( 'SETTING_ID_FOR_ONE_SLOGAN', 'snrg-slogan' );
+  define( 'SETTING_REST_ROUTE_FOR_SLOGANS', '/slogans' );
+  define( 'SETTINGS', [
+      [ SETTING_KEY => SETTING_KEY_FOR_HESYCHIA_URL, SETTING_ID => SETTING_ID_FOR_HESYCHIA_URL, SETTING_TYPE => SETTINGS_TYPE_FOR_URLS, SETTING_DEFAULT => '', SETTING_LABEL => 'Cap Hesychia URL', SETTING_REST_ROUTE => SETTING_REST_ROUTE_FOR_HESYCHIA_URL ],
+      [ SETTING_KEY => SETTING_KEY_FOR_SLOGANS, SETTING_ID => SETTING_ID_FOR_ONE_SLOGAN, SETTING_TYPE => SETTINGS_TYPE_FOR_TEXT_ARRAYS, SETTING_DEFAULT => [], SETTING_LABEL => 'Slogans', SETTING_REST_ROUTE => SETTING_REST_ROUTE_FOR_SLOGANS ]
     ] );
   define( 'SLUG_FOR_ACCOUNT_PAGE', 'compte' );
   define( 'SLUG_FOR_BIOGRAPHY_PAGE', 'bio' );

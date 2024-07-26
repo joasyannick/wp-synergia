@@ -118,16 +118,16 @@
     <p><?php esc_html_e( 'Please enter the following settings', DOMAIN ); ?>:</p>
   <?php }
 
-  function render_field( $args ) {
-    $field = $args['field'];
+  function render_setting( $args ) {
+    $setting = $args[ SETTINGS_ID ];
     $options = get_option( SETTINGS_DATA );
-    if ( $field[ 'type' ] === SETTINGS_TYPE_FOR_URLS ): ?>
-      <input type="url" id="snrg-<?php echo str_replace( '_', '-', esc_attr( $field['id'] ) ); ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . ']'; ?>" value="<?php echo isset( $options[ $field['id'] ] ) ? esc_attr( $options[ $field['id'] ] ) : ''; ?>" placeholder="https://example.com" pattern="https://.*" size="30" required />
-    <?php elseif ( $field[ 'type' ] === SETTINGS_TYPE_FOR_TEXT_ARRAYS ): ?>
-      <?php if ( isset( $options[ $field['id'] ] ) && ! empty( $options[ $field['id'] ] ) ): ?>
-        <?php foreach ( $options[ $field['id'] ] as $index => $value )  { ?>
+    if ( $setting[ SETTING_TYPE ] === SETTINGS_TYPE_FOR_URLS ): ?>
+      <input type="url" id="<?php echo esc_attr( $setting[ SETTING_ID ] ); ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $setting[ SETTING_KEY ] ) . ']'; ?>" value="<?php echo isset( $options[ $setting[ SETTING_KEY ] ] ) ? esc_attr( $options[ $setting[ SETTING_KEY ] ] ) : ''; ?>" placeholder="https://example.com" pattern="https://.*" size="30" required />
+    <?php elseif ( $setting[ SETTING_TYPE ] === SETTINGS_TYPE_FOR_TEXT_ARRAYS ): ?>
+      <?php if ( isset( $options[ $setting[ SETTING_KEY ] ] ) && ! empty( $options[ $setting[ SETTING_KEY ] ] ) ): ?>
+        <?php foreach ( $options[ $setting[ SETTING_KEY ] ] as $index => $value )  { ?>
           <div class="snrg-slogan">
-            <input type="text" id="snrg-<?php echo str_replace( '_', '-', esc_attr( $field['id'] ) ) . '-' . $index; ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $field['id'] ) . '][]'; ?>" value="<?php echo esc_attr( $value ); ?>" size="30" required />
+            <input type="text" id="<?php echo esc_attr( $setting[ SETTING_ID ] ) . '-' . $index; ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $setting[ SETTING_KEY ] ) . '][]'; ?>" value="<?php echo esc_attr( $value ); ?>" size="30" required />
             <button type="button" class="snrg-remove-slogan">–</button>
           </div>
         <?php } ?>
@@ -147,18 +147,18 @@
     <div class="wrap">
       <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
       <form action="options.php" method="post"> <?php
-        settings_fields( SETTINGS );
-        do_settings_sections( SETTINGS );
+        settings_fields( SETTINGS_ID );
+        do_settings_sections( SETTINGS_ID );
         submit_button( __( 'Save Settings', DOMAIN ) ); ?>
       </form>
     </div> <?php
   }
 
   function add_settings() {
-    register_setting( SETTINGS, SETTINGS_DATA );
-    add_settings_section( SETTINGS_SECTION, __( 'Settings', DOMAIN ), 'snrg\render_section', SETTINGS );
-    foreach ( SETTINGS_FIELDS as $field ) {
-      add_settings_field( $field[ 'id' ], __( $field[ 'label' ], DOMAIN ), 'snrg\render_field', SETTINGS, SETTINGS_SECTION, [ 'label_for' => str_replace( '_', '-', $field[ 'id' ] ), 'field' => $field ] );
+    register_setting( SETTINGS_ID, SETTINGS_DATA );
+    add_settings_section( SETTINGS_SECTION_ID, __( 'Settings', DOMAIN ), 'snrg\render_section', SETTINGS_ID );
+    foreach ( SETTINGS as $setting ) {
+      add_settings_field( $setting[ SETTING_ID ], __( $setting[ SETTING_LABEL ], DOMAIN ), 'snrg\render_setting', SETTINGS_ID, SETTINGS_SECTION_ID, array_merge( [ SETTINGS_ID => $setting ], $setting[ SETTING_TYPE ] !== SETTINGS_TYPE_FOR_TEXT_ARRAYS ? [ 'label_for' => $setting[ SETTING_ID ] ] : [] ) );
     }
   }
 
@@ -173,7 +173,7 @@
   }
 
   function add_settings_page() {
-    $theme_page_hook = add_menu_page( 'WP Synergia', 'WP Synergia', CAPABILITY_REQUIRED_FOR_SETTINGS, SETTINGS, 'snrg\render_settings_page', 'dashicons-menu' );
+    $theme_page_hook = add_menu_page( 'WP Synergia', 'WP Synergia', CAPABILITY_REQUIRED_FOR_SETTINGS, SETTINGS_ID, 'snrg\render_settings_page', 'dashicons-menu' );
     add_action( 'load-' . $theme_page_hook, 'snrg\enqueue_styles_for_options_page' );
     add_action( 'load-' . $theme_page_hook, 'snrg\enqueue_scripts_for_options_page' );
   }
@@ -433,13 +433,12 @@
         },
         'permission_callback' => '__return_true'
       ] );
-    $settings = [ SETTING_FOR_HESYCHIA_URL ];
-    foreach ( $settings as $setting ) {
-      register_rest_route( REST_ROUTE, str_replace( '_', '-', $setting ), [
+    foreach ( SETTINGS as $setting ) {
+      register_rest_route( REST_ROUTE, $setting[ SETTING_REST_ROUTE ], [
           'methods' => \WP_REST_Server::READABLE,
           'callback' => function( $request ) use ( $setting ) {
             $options = get_option( SETTINGS_DATA );
-            return rest_ensure_response( isset( $options[ $setting ] ) ? $options[ $setting ] : ( $setting === SETTING_FOR_HESYCHIA_URL ? '' : '0' ) );
+            return rest_ensure_response( isset( $options[ $setting[ SETTING_KEY ] ] ) ? $options[ $setting[ SETTING_KEY ] ] : $setting[ SETTING_DEFAULT ] );
           },
           'permission_callback' => '__return_true'
         ] );
