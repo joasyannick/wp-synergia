@@ -4,6 +4,11 @@
 
   const defaultImage = ref( '' )
   const posts = ref( [] as { id: number, slug: string, title: string, data: Map< string, any > }[] )
+  const current = ref( undefined as undefined | number)
+
+  const onClick = ( index: number ) => {
+      current.value = index
+    }
 
   const fetchDefaultImage = async () => {
       try {
@@ -18,33 +23,47 @@
   const options = new Map()
   options.set( 'excerpt.rendered', true )
   options.set( 'wp:featuredmedia', true )
-  constants.function.fetchAllPosts( 'https://paddyfontaine.fr/wp-json', 'posts', options ).then( results => posts.value = results )
+  constants.function.fetchAllPosts( 'https://paddyfontaine.fr/wp-json', 'posts', options ).then( results => {
+      if ( results.length ) {
+        posts.value = results
+        current.value = 0
+      }
+    } )
 
 </script>
 
 <template>
   <nav class="snrg-posts">
     <header>
-      <h1>Blog</h1>
+      <h1 v-if="current !== undefined" v-html="posts[ current ].title"></h1>
     </header>
-    <article v-for="post in posts" :key="post.id">
-      <header>
-        <h1 v-html="post.title"></h1>
-      </header>
-      <aside>
-        <img v-if="post.data.get( 'wp:featuredmedia' )" :src="post.data.get( 'wp:featuredmedia' )" style="width:400px; height:auto" />
-        <img v-else :src="defaultImage" style="width:400px; height:auto" />
-      </aside>
-      <div v-if="post.data.get( 'excerpt.rendered' )" v-html="post.data.get( 'excerpt.rendered' )"></div>
-    </article>
+    <aside>
+      <Transition name="snrg">
+        <img v-if="current !== undefined && posts[ current ].data.get( 'wp:featuredmedia' )" :src="posts[ current ].data.get( 'wp:featuredmedia' )" />
+        <img v-else-if="current !== undefined" :src="defaultImage" />
+      </Transition>
+    </aside>
+    <div v-if="posts.length">
+      <article v-for="( post, index ) in posts" :key="post.id">
+        <header v-if="current !== undefined && current !== index">
+          <h1 v-html="post.title"></h1>
+        </header>
+        <aside>
+          <img v-if="post.data.get( 'wp:featuredmedia' )" :src="post.data.get( 'wp:featuredmedia' )" style="width:400px; height:auto" />
+          <img v-else :src="defaultImage" style="width:400px; height:auto" />
+        </aside>
+        <div v-if="current !== undefined && current === index && post.data.get( 'excerpt.rendered' )" v-html="post.data.get( 'excerpt.rendered' )"></div>
+      </article>
+    </div>
   </nav>
 </template>
 
 <style scoped>
   nav.snrg-posts {
+    position: relative;
     width: 100vw;
     height: 100vh;
-    background: black;
+    overflow: hidden;
   }
 
   nav.snrg-posts.snrg-enter-active {
@@ -58,5 +77,40 @@
   nav.snrg-posts.snrg-enter-from,
   nav.snrg-posts.snrg-leave-to {
     opacity: 0;
+  }
+
+  nav.snrg-posts > header > h1 {
+    margin: 0;
+  }
+
+  nav.snrg-posts > aside {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+  }
+
+  nav.snrg-posts > aside::after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    content: '';
+    background-color: grey;
+    mix-blend-mode: darken;
+  }
+
+  nav.snrg-posts > aside > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(15px)
+  }
+
+  nav.snrg-posts > div {
+    display: flex;
   }
 </style>

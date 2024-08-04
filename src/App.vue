@@ -31,16 +31,16 @@
     @return $number;
   }
 
-  @function snrg-fluid-coefficient( $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) {
+  @function snrg-linear-coefficient( $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) {
     @return math.div( ( snrg-strip-unit( $value-for-max-viewport-width ) - snrg-strip-unit( $value-for-min-viewport-width ) ), ( snrg-strip-unit( $max-viewport-width ) - snrg-strip-unit( $min-viewport-width ) ) );
   }
 
-  @function snrg-fluid-value( $initial-value, $viewport-width, $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) {
-    @return  $initial-value + ( $viewport-width - $min-viewport-width ) * snrg-fluid-coefficient( $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width );
+  @function snrg-linear-value( $initial-value, $viewport-width, $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) {
+    @return  $initial-value + ( $viewport-width - $min-viewport-width ) * snrg-linear-coefficient( $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width );
   }
 
-  @function snrg-fluid-expression( $initial-value, $viewport-width, $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) {
-    @return  #{ $initial-value } + ' + ( ' + #{ $viewport-width } + ' - ' + #{ $min-viewport-width } + ' ) * ' + #{ snrg-fluid-coefficient( $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) };
+  @function snrg-linear-expression( $initial-value, $viewport-width, $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) {
+    @return  #{ $initial-value } + ' + ( ' + #{ $viewport-width } + ' - ' + #{ $min-viewport-width } + ' ) * ' + #{ snrg-linear-coefficient( $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) };
   }
 
   @function snrg-font-size-coefficient( $initial-value, $padding-coefficient, $initial-padding, $min-viewport-width ) {
@@ -54,13 +54,14 @@
   $major-second: 1.125;
   $minor-third: 1.2;
   $snrg-padding-until-396px: 18px;
-  $snrg-padding-at-1584px: snrg-fluid-value( $snrg-padding-until-396px, 1584px, 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) );
-  $snrg-padding-coefficient-at-1584px: snrg-fluid-coefficient( 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) );
+  $snrg-padding-at-1584px: snrg-linear-value( $snrg-padding-until-396px, 1584px, 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) );
+  $snrg-padding-coefficient-at-1584px: snrg-linear-coefficient( 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) );
   $snrg-nunito-sans-size-until-1584px: 18px;
   $snrg-roboto-ratio: 0.9;
 
   header.snrg-header, main {
     --snrg-font-size: #{ $snrg-nunito-sans-size-until-1584px };
+    --snrg-margin: #{ $snrg-padding-until-396px };
   }
 
   $snrg-heading-coefficient: 1;
@@ -79,7 +80,7 @@
 
   @media screen and (min-width: 396px) {
     header.snrg-header, main {
-      --snrg-margin: #{ snrg-fluid-expression( $snrg-padding-until-396px, 100vw, 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) ) };
+      --snrg-margin: #{ snrg-linear-expression( $snrg-padding-until-396px, 100vw, 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) ) };
     }
     
     $snrg-initial-heading-coefficient: 1;
@@ -90,7 +91,7 @@
       $snrg-final-heading-coefficient: $minor-third * $minor-third * $snrg-final-heading-coefficient;
       $snrg-final-heading-size: $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio * $snrg-final-heading-coefficient;
       header.snrg-header, main {
-        --snrg-heading-font-size-#{ $heading-level }: #{ snrg-fluid-expression( $snrg-initial-heading-size, 100vw, 396px, $snrg-initial-heading-size, 1584px, $snrg-final-heading-size ) };
+        --snrg-heading-font-size-#{ $heading-level }: #{ snrg-linear-expression( $snrg-initial-heading-size, 100vw, 396px, $snrg-initial-heading-size, 1584px, $snrg-final-heading-size ) };
       }
     }
   }
@@ -98,7 +99,7 @@
   @media screen and (min-width: 1584px) {
     header.snrg-header, main {
       --snrg-font-size: #{ snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) };
-      --snrg-margin: #{ snrg-fluid-expression(  $snrg-padding-at-1584px, 100vw, 1584px, math.div( 1584px, 4 ), 1588px, math.div( 1588px, 4 ) ) };
+      --snrg-margin: #{ snrg-linear-expression(  $snrg-padding-at-1584px, 100vw, 1584px, math.div( 1584px, 4 ), 1588px, math.div( 1588px, 4 ) ) };
     }
 
     $snrg-heading-font-size: #{ $snrg-roboto-ratio } + ' * ( ' + snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) + ' )';
