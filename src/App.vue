@@ -1,18 +1,21 @@
 <script setup lang="ts">
   import { ref, provide , watch, onMounted, onUnmounted } from 'vue'
   import { RouterView, useRoute } from 'vue-router'
-  import { throttle } from 'throttle-debounce';
-  import { iMenu, iApp } from '@/injection'
+  import { storeToRefs } from 'pinia'
+  import { throttle } from 'throttle-debounce'
+  import { iMenu } from '@/injection'
+  import { useThemeStore } from '@/stores/theme'
   import AppHeader from '@/components/AppHeader.vue'
 
   const route = useRoute()
+  const { theme } = storeToRefs( useThemeStore() )
 
   const menuOpened = ref( false )
   const appElement = ref( null as null | HTMLDivElement )
 
   const openOrCloseMenu = () => { menuOpened.value = ! menuOpened.value }
 
-  const onResize = throttle( 250, () => {
+  const updateMargins = () => {
       const viewportWidth = Math.max( document.documentElement.clientWidth || 0, window.innerWidth || 0 )
       if ( viewportWidth < 396 ) {
         appElement.value!.style.setProperty( '--snrg-margin', '18px' )
@@ -21,18 +24,28 @@
       } else {
         appElement.value!.style.setProperty( '--snrg-margin', ( 0.25 * viewportWidth ) + 'px' )
       }
-    } )
+    }
+
+  const onResize = throttle( 250, updateMargins )
 
   provide( iMenu, { opened: menuOpened, openOrClose: openOrCloseMenu } )
-  provide( iApp, { element: appElement } )
 
   watch( () => route.path, ( now ) => {
       if ( appElement.value ) {
         appElement.value.dataset.snrgRoute = now
       }
-    }, { immediate: true } )
+    } )
+  
+  watch( theme, ( now ) => {
+      if ( appElement.value ) {
+        appElement.value.dataset.snrgRoute = now
+      }
+    } )
 
   onMounted( () => {
+      appElement.value!.dataset.snrgRoute = route.path
+      appElement.value!.dataset.snrgTheme = theme.value
+      updateMargins()
       window.addEventListener( 'resize', onResize )
     } )
 
