@@ -10,10 +10,10 @@
 
   const duration = Math.round(0.5 * constants.menu.animation * 1000) / 1000
 
-  const openingTranslation = ref< SVGAnimateTransformElement | null >( null )
-  const openingRotation = ref< SVGAnimateTransformElement | null >( null )
-  const closingRotation = ref< SVGAnimateTransformElement | null >( null )
-  const closingTranslation = ref< SVGAnimateTransformElement | null >( null )
+  const openingTranslation = ref( null as null | SVGAnimateTransformElement )
+  const openingRotation = ref( null as null | SVGAnimateTransformElement )
+  const closingRotation = ref(null as null | SVGAnimateTransformElement )
+  const closingTranslation = ref( null as null | SVGAnimateTransformElement )
 
   onMounted( () => {
       openingTranslation.value!.addEventListener( 'beginEvent', () => emit( 'animated', true ) )

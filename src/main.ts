@@ -4,9 +4,11 @@ import 'leaflet' // Patch, should be able to remove it...
 import App from './App.vue'
 import router from './router'
 
-const route = document.getElementById( 'snrg-app' )!.dataset.snrgRoute!
 const app = createApp( App )
 app.use( createPinia() )
 app.use( router )
-router.push( route )
-app.mount( '#snrg-app' )
+const dataElement = document.getElementById( 'snrg-data' )
+if ( dataElement ) {
+    router.push( JSON.parse( dataElement.textContent! ).route )
+}
+app.mount( '#snrg-vue' )

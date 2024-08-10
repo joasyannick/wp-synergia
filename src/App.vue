@@ -1,24 +1,49 @@
 <script setup lang="ts">
-  import { ref, provide , watch } from 'vue'
+  import { ref, provide , watch, onMounted, onUnmounted } from 'vue'
   import { RouterView, useRoute } from 'vue-router'
-
-  import { iMenu } from '@/injection'
+  import { throttle } from 'throttle-debounce';
+  import { iMenu, iApp } from '@/injection'
   import AppHeader from '@/components/AppHeader.vue'
 
   const route = useRoute()
 
   const menuOpened = ref( false )
+  const appElement = ref( null as null | HTMLDivElement )
 
   const openOrCloseMenu = () => { menuOpened.value = ! menuOpened.value }
 
-  provide( iMenu, { opened: menuOpened, openOrClose: openOrCloseMenu } )
+  const onResize = throttle( 250, () => {
+      const viewportWidth = Math.max( document.documentElement.clientWidth || 0, window.innerWidth || 0 )
+      if ( viewportWidth < 396 ) {
+        appElement.value!.style.setProperty( '--snrg-margin', '18px' )
+      } else if ( viewportWidth < 1584 ) {
+        appElement.value!.style.setProperty( '--snrg-margin', ( ( 7 / 31049568 ) * viewportWidth * viewportWidth * viewportWidth - ( 7 / 26136 ) * viewportWidth * viewportWidth + ( 7 / 66 ) * viewportWidth + 4 ) + 'px' )
+      } else {
+        appElement.value!.style.setProperty( '--snrg-margin', ( 0.25 * viewportWidth ) + 'px' )
+      }
+    } )
 
-  watch( () => route.path, ( now ) => document.getElementById( 'snrg-app' )!.dataset.snrgRoute = now, { immediate: true } )
+  provide( iMenu, { opened: menuOpened, openOrClose: openOrCloseMenu } )
+  provide( iApp, { element: appElement } )
+
+  watch( () => route.path, ( now ) => {
+      if ( appElement.value ) {
+        appElement.value.dataset.snrgRoute = now
+      }
+    }, { immediate: true } )
+
+  onMounted( () => {
+      window.addEventListener( 'resize', onResize )
+    } )
+
+  onUnmounted( () => window.removeEventListener( 'resize', onResize ) )
 </script>
 
 <template>
-  <AppHeader />
-  <RouterView />
+  <div id="snrg-app" ref="appElement">
+    <AppHeader />
+    <RouterView />
+  </div>
 </template>
 
 <style lang="scss">
@@ -59,9 +84,44 @@
   $snrg-nunito-sans-size-until-1584px: 18px;
   $snrg-roboto-ratio: 0.9;
 
+  div#snrg-app {
+    --SNRG-BACKGROUND-HUE: 225;
+    --SNRG-BACKGROUND-SATURATION: 70%;
+    --SNRG-TEXT-HUE: 210;
+    --SNRG-TEXT-SATURATION: 29%;
+    --SNRG-DARK-FILTER: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    --snrg-menu-height: 2rem;
+    --snrg-menu-top: 1rem;
+    --snrg-menu-left: 1rem;
+    position: relative;
+    background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
+    color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
+    font-family: 'Nunito Sans';
+  }
+
+  div#snrg-app[data-snrg-theme='light'] {
+    --snrg-light-sign: 1;
+    --snrg-background-lightness: 100%;
+    --snrg-text-lightness: 24.3%;
+  }
+
+  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) {
+    --snrg-light-sign: -1;
+    --snrg-background-lightness: 10%;
+    --snrg-text-lightness: 92.2%;
+  }
+
+  :is(button, h1, h2, h3, h4, h5, h6) {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  :is(h1, h2, h3, h4, h5, h6) {
+    font-weight: 500;
+  }
+
   header.snrg-header, main {
     --snrg-font-size: #{ $snrg-nunito-sans-size-until-1584px };
-    --snrg-margin: #{ $snrg-padding-until-396px };
+    --snrg-margin: 18px;
   }
 
   $snrg-heading-coefficient: 1;
