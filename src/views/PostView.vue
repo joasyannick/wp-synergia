@@ -14,12 +14,12 @@
 </script>
 
 <template>
-  <section v-if="post" class="snrg-post">
+  <article v-if="post" class="snrg-post">
     <header>
       <h1 v-html="post.title"></h1>
     </header>
     <div v-if="post.data.get( 'content.rendered' )" v-html="post.data.get( 'content.rendered' )"></div>
-  </section>
+  </article>
 </template>
 
 <style scoped>

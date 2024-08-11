@@ -9,6 +9,7 @@ import ModuleView from '@/views/ModuleView.vue'
 import SynergiaView from '@/views/SynergiaView.vue'
 import PostView from '@/views/PostView.vue'
 import AccountView from '@/views/AccountView.vue'
+import ErrorView from '@/views/ErrorView.vue'
 
 const router = createRouter( {
     history: createWebHistory( import.meta.env.BASE_URL ),
@@ -58,7 +59,12 @@ const router = createRouter( {
         {
             path: constants.route.account.path,
             name: constants.route.account.name,
-            component: AccountView,
+            component: AccountView
+          },
+        {
+            path: constants.route.error.path,
+            name: constants.route.error.name,
+            component: ErrorView
           }
       ]
   } )

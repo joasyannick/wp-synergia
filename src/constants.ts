@@ -91,12 +91,18 @@ const constants = Object.freeze( {
             name: 'compte',
             path: '/compte',
             fullPath: '/compte'
+          },
+        error: {
+            name: '404',
+            path: '/404',
+            fullpath: '/404'
           }
       },
     page: {
-        biography: 'snrg-biography',
+        biography: 'snrg-bio',
         helikia: 'snrg-helikia',
-        introduction: 'snrg-introduction'
+        introduction: 'snrg-intro',
+        error: 'snrg-404'
       },
     function: {
         fetchPost: async ( url: string, postType: string, slug: string, options: Map< string, boolean > ): Promise< null | { id: number, date_gmt: string, title: string, data: Map< string, any > } > => {

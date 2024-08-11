@@ -13,16 +13,16 @@
 </script>
 
 <template>
-  <section class="snrg-biography">
+  <article class="snrg-biography">
     <header>
       <h1 v-if="biography" v-html="biography.title"></h1>
       <h1 v-else>Biographie</h1>
     </header>
     <div v-if="biography && biography.data.get( 'content.rendered' )" v-html="biography.data.get( 'content.rendered' )"></div>
     <div v-else>
-      <p>>Raconter son histoire.</p>
+      <p>Raconter son histoire.</p>
     </div>
-  </section>
+  </article>
 </template>
 
 <style scoped>

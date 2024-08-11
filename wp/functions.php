@@ -75,7 +75,7 @@
     add_rewrite_rule( '^(' . SLUG_FOR_HELIKIA_PAGE . ')/?$', 'index.php?route=$matches[1]', 'top' );
     add_rewrite_rule( '^(' . SLUG_FOR_HELIKIA_PAGE . '/[^/]+)/?$', 'index.php?route=$matches[1]', 'top' );
     add_rewrite_rule( '^(' . SLUG_FOR_BLOG_PAGE . '/[^/]+)/?$', 'index.php?route=$matches[1]', 'top' );
-    add_rewrite_rule( '^.+/?$', 'index.php?route=404', 'top' );
+    add_rewrite_rule( '^.+/?$', 'index.php?route=' . SLUG_FOR_ERROR_PAGE, 'top' );
   }
 
   add_action( 'init', 'snrg\add_rewrite_rules' );
@@ -83,18 +83,12 @@
   function change_template_selection( $template ) {
     $route = get_query_var( 'route' );
     if ( $route ):
-      if ( $route !== '404' ):
+      if ( SLUG_FOR_ERROR_PAGE !== $route ):
         $matches = [];
-        if ( preg_match( '@^(' . SLUG_FOR_BIOGRAPHY_PAGE . ')/?$@', $route, $matches ) ||
-            preg_match( '@^(' . SLUG_FOR_ACCOUNT_PAGE . ')/?$@', $route, $matches ) ||
-            preg_match( '@^(' . SLUG_FOR_HELIKIA_PAGE . ')/?$@', $route, $matches ) ||
-            preg_match( '@^' . SLUG_FOR_HELIKIA_PAGE . '/([^/]+)/?$@', $route, $matches ) ||
-            preg_match( '@^' . SLUG_FOR_BLOG_PAGE . '/([^/]+)/?$@', $route, $matches )
-          ):
-          // Slugs must be unique across post types. Slugs starting with 'snrg-' are reserved for the theme.
-          if ( substr( $matches[ 1 ], 0, 5 ) !== 'snrg-' && get_posts( [ 'name' => $matches[ 1 ], 'post_type' => [ 'post', 'page', MODULE_POST_TYPE ], 'post_status' => 'publish', 'posts_per_page' => 1 ] ) ):
-            return locate_template( 'singular.php' );
-          endif;
+        if ( SLUG_FOR_BIOGRAPHY_PAGE === $route || SLUG_FOR_HELIKIA_PAGE === $route || SLUG_FOR_ACCOUNT_PAGE === $route ):
+          return locate_template( 'singular.php' );
+        elseif ( ( preg_match( '@^' . SLUG_FOR_HELIKIA_PAGE . '/([^/]+)/?$@', $route, $matches ) || preg_match( '@^' . SLUG_FOR_BLOG_PAGE . '/([^/]+)/?$@', $route, $matches ) ) && substr( $matches[ 1 ], 0, 5 ) !== 'snrg-' && get_posts( [ 'name' => $matches[ 1 ], 'post_type' => [ 'post', 'page', MODULE_POST_TYPE ], 'post_status' => 'publish', 'posts_per_page' => 1 ] ) ):
+          return locate_template( 'singular.php' );
         endif;
       endif;
       global $wp_query;

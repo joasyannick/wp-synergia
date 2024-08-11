@@ -29,6 +29,7 @@
   define( 'SLUG_FOR_BLOG_PAGE', 'blog' );
   define( 'SLUG_FOR_CONTACT_PAGE', 'contact' );
   define( 'SLUG_FOR_HELIKIA_PAGE', 'helikia' );
+  define( 'SLUG_FOR_ERROR_PAGE', '404' );
   define( 'SLUG_FOR_INTRODUCTION_PAGE', 'intro' );
   define( 'WP_BASE_IN_REST', 'wp/v2' );
   define( 'MODULE_POST_TYPE', 'snrg_module' );

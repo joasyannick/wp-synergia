@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <section class="snrg-synergia">
+  <article class="snrg-synergia">
     <header>
       <h2>Synergia</h2>
     </header>
@@ -27,7 +27,7 @@
         </l-tile-layer>
       </l-map>
     </div>
-  </section>
+  </article>
 </template>
   
 <style>

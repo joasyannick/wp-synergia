@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <section class="snrg-helikia">
+  <article class="snrg-helikia">
       <header>
       <h1 v-if="helikia" v-html="helikia.title"></h1>
       <h1 v-else>Helikia</h1>
@@ -22,7 +22,7 @@
     <div v-else>
       <p>Parler d'Helikia.</p>
     </div>
-  </section>
+  </article>
 </template>
 
 <style scoped>

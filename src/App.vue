@@ -134,7 +134,6 @@
 
   header.snrg-header, main {
     --snrg-font-size: #{ $snrg-nunito-sans-size-until-1584px };
-    --snrg-margin: 18px;
   }
 
   $snrg-heading-coefficient: 1;
@@ -152,10 +151,6 @@
   }
 
   @media screen and (min-width: 396px) {
-    header.snrg-header, main {
-      --snrg-margin: #{ snrg-linear-expression( $snrg-padding-until-396px, 100vw, 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) ) };
-    }
-    
     $snrg-initial-heading-coefficient: 1;
     $snrg-final-heading-coefficient: 1;
     @each $heading-level in 3, 2, 1 {
@@ -172,7 +167,6 @@
   @media screen and (min-width: 1584px) {
     header.snrg-header, main {
       --snrg-font-size: #{ snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) };
-      --snrg-margin: #{ snrg-linear-expression(  $snrg-padding-at-1584px, 100vw, 1584px, math.div( 1584px, 4 ), 1588px, math.div( 1588px, 4 ) ) };
     }
 
     $snrg-heading-font-size: #{ $snrg-roboto-ratio } + ' * ( ' + snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) + ' )';
