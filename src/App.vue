@@ -18,15 +18,15 @@
   const updateMargins = () => {
       const viewportWidth = Math.max( document.documentElement.clientWidth || 0, window.innerWidth || 0 )
       if ( viewportWidth < 396 ) {
-        appElement.value!.style.setProperty( '--snrg-margin', '18px' )
+        appElement.value!.style.setProperty( '--snrg-margin', '1.125rem' )
       } else if ( viewportWidth < 1584 ) {
-        appElement.value!.style.setProperty( '--snrg-margin', ( ( 7 / 31049568 ) * viewportWidth * viewportWidth * viewportWidth - ( 7 / 26136 ) * viewportWidth * viewportWidth + ( 7 / 66 ) * viewportWidth + 4 ) + 'px' )
+        appElement.value!.style.setProperty( '--snrg-margin', ( ( ( 7 / 31049568 ) * viewportWidth * viewportWidth * viewportWidth - ( 7 / 26136 ) * viewportWidth * viewportWidth + ( 7 / 66 ) * viewportWidth + 4 ) / 16 ) + 'rem' )
       } else {
-        appElement.value!.style.setProperty( '--snrg-margin', ( 0.25 * viewportWidth ) + 'px' )
+        appElement.value!.style.setProperty( '--snrg-margin', ( ( 0.25 * viewportWidth ) / 16 ) + 'rem' )
       }
     }
 
-  const onResize = throttle( 250, updateMargins )
+  const onResize = throttle( 100, updateMargins )
 
   provide( iMenu, { opened: menuOpened, openOrClose: openOrCloseMenu } )
 
@@ -109,7 +109,7 @@
     position: relative;
     background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
     color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
-    font-family: 'Nunito Sans';
+    font: 1.125rem/calc(5/3) 'Nunito Sans';
   }
 
   div#snrg-app[data-snrg-theme='light'] {
@@ -124,30 +124,30 @@
     --snrg-text-lightness: 92.2%;
   }
 
-  :is(button, h1, h2, h3, h4, h5, h6) {
-    font-family: 'Roboto', sans-serif;
-  }
-
-  :is(h1, h2, h3, h4, h5, h6) {
-    font-weight: 500;
-  }
-
-  header.snrg-header, main {
+  div#snrg-app {
     --snrg-font-size: #{ $snrg-nunito-sans-size-until-1584px };
   }
 
   $snrg-heading-coefficient: 1;
   @each $heading-level in 3, 2, 1 {
     $snrg-heading-coefficient: $major-second * $major-second * $snrg-heading-coefficient;
-    header.snrg-header, main {
+    div#snrg-app {
       --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio * $snrg-heading-coefficient };
     }
   }
 
   @each $heading-level in 4, 5, 6 {
-    header.snrg-header, main {
+    div#snrg-app {
       --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio };
     }
+  }
+
+  div#snrg-app :is(button, h1, h2, h3, h4, h5, h6) {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  div#snrg-app :is(h1, h2, h3, h4, h5, h6) {
+    font-weight: 500;
   }
 
   @media screen and (min-width: 396px) {
@@ -158,28 +158,28 @@
       $snrg-initial-heading-size: $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio * $snrg-initial-heading-coefficient;
       $snrg-final-heading-coefficient: $minor-third * $minor-third * $snrg-final-heading-coefficient;
       $snrg-final-heading-size: $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio * $snrg-final-heading-coefficient;
-      header.snrg-header, main {
+      div#snrg-app {
         --snrg-heading-font-size-#{ $heading-level }: #{ snrg-linear-expression( $snrg-initial-heading-size, 100vw, 396px, $snrg-initial-heading-size, 1584px, $snrg-final-heading-size ) };
       }
     }
   }
 
   @media screen and (min-width: 1584px) {
-    header.snrg-header, main {
+    div#snrg-app {
       --snrg-font-size: #{ snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) };
     }
 
     $snrg-heading-font-size: #{ $snrg-roboto-ratio } + ' * ( ' + snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) + ' )';
     @each $heading-level in 3, 2, 1 {
       $snrg-heading-font-size: #{ $minor-third } + ' * ' + #{ $minor-third } + ' * ' + $snrg-heading-font-size;
-      header.snrg-header, main {
+      div#snrg-app {
         --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-heading-font-size };
       }
     }
 
     @each $heading-level in 4, 5, 6 {
       $snrg-heading-font-size: #{ $snrg-roboto-ratio } + ' * ' + '( ' + snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) + ' )';
-      header.snrg-header, main {
+      div#snrg-app {
         --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-heading-font-size };
       }
     }

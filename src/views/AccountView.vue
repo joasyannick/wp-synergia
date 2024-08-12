@@ -10,15 +10,14 @@
 
 <style scoped>
   main.snrg-account {
-    position: relative;
-    box-sizing: border-box;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden auto;
+    margin-right: var(--snrg-margin);
+    margin-left: var(--snrg-margin);
+    padding-top: 4rem;
+    padding-bottom: 2rem;
   }
 
   main.snrg-account h1 {
-    margin-top: 4rem;
+    margin-top: 0;
   }
 
   main.snrg-account span.alt {
