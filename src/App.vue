@@ -20,7 +20,9 @@
       if ( viewportWidth < 396 ) {
         appElement.value!.style.setProperty( '--snrg-margin', '1.125rem' )
       } else if ( viewportWidth < 1584 ) {
-        appElement.value!.style.setProperty( '--snrg-margin', ( ( ( 7 / 31049568 ) * viewportWidth * viewportWidth * viewportWidth - ( 7 / 26136 ) * viewportWidth * viewportWidth + ( 7 / 66 ) * viewportWidth + 4 ) / 16 ) + 'rem' )
+        // appElement.value!.style.setProperty( '--snrg-margin', ( ( ( 7 / 26136 ) * viewportWidth * viewportWidth - ( 7 / 33 ) * viewportWidth + 60 ) / 16 ) + 'rem' )
+        appElement.value!.style.setProperty( '--snrg-margin', ( ( ( 7 / 62099136 ) * viewportWidth * viewportWidth * viewportWidth - ( 7 / 132 ) * viewportWidth + 32 ) / 16 ) + 'rem' )
+        // appElement.value!.style.setProperty( '--snrg-margin', ( ( ( 7 / 31049568 ) * viewportWidth * viewportWidth * viewportWidth - ( 7 / 26136 ) * viewportWidth * viewportWidth + ( 7 / 66 ) * viewportWidth + 4 ) / 16 ) + 'rem' )
       } else {
         appElement.value!.style.setProperty( '--snrg-margin', ( ( 0.25 * viewportWidth ) / 16 ) + 'rem' )
       }
@@ -62,40 +64,46 @@
 <style lang="scss">
   @use "sass:math";
 
-  @function snrg-strip-unit( $number ) {
+  @function rem( $px, $em: false ) {
+    @if not unitless( $px ) {
+      @error 'The value passed to rem() must be unitless.';
+    }
+    @if $em {
+      @return math.div( $px, 16 ) * 1em;
+    }
+    @return math.div( $px, 16 ) * 1rem;
+  }
+
+  @function strip-unit( $number ) {
     @if type-of( $number ) == 'number' and not unitless( $number ) {
       @return math.div( $number, ( $number * 0 + 1 ) );
     }
     @return $number;
   }
 
-  @function snrg-linear-coefficient( $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) {
-    @return math.div( ( snrg-strip-unit( $value-for-max-viewport-width ) - snrg-strip-unit( $value-for-min-viewport-width ) ), ( snrg-strip-unit( $max-viewport-width ) - snrg-strip-unit( $min-viewport-width ) ) );
+  @function linear-coefficient( $x1, $y1, $x2, $y2 ) {
+    @return math.div( $y2 - $y1 , $x2 - $x1 );
   }
 
-  @function snrg-linear-value( $initial-value, $viewport-width, $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) {
-    @return  $initial-value + ( $viewport-width - $min-viewport-width ) * snrg-linear-coefficient( $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width );
+  @function linear-expression( $x1, $y1, $x2, $y2, $x ) {
+    @return  '#{ $y1 } + ( #{ $x } - #{ $x1 } ) * #{ linear-coefficient( strip-unit( $x1 ), strip-unit( $y1 ), strip-unit( $x2 ), strip-unit( $y2 ) ) }';
   }
 
-  @function snrg-linear-expression( $initial-value, $viewport-width, $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) {
-    @return  #{ $initial-value } + ' + ( ' + #{ $viewport-width } + ' - ' + #{ $min-viewport-width } + ' ) * ' + #{ snrg-linear-coefficient( $min-viewport-width, $value-for-min-viewport-width, $max-viewport-width, $value-for-max-viewport-width ) };
-  }
+  // @function font-size-coefficient( $initial-value, $padding-coefficient, $initial-padding, $min-viewport-width ) {
+  //   @return math.div( ( 1 - 2 * $padding-coefficient ) * $initial-value, strip-unit( $min-viewport-width ) - 2 * $initial-padding );
+  // }
 
-  @function snrg-font-size-coefficient( $initial-value, $padding-coefficient, $initial-padding, $min-viewport-width ) {
-    @return math.div( ( 1 - 2 * $padding-coefficient ) * $initial-value, snrg-strip-unit( $min-viewport-width ) - 2 * $initial-padding );
-  }
+  // @function font-size-expression( $initial-value, $padding-coefficient, $initial-padding, $viewport-width, $min-viewport-width ) {
+  //   @return #{ $initial-value } + ' + ( ' + #{ $viewport-width } + ' - ' + #{ $min-viewport-width } + ' ) * ' + #{ font-size-coefficient( $initial-value, $padding-coefficient, $initial-padding, $min-viewport-width ) };
+  // }
 
-  @function snrg-font-size-expression( $initial-value, $padding-coefficient, $initial-padding, $viewport-width, $min-viewport-width ) {
-    @return #{ $initial-value } + ' + ( ' + #{ $viewport-width } + ' - ' + #{ $min-viewport-width } + ' ) * ' + #{ snrg-font-size-coefficient( $initial-value, $padding-coefficient, $initial-padding, $min-viewport-width ) };
-  }
-
-  $major-second: 1.125;
-  $minor-third: 1.2;
-  $snrg-padding-until-396px: 18px;
-  $snrg-padding-at-1584px: snrg-linear-value( $snrg-padding-until-396px, 1584px, 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) );
-  $snrg-padding-coefficient-at-1584px: snrg-linear-coefficient( 396px, $snrg-padding-until-396px, 1584px, math.div( 1584px, 4 ) );
-  $snrg-nunito-sans-size-until-1584px: 18px;
-  $snrg-roboto-ratio: 0.9;
+  $MAJOR-SECOND: 1.125;
+  $MINOR-THIRD: 1.2;
+  $MARGIN-AT-396: 1.125rem;
+  $MARGIN-AT-1584: rem( math.div( 1584, 4 ) );
+  $MARGIN-COEFFICIENT-AT-1584: linear-coefficient( strip-unit( rem( 396 ) ), strip-unit( $MARGIN-AT-396 ), strip-unit( rem( 1584 ) ), strip-unit( rem( math.div( 1584, 4 ) ) ) );
+  $NUNITO-SANS-SIZE-AT-1584: 1.125rem;
+  $ROBOTO-RATIO: 0.9;
 
   div#snrg-app {
     --SNRG-BACKGROUND-HUE: 225;
@@ -125,20 +133,21 @@
   }
 
   div#snrg-app {
-    --snrg-font-size: #{ $snrg-nunito-sans-size-until-1584px };
+    --snrg-font-size: #{ $NUNITO-SANS-SIZE-AT-1584 };
   }
 
   $snrg-heading-coefficient: 1;
   @each $heading-level in 3, 2, 1 {
-    $snrg-heading-coefficient: $major-second * $major-second * $snrg-heading-coefficient;
+    $snrg-heading-coefficient: $MAJOR-SECOND * $MAJOR-SECOND * $snrg-heading-coefficient;
+
     div#snrg-app {
-      --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio * $snrg-heading-coefficient };
+      --snrg-heading-font-size-#{ $heading-level }: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-heading-coefficient };
     }
   }
 
   @each $heading-level in 4, 5, 6 {
     div#snrg-app {
-      --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio };
+      --snrg-heading-font-size-#{ $heading-level }: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO };
     }
   }
 
@@ -150,38 +159,43 @@
     font-weight: 500;
   }
 
-  @media screen and (min-width: 396px) {
+  @media screen and (min-width: rem( 396, true ) ) {
     $snrg-initial-heading-coefficient: 1;
     $snrg-final-heading-coefficient: 1;
     @each $heading-level in 3, 2, 1 {
-      $snrg-initial-heading-coefficient: $major-second * $major-second * $snrg-initial-heading-coefficient;
-      $snrg-initial-heading-size: $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio * $snrg-initial-heading-coefficient;
-      $snrg-final-heading-coefficient: $minor-third * $minor-third * $snrg-final-heading-coefficient;
-      $snrg-final-heading-size: $snrg-nunito-sans-size-until-1584px * $snrg-roboto-ratio * $snrg-final-heading-coefficient;
+      $snrg-initial-heading-coefficient: $MAJOR-SECOND * $MAJOR-SECOND * $snrg-initial-heading-coefficient;
+      $snrg-initial-heading-size: $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-initial-heading-coefficient;
+      $snrg-final-heading-coefficient: $MINOR-THIRD * $MINOR-THIRD * $snrg-final-heading-coefficient;
+      $snrg-final-heading-size: $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-final-heading-coefficient;
+      
       div#snrg-app {
-        --snrg-heading-font-size-#{ $heading-level }: #{ snrg-linear-expression( $snrg-initial-heading-size, 100vw, 396px, $snrg-initial-heading-size, 1584px, $snrg-final-heading-size ) };
+        --snrg-heading-font-size-#{ $heading-level }: #{ linear-expression( rem( 396 ), $snrg-initial-heading-size, rem( 1584 ), $snrg-final-heading-size, 100vw ) };
+      }
+
+      div#snrg-app h#{ $heading-level } {
+        font-size: calc( var( --snrg-heading-font-size-#{ $heading-level } ) );
       }
     }
   }
 
-  @media screen and (min-width: 1584px) {
-    div#snrg-app {
-      --snrg-font-size: #{ snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) };
-    }
+  // @media screen and (min-width: rem( 1584, true ) ) {
+  //   div#snrg-app {
+  //     --snrg-font-size: #{ font-size-expression( $NUNITO-SANS-SIZE-AT-1584, $MARGIN-COEFFICIENT-AT-1584, $MARGIN-AT-1584, 100vw, rem( 1584 ) ) };
+  //   }
 
-    $snrg-heading-font-size: #{ $snrg-roboto-ratio } + ' * ( ' + snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) + ' )';
-    @each $heading-level in 3, 2, 1 {
-      $snrg-heading-font-size: #{ $minor-third } + ' * ' + #{ $minor-third } + ' * ' + $snrg-heading-font-size;
-      div#snrg-app {
-        --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-heading-font-size };
-      }
-    }
+  //   $snrg-heading-font-size: #{ $ROBOTO-RATIO } + ' * ( ' + font-size-expression( $NUNITO-SANS-SIZE-AT-1584, $MARGIN-COEFFICIENT-AT-1584, $MARGIN-AT-1584, 100vw, rem( 1584 ) ) + ' )';
+  //   @each $heading-level in 3, 2, 1 {
+  //     $snrg-heading-font-size: #{ $MINOR-THIRD } + ' * ' + #{ $MINOR-THIRD } + ' * ' + $snrg-heading-font-size;
+  //     div#snrg-app {
+  //       --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-heading-font-size };
+  //     }
+  //   }
 
-    @each $heading-level in 4, 5, 6 {
-      $snrg-heading-font-size: #{ $snrg-roboto-ratio } + ' * ' + '( ' + snrg-font-size-expression( $snrg-nunito-sans-size-until-1584px, $snrg-padding-coefficient-at-1584px, $snrg-padding-at-1584px, 100vw, 1584px ) + ' )';
-      div#snrg-app {
-        --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-heading-font-size };
-      }
-    }
-  }
+  //   @each $heading-level in 4, 5, 6 {
+  //     $snrg-heading-font-size: #{ $ROBOTO-RATIO } + ' * ' + '( ' + font-size-expression( $NUNITO-SANS-SIZE-AT-1584, $MARGIN-COEFFICIENT-AT-1584, $MARGIN-AT-1584, 100vw, rem( 1584 ) ) + ' )';
+  //     div#snrg-app {
+  //       --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-heading-font-size };
+  //     }
+  //   }
+  // }
 </style>
