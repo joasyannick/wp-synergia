@@ -89,13 +89,9 @@
     @return  '#{ $y1 } + ( #{ $x } - #{ $x1 } ) * #{ linear-coefficient( strip-unit( $x1 ), strip-unit( $y1 ), strip-unit( $x2 ), strip-unit( $y2 ) ) }';
   }
 
-  // @function font-size-coefficient( $initial-value, $padding-coefficient, $initial-padding, $min-viewport-width ) {
-  //   @return math.div( ( 1 - 2 * $padding-coefficient ) * $initial-value, strip-unit( $min-viewport-width ) - 2 * $initial-padding );
-  // }
-
-  // @function font-size-expression( $initial-value, $padding-coefficient, $initial-padding, $viewport-width, $min-viewport-width ) {
-  //   @return #{ $initial-value } + ' + ( ' + #{ $viewport-width } + ' - ' + #{ $min-viewport-width } + ' ) * ' + #{ font-size-coefficient( $initial-value, $padding-coefficient, $initial-padding, $min-viewport-width ) };
-  // }
+  @function font-size-coefficient( $font-size-0, $width-0, $margin-0, $margin-coefficient ) {
+    @return math.div( ( 1 - 2 * $margin-coefficient ) * $font-size-0, $width-0 - 2 * $margin-0 );
+  }
 
   $MAJOR-SECOND: 1.125;
   $MINOR-THIRD: 1.2;
@@ -103,6 +99,7 @@
   $MARGIN-AT-1584: rem( math.div( 1584, 4 ) );
   $MARGIN-COEFFICIENT-AT-1584: linear-coefficient( strip-unit( rem( 396 ) ), strip-unit( $MARGIN-AT-396 ), strip-unit( rem( 1584 ) ), strip-unit( rem( math.div( 1584, 4 ) ) ) );
   $NUNITO-SANS-SIZE-AT-1584: 1.125rem;
+  $NUNITO-SANS-SIZE-AT-1684: $NUNITO-SANS-SIZE-AT-1584 + font-size-coefficient( strip-unit( $NUNITO-SANS-SIZE-AT-1584 ), strip-unit( rem( 1584 ) ), strip-unit( $MARGIN-AT-1584 ), $MARGIN-COEFFICIENT-AT-1584 ) * rem( 100 );
   $ROBOTO-RATIO: 0.9;
 
   div#snrg-app {
@@ -145,10 +142,8 @@
     }
   }
 
-  @each $heading-level in 4, 5, 6 {
-    div#snrg-app {
-      --snrg-heading-font-size-#{ $heading-level }: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO };
-    }
+  div#snrg-app {
+    --snrg-heading-font-size-h4-h5-h6: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO };
   }
 
   div#snrg-app :is(button, h1, h2, h3, h4, h5, h6) {
@@ -178,24 +173,22 @@
     }
   }
 
-  // @media screen and (min-width: rem( 1584, true ) ) {
-  //   div#snrg-app {
-  //     --snrg-font-size: #{ font-size-expression( $NUNITO-SANS-SIZE-AT-1584, $MARGIN-COEFFICIENT-AT-1584, $MARGIN-AT-1584, 100vw, rem( 1584 ) ) };
-  //   }
+  @media screen and (min-width: rem( 1584, true ) ) {
+    div#snrg-app {
+      --snrg-font-size: #{ linear-expression( rem( 1584 ), $NUNITO-SANS-SIZE-AT-1584, rem( 1684 ), $NUNITO-SANS-SIZE-AT-1684, 100vw ) };
+    }
 
-  //   $snrg-heading-font-size: #{ $ROBOTO-RATIO } + ' * ( ' + font-size-expression( $NUNITO-SANS-SIZE-AT-1584, $MARGIN-COEFFICIENT-AT-1584, $MARGIN-AT-1584, 100vw, rem( 1584 ) ) + ' )';
-  //   @each $heading-level in 3, 2, 1 {
-  //     $snrg-heading-font-size: #{ $MINOR-THIRD } + ' * ' + #{ $MINOR-THIRD } + ' * ' + $snrg-heading-font-size;
-  //     div#snrg-app {
-  //       --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-heading-font-size };
-  //     }
-  //   }
+    $snrg-heading-coefficient: 1;
+    @each $heading-level in 3, 2, 1 {
+      $snrg-heading-coefficient: $MINOR-THIRD * $MINOR-THIRD * $snrg-heading-coefficient;
 
-  //   @each $heading-level in 4, 5, 6 {
-  //     $snrg-heading-font-size: #{ $ROBOTO-RATIO } + ' * ' + '( ' + font-size-expression( $NUNITO-SANS-SIZE-AT-1584, $MARGIN-COEFFICIENT-AT-1584, $MARGIN-AT-1584, 100vw, rem( 1584 ) ) + ' )';
-  //     div#snrg-app {
-  //       --snrg-heading-font-size-#{ $heading-level }: #{ $snrg-heading-font-size };
-  //     }
-  //   }
-  // }
+      div#snrg-app {
+        --snrg-heading-font-size-#{ $heading-level }: #{ $ROBOTO-RATIO * $snrg-heading-coefficient } * ( var( --snrg-font-size ) );
+      }
+    }
+
+    div#snrg-app {
+      --snrg-heading-font-size-h4-h5-h6: #{ $ROBOTO-RATIO } * ( var( --snrg-font-size ) );
+    }
+  }
 </style>
