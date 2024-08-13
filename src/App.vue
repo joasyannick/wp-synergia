@@ -112,6 +112,7 @@
     --snrg-menu-top: 1rem;
     --snrg-menu-left: 1rem;
     --snrg-font-size: #{ $NUNITO-SANS-SIZE-AT-1584 };
+    --snrg-heading-font-size-h4-h5-h6: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO };
     position: relative;
     background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
     color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
@@ -137,10 +138,6 @@
     div#snrg-app {
       --snrg-heading-font-size-#{ $heading-level }: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-heading-coefficient };
     }
-  }
-
-  div#snrg-app {
-    --snrg-heading-font-size-h4-h5-h6: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO };
   }
 
   div#snrg-app :is(button, h1, h2, h3, h4, h5, h6) {
