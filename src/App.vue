@@ -86,7 +86,7 @@
   }
 
   @function linear-expression( $x1, $y1, $x2, $y2, $x ) {
-    @return  '#{ $y1 } + ( #{ $x } - #{ $x1 } ) * #{ linear-coefficient( strip-unit( $x1 ), strip-unit( $y1 ), strip-unit( $x2 ), strip-unit( $y2 ) ) }';
+    @return  '#{ $y1 } + (#{ $x } - #{ $x1 }) * #{ linear-coefficient( strip-unit( $x1 ), strip-unit( $y1 ), strip-unit( $x2 ), strip-unit( $y2 ) ) }';
   }
 
   @function font-size-coefficient( $font-size-0, $width-0, $margin-0, $margin-coefficient ) {
@@ -111,10 +111,11 @@
     --snrg-menu-height: 2rem;
     --snrg-menu-top: 1rem;
     --snrg-menu-left: 1rem;
+    --snrg-font-size: #{ $NUNITO-SANS-SIZE-AT-1584 };
     position: relative;
     background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
     color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
-    font: 1.125rem/calc(5/3) 'Nunito Sans';
+    font: calc(var(--snrg-font-size))/calc(5/3) 'Nunito Sans';
   }
 
   div#snrg-app[data-snrg-theme='light'] {
@@ -127,10 +128,6 @@
     --snrg-light-sign: -1;
     --snrg-background-lightness: 10%;
     --snrg-text-lightness: 92.2%;
-  }
-
-  div#snrg-app {
-    --snrg-font-size: #{ $NUNITO-SANS-SIZE-AT-1584 };
   }
 
   $snrg-heading-coefficient: 1;
@@ -183,12 +180,12 @@
       $snrg-heading-coefficient: $MINOR-THIRD * $MINOR-THIRD * $snrg-heading-coefficient;
 
       div#snrg-app {
-        --snrg-heading-font-size-#{ $heading-level }: #{ $ROBOTO-RATIO * $snrg-heading-coefficient } * ( var( --snrg-font-size ) );
+        --snrg-heading-font-size-#{ $heading-level }: #{ $ROBOTO-RATIO * $snrg-heading-coefficient } * (var( --snrg-font-size ));
       }
     }
 
     div#snrg-app {
-      --snrg-heading-font-size-h4-h5-h6: #{ $ROBOTO-RATIO } * ( var( --snrg-font-size ) );
+      --snrg-heading-font-size-h4-h5-h6: #{ $ROBOTO-RATIO } * (var(--snrg-font-size));
     }
   }
 </style>
