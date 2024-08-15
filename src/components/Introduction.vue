@@ -28,13 +28,10 @@
 <style scoped>
   article.snrg-introduction {
     position: relative;
-    margin-left: calc(-1 * var(--snrg-padding));
     margin-top: -10vh;
-    box-sizing: border-box;
-    width: 100vw;
-    background: hsl( var( --SNRG-BACKGROUND-HUE ), var( --SNRG-BACKGROUND-SATURATION ), var( --snrg-background-lightness ) );
-    padding-left: inherit;
-    padding-right: inherit;
+    padding-left: calc(var(--snrg-outer-margin) + var(--snrg-middle-content-margin));
+    padding-right: calc(var(--snrg-outer-margin) + var(--snrg-middle-content-margin));
+    background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
   }
   
   article.snrg-introduction > div > p:last-child {
@@ -47,5 +44,10 @@
 
   article.snrg-introduction > header > h1 {
     margin: 0;
+  }
+
+  article.snrg-introduction > div {
+    margin-left: calc(var(--snrg-middle-content-margin));
+    margin-right: calc(var(--snrg-middle-content-margin));
   }
 </style>

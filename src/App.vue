@@ -116,11 +116,10 @@
     --snrg-top-margin: 1rem;
     --snrg-bottom-margin: 1rem;
     --snrg-content-margin: ((var(--snrg-inner-margin)) - (var(--snrg-outer-margin)));
-    --snrg-middle-content-margin: (0.5 * ((var(--snrg-inner-margin)) - (var(--snrg-outer-margin))));
+    --snrg-middle-content-margin: (0.5 * var(--snrg-content-margin));
     --snrg-font-size: #{ $NUNITO-SANS-SIZE-AT-1584 };
     --snrg-font-size-h4-h5-h6: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO };
     position: relative;
-    padding: var(--snrg-top-margin) calc(var(--snrg-outer-margin)) var(--snrg-bottom-margin) calc(var(--snrg-outer-margin));
     background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
     color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
     font: calc(var(--snrg-font-size))/calc(5/3) 'Nunito Sans';
@@ -143,7 +142,11 @@
     $snrg-heading-coefficient: $MAJOR-SECOND * $MAJOR-SECOND * $snrg-heading-coefficient;
 
     div#snrg-app {
-      --snrg-font-size-h#{ $heading-level }: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-heading-coefficient };
+      --snrg-font-size-h#{ $heading-level }: (#{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-heading-coefficient });
+    }
+
+    div#snrg-app h#{ $heading-level } {
+      font-size: calc(var(--snrg-font-size-h#{ $heading-level }));
     }
   }
 
@@ -165,18 +168,14 @@
       $snrg-final-heading-size: $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-final-heading-coefficient;
       
       div#snrg-app {
-        --snrg-font-size-h#{ $heading-level }: #{ linear-expression( rem( 396 ), $snrg-initial-heading-size, rem( 1584 ), $snrg-final-heading-size, 100vw ) };
-      }
-
-      div#snrg-app h#{ $heading-level } {
-        font-size: calc(var(--snrg-font-size-h#{ $heading-level }));
+        --snrg-font-size-h#{ $heading-level }: (#{ linear-expression( rem( 396 ), $snrg-initial-heading-size, rem( 1584 ), $snrg-final-heading-size, 100vw ) });
       }
     }
   }
 
   @media screen and (min-width: rem( 1584, true ) ) {
     div#snrg-app {
-      --snrg-font-size: #{ linear-expression( rem( 1584 ), $NUNITO-SANS-SIZE-AT-1584, rem( 1684 ), $NUNITO-SANS-SIZE-AT-1684, 100vw ) };
+      --snrg-font-size: (#{ linear-expression( rem( 1584 ), $NUNITO-SANS-SIZE-AT-1584, rem( 1684 ), $NUNITO-SANS-SIZE-AT-1684, 100vw ) });
     }
 
     $snrg-heading-coefficient: 1;
@@ -184,12 +183,12 @@
       $snrg-heading-coefficient: $MINOR-THIRD * $MINOR-THIRD * $snrg-heading-coefficient;
 
       div#snrg-app {
-        --snrg-font-size-h#{ $heading-level }: #{ $ROBOTO-RATIO * $snrg-heading-coefficient } * (var(--snrg-font-size));
+        --snrg-font-size-h#{ $heading-level }: (#{ $ROBOTO-RATIO * $snrg-heading-coefficient } * var(--snrg-font-size));
       }
     }
 
     div#snrg-app {
-      --snrg-font-size-h4-h5-h6: #{ $ROBOTO-RATIO } * (var(--snrg-font-size));
+      --snrg-font-size-h4-h5-h6: (#{ $ROBOTO-RATIO } * (var(--snrg-font-size)));
     }
   }
 </style>

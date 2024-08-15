@@ -141,7 +141,7 @@
       --snrg-header-lightness-1: (var(--snrg-background-lightness) - (var(--snrg-light-sign) * 30%));
       --snrg-header-lightness-2: (var(--snrg-header-lightness-1) - (var(--snrg-light-sign) * 30%));
       position: absolute;
-      left: calc(var(--snrg-outer-margin));
+      left: var(--snrg-outer-margin);
       top: var(--snrg-menu-top);
       z-index: 1;
       display: inline-flex;

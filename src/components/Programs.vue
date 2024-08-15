@@ -14,31 +14,36 @@
     <header>
       <h1>Nos programmes</h1>
     </header>
-    <article v-if="programs.length" v-for="program in programs" :key="program.id">
-      <header>
-        <h2 v-html="program.title"></h2>
-      </header>
-      <div v-if="program.data.get( 'content.rendered' )" v-html="program.data.get( 'content.rendered' )"></div>
-    </article>
-    <article v-else>
-      <p>Pas de programme pour le moment.</p>
-    </article>
+    <div>
+      <article v-if="programs.length" v-for="program in programs" :key="program.id">
+        <header>
+          <h2 v-html="program.title"></h2>
+        </header>
+        <div v-if="program.data.get( 'content.rendered' )" v-html="program.data.get( 'content.rendered' )"></div>
+      </article>
+      <article v-else>
+        <p>Pas de programme pour le moment.</p>
+      </article>
+    </div>
   </nav>
 </template>
 
 <style scoped>
   nav.snrg-programs {
     position: relative;
-    margin-left: calc(-1 * var(--snrg-padding));
-    box-sizing: border-box;
-    width: 100vw;
     min-height: 100vh;
     background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
-    padding-left: inherit;
-    padding-right: inherit;
+    padding-top: 2rem;
+    padding-left: calc(var(--snrg-outer-margin) + var(--snrg-middle-content-margin));
+    padding-right: calc(var(--snrg-outer-margin) + var(--snrg-middle-content-margin));
   }
 
   nav.snrg-programs > header > h1 {
     margin: 0;
+  }
+
+  nav.snrg-programs > div {
+    margin-left: calc(var(--snrg-middle-content-margin));
+    margin-right: calc(var(--snrg-middle-content-margin));
   }
 </style>

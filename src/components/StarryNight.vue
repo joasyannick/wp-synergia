@@ -219,7 +219,7 @@
 <style scoped>
   aside.snrg-starry-night {
     position: relative;
-    left: calc(50% - (var(--snrg-outer-margin)));
+    left: 50%;
     /* Fit a div of ( w0, h0 ) size into a div of ( w, h ) size in a cover way */
     width: max(100vw, 100vh * 16 / 9); /* max( w, h * w0 / h0 ) */
     height: max(100vw * 9 / 16, 100vh); /* max( w * h0 / w0, h ) */
@@ -228,7 +228,7 @@
     pointer-events: none;
   }
 
-  :is( svg.snrg-graphic, div.snrg-slogans, div.snrg-blog-access ) {
+  aside.snrg-starry-night > :is( svg.snrg-graphic, div.snrg-slogans, div.snrg-blog-access ) {
     position: absolute;
     left: 0;
     top: 0;
@@ -236,23 +236,23 @@
     height:100%;
   }
 
-  svg.snrg-graphic.snrg-sky {
+  aside.snrg-starry-night > svg.snrg-graphic.snrg-sky {
     transform: translateZ( -160px ) scale( 2.6 ); /* scale = (perspective - distance) / perspective */
   }
 
-  svg.snrg-graphic.snrg-sky:deep( g > rect.snrg-overlay ) {
+  aside.snrg-starry-night > svg.snrg-graphic.snrg-sky:deep( g > rect.snrg-overlay ) {
     mix-blend-mode: multiply;
   }
 
-  svg.snrg-graphic.snrg-stars {
+  aside.snrg-starry-night > svg.snrg-graphic.snrg-stars {
     transform: translateZ( -80px ) scale( 1.8 );
   }
 
-  svg.snrg-graphic.snrg-mountains {
+  aside.snrg-starry-night > svg.snrg-graphic.snrg-mountains {
     transform: translateZ( -40px ) scale( 1.4 );
   }
 
-  div.snrg-blog-access {
+  aside.snrg-starry-night > div.snrg-blog-access {
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
@@ -260,16 +260,16 @@
     transform: translateZ( -30px ) scale( 1.3 );
   }
 
-  div.snrg-blog-access::before {
+  aside.snrg-starry-night > div.snrg-blog-access::before {
     content: '';
     height: calc( var(--snrg-top-margin) + 45% );
   }
 
-  svg.snrg-graphic.snrg-plain {
+  aside.snrg-starry-night > svg.snrg-graphic.snrg-plain {
     transform: translateZ( -20px ) scale( 1.2 );
   }
 
-  svg.snrg-graphic.snrg-forest {
+  aside.snrg-starry-night > svg.snrg-graphic.snrg-forest {
     transform: translateZ( -10px ) scale( 1.1 );
   }
 </style>
