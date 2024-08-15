@@ -17,15 +17,19 @@
 
   const updateMargins = () => {
       const viewportWidth = Math.max( document.documentElement.clientWidth || 0, window.innerWidth || 0 )
-      if ( viewportWidth < 396 ) {
-        appElement.value!.style.setProperty( '--snrg-margin', '1.125rem' )
-      } else if ( viewportWidth < 1584 ) {
-        // appElement.value!.style.setProperty( '--snrg-margin', ( ( ( 7 / 26136 ) * viewportWidth * viewportWidth - ( 7 / 33 ) * viewportWidth + 60 ) / 16 ) + 'rem' )
-        appElement.value!.style.setProperty( '--snrg-margin', ( ( ( 7 / 62099136 ) * viewportWidth * viewportWidth * viewportWidth - ( 7 / 132 ) * viewportWidth + 32 ) / 16 ) + 'rem' )
-        // appElement.value!.style.setProperty( '--snrg-margin', ( ( ( 7 / 31049568 ) * viewportWidth * viewportWidth * viewportWidth - ( 7 / 26136 ) * viewportWidth * viewportWidth + ( 7 / 66 ) * viewportWidth + 4 ) / 16 ) + 'rem' )
-      } else {
-        appElement.value!.style.setProperty( '--snrg-margin', ( ( 0.25 * viewportWidth ) / 16 ) + 'rem' )
+      let innerMargin = 1.125
+      let outerMargin = innerMargin
+      if ( 396 < viewportWidth && viewportWidth < 1584 ) {
+        // innerMargin = ( ( 7 / 26136 ) * viewportWidth * viewportWidth - ( 7 / 33 ) * viewportWidth + 60 ) / 16
+        innerMargin = ( ( 7 / 62099136 ) * viewportWidth * viewportWidth * viewportWidth - ( 7 / 132 ) * viewportWidth + 32 ) / 16
+        // innerMargin = ( ( 7 / 31049568 ) * viewportWidth * viewportWidth * viewportWidth - ( 7 / 26136 ) * viewportWidth * viewportWidth + ( 7 / 66 ) * viewportWidth + 4 ) / 16
+        outerMargin = ( ( 1 / 41399424 ) * viewportWidth * viewportWidth * viewportWidth - ( 1 / 88 ) * viewportWidth + 21 ) / 16
+      } else if ( 1584 <= viewportWidth ) {
+        innerMargin = ( 0.25 * viewportWidth ) / 16
+        outerMargin = ( 0.0625 * viewportWidth ) / 16
       }
+      appElement.value!.style.setProperty( '--snrg-inner-margin',  `${ innerMargin }rem` )
+      appElement.value!.style.setProperty( '--snrg-outer-margin',  `${ outerMargin }rem` )
     }
 
   const onResize = throttle( 100, updateMargins )
@@ -62,7 +66,7 @@
 </template>
 
 <style lang="scss">
-  @use "sass:math";
+  @use 'sass:math';
 
   @function rem( $px, $em: false ) {
     @if not unitless( $px ) {
@@ -109,11 +113,14 @@
     --SNRG-TEXT-SATURATION: 29%;
     --SNRG-DARK-FILTER: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
     --snrg-menu-height: 2rem;
-    --snrg-menu-top: 1rem;
-    --snrg-menu-left: 1rem;
+    --snrg-top-margin: 1rem;
+    --snrg-bottom-margin: 1rem;
+    --snrg-content-margin: ((var(--snrg-inner-margin)) - (var(--snrg-outer-margin)));
+    --snrg-middle-content-margin: (0.5 * ((var(--snrg-inner-margin)) - (var(--snrg-outer-margin))));
     --snrg-font-size: #{ $NUNITO-SANS-SIZE-AT-1584 };
-    --snrg-heading-font-size-h4-h5-h6: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO };
+    --snrg-font-size-h4-h5-h6: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO };
     position: relative;
+    padding: var(--snrg-top-margin) calc(var(--snrg-outer-margin)) var(--snrg-bottom-margin) calc(var(--snrg-outer-margin));
     background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
     color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
     font: calc(var(--snrg-font-size))/calc(5/3) 'Nunito Sans';
@@ -136,7 +143,7 @@
     $snrg-heading-coefficient: $MAJOR-SECOND * $MAJOR-SECOND * $snrg-heading-coefficient;
 
     div#snrg-app {
-      --snrg-heading-font-size-#{ $heading-level }: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-heading-coefficient };
+      --snrg-font-size-h#{ $heading-level }: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-heading-coefficient };
     }
   }
 
@@ -158,11 +165,11 @@
       $snrg-final-heading-size: $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-final-heading-coefficient;
       
       div#snrg-app {
-        --snrg-heading-font-size-#{ $heading-level }: #{ linear-expression( rem( 396 ), $snrg-initial-heading-size, rem( 1584 ), $snrg-final-heading-size, 100vw ) };
+        --snrg-font-size-h#{ $heading-level }: #{ linear-expression( rem( 396 ), $snrg-initial-heading-size, rem( 1584 ), $snrg-final-heading-size, 100vw ) };
       }
 
       div#snrg-app h#{ $heading-level } {
-        font-size: calc( var( --snrg-heading-font-size-#{ $heading-level } ) );
+        font-size: calc(var(--snrg-font-size-h#{ $heading-level }));
       }
     }
   }
@@ -177,12 +184,12 @@
       $snrg-heading-coefficient: $MINOR-THIRD * $MINOR-THIRD * $snrg-heading-coefficient;
 
       div#snrg-app {
-        --snrg-heading-font-size-#{ $heading-level }: #{ $ROBOTO-RATIO * $snrg-heading-coefficient } * (var( --snrg-font-size ));
+        --snrg-font-size-h#{ $heading-level }: #{ $ROBOTO-RATIO * $snrg-heading-coefficient } * (var(--snrg-font-size));
       }
     }
 
     div#snrg-app {
-      --snrg-heading-font-size-h4-h5-h6: #{ $ROBOTO-RATIO } * (var(--snrg-font-size));
+      --snrg-font-size-h4-h5-h6: #{ $ROBOTO-RATIO } * (var(--snrg-font-size));
     }
   }
 </style>

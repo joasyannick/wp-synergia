@@ -4,7 +4,7 @@
   import constants from '@/constants'
   import type { IMenu } from '@/injection'
   import { iMenu } from '@/injection'
-  import Graphic from '@/components/images/Graphic.vue'
+  import Graphic from '@/components/Graphic.vue'
   import Slogans from '@/components/Slogans.vue'
 
   const menu = inject( iMenu ) as IMenu
@@ -190,31 +190,44 @@
 </script>
 
 <template>
-  <Graphic class="snrg-sky" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-sky-clip">
-    <sky clip-id="snrg-starry-night-sky-clip" />
-  </Graphic>
-  <Graphic class="snrg-stars" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-stars-clip">
-    <stars :star-count="props.starCount" clip-id="snrg-starry-night-stars-clip" />
-  </Graphic>
-  <Slogans />
-  <Graphic class="snrg-mountains" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-mountains-clip">
-    <mountains clip-id="snrg-starry-night-mountains-clip" />
-  </Graphic>
-  <div class="snrg-blog-access">
-    <p><button type="button" @click="menu.openOrClose">Lire le blog</button></p>
-  </div>
-  <Graphic class="snrg-plain" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-plain-clip">
-    <plain clip-id="snrg-starry-night-plain-clip" />
-  </Graphic>
-  <Graphic class="snrg-forest" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-forest-clip">
-    <forest clip-id="snrg-starry-night-forest-clip" />
-  </Graphic>
-  <Graphic class="snrg-deer" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-deer-clip">
-    <deer clip-id="snrg-starry-night-deer-clip" />
-  </Graphic>
+  <aside class="snrg-starry-night">
+    <Graphic class="snrg-sky" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-sky-clip">
+      <sky clip-id="snrg-starry-night-sky-clip" />
+    </Graphic>
+    <Graphic class="snrg-stars" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-stars-clip">
+      <stars :star-count="props.starCount" clip-id="snrg-starry-night-stars-clip" />
+    </Graphic>
+    <Slogans />
+    <Graphic class="snrg-mountains" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-mountains-clip">
+      <mountains clip-id="snrg-starry-night-mountains-clip" />
+    </Graphic>
+    <div class="snrg-blog-access">
+      <p><button type="button" @click="menu.openOrClose">Lire le blog</button></p>
+    </div>
+    <Graphic class="snrg-plain" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-plain-clip">
+      <plain clip-id="snrg-starry-night-plain-clip" />
+    </Graphic>
+    <Graphic class="snrg-forest" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-forest-clip">
+      <forest clip-id="snrg-starry-night-forest-clip" />
+    </Graphic>
+    <Graphic class="snrg-deer" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-deer-clip">
+      <deer clip-id="snrg-starry-night-deer-clip" />
+    </Graphic>
+  </aside>
 </template>
 
 <style scoped>
+  aside.snrg-starry-night {
+    position: relative;
+    left: calc(50% - (var(--snrg-outer-margin)));
+    /* Fit a div of ( w0, h0 ) size into a div of ( w, h ) size in a cover way */
+    width: max(100vw, 100vh * 16 / 9); /* max( w, h * w0 / h0 ) */
+    height: max(100vw * 9 / 16, 100vh); /* max( w * h0 / w0, h ) */
+    transform: translateX(-50%);
+    transform-style: preserve-3d;
+    pointer-events: none;
+  }
+
   :is( svg.snrg-graphic, div.snrg-slogans, div.snrg-blog-access ) {
     position: absolute;
     left: 0;
@@ -249,7 +262,7 @@
 
   div.snrg-blog-access::before {
     content: '';
-    height: calc( var( --snrg-menu-top ) + var( --snrg-menu-height ) + 45% );
+    height: calc( var(--snrg-top-margin) + 45% );
   }
 
   svg.snrg-graphic.snrg-plain {

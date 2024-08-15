@@ -39,7 +39,7 @@
 
   div.snrg-slogans > blockquote {
     position: absolute;
-    top: calc(var(--snrg-menu-top) + var(--snrg-menu-height) + 25%);
+    top: calc(var(--snrg-top-margin) + 25%);
     font-family: 'Roboto';
     font-size: calc(var(--snrg-roboto-size));
     font-weight: 100;
