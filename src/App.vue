@@ -44,7 +44,7 @@
   
   watch( theme, ( now ) => {
       if ( appElement.value ) {
-        appElement.value.dataset.snrgRoute = now
+        appElement.value.dataset.snrgTheme = now
       }
     } )
 
@@ -129,12 +129,16 @@
     --snrg-light-sign: 1;
     --snrg-background-lightness: 100%;
     --snrg-text-lightness: 24.3%;
+    --snrg-button-saturation: var(--SNRG-BACKGROUND-SATURATION);
+    --snrg-button-lightness: 40%;
   }
 
   div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) {
     --snrg-light-sign: -1;
     --snrg-background-lightness: 10%;
     --snrg-text-lightness: 92.2%;
+    --snrg-button-saturation: (0.75 * var(--SNRG-BACKGROUND-SATURATION));
+    --snrg-button-lightness: 63%;
   }
 
   $snrg-heading-coefficient: 1;
@@ -145,17 +149,32 @@
       --snrg-font-size-h#{ $heading-level }: (#{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-heading-coefficient });
     }
 
-    div#snrg-app h#{ $heading-level } {
+    h#{ $heading-level } {
       font-size: calc(var(--snrg-font-size-h#{ $heading-level }));
     }
   }
 
-  div#snrg-app :is(button, h1, h2, h3, h4, h5, h6) {
-    font-family: 'Roboto', sans-serif;
+  :is(button, h1, h2, h3, h4, h5, h6) {
+    font-family: 'Roboto';
   }
 
-  div#snrg-app :is(h1, h2, h3, h4, h5, h6) {
+  :is(h1, h2, h3, h4, h5, h6) {
     font-weight: 500;
+  }
+
+  :is(button, a) {
+    all: unset;
+  }
+
+  button {
+    cursor: default;
+    background-color: hsl(var(--SNRG-BACKGROUND-HUE), calc(var(--snrg-button-saturation)), var(--snrg-button-lightness));
+    color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
+    font-weight: 300;
+  }
+
+  a {
+    cursor: pointer;
   }
 
   @media screen and (min-width: rem( 396, true ) ) {

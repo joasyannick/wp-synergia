@@ -131,83 +131,77 @@
 
 <style scoped>
   nav.snrg-menu {
-      --snrg-paddy-hue: var(--SNRG-BACKGROUND-HUE);
-      --snrg-helikia-hue: 30;
-      --snrg-hesychia-hue: 285;
-      --snrg-account-hue: 75;
-      --snrg-menu-top: 1rem;
-      --snrg-menu-button-width: var(--snrg-menu-height);
-      --snrg-menu-button-gap: 0.25rem;
-      --snrg-header-lightness-1: (var(--snrg-background-lightness) - (var(--snrg-light-sign) * 30%));
-      --snrg-header-lightness-2: (var(--snrg-header-lightness-1) - (var(--snrg-light-sign) * 30%));
-      position: absolute;
-      left: var(--snrg-outer-margin);
-      top: var(--snrg-menu-top);
-      z-index: 1;
-      display: inline-flex;
-    }
+    --snrg-paddy-hue: var(--SNRG-BACKGROUND-HUE);
+    --snrg-helikia-hue: 30;
+    --snrg-hesychia-hue: 285;
+    --snrg-account-hue: 75;
+    --snrg-menu-top: 1rem;
+    --snrg-menu-button-width: var(--snrg-menu-height);
+    --snrg-menu-button-gap: 0.25rem;
+    --snrg-header-lightness-1: (var(--snrg-background-lightness) - (var(--snrg-light-sign) * 30%));
+    --snrg-header-lightness-2: (var(--snrg-header-lightness-1) - (var(--snrg-light-sign) * 30%));
+    position: absolute;
+    left: var(--snrg-outer-margin);
+    top: var(--snrg-menu-top);
+    z-index: 1;
+    display: inline-flex;
+  }
 
   div#snrg-app[data-snrg-route^='/'] nav.snrg-menu,
   nav.snrg-menu a.snrg-home-link {
-      --snrg-menu-hue: var(--snrg-paddy-hue);
-    }
+    --snrg-menu-hue: var(--snrg-paddy-hue);
+  }
 
   div#snrg-app[data-snrg-route^='/helikia'] nav.snrg-menu,
   nav.snrg-menu a.snrg-helikia-link {
-      --snrg-menu-hue: var(--snrg-helikia-hue);
-    }
+    --snrg-menu-hue: var(--snrg-helikia-hue);
+  }
 
   nav.snrg-menu a.snrg-hesychia-link {
-      --snrg-menu-hue: var(--snrg-hesychia-hue);
-    }
+    --snrg-menu-hue: var(--snrg-hesychia-hue);
+  }
 
   div#snrg-app[data-snrg-route^='/compte'] nav.snrg-menu,
   nav.snrg-menu a.snrg-account-link {
-      --snrg-menu-hue: var(--snrg-account-hue);
-    }
+    --snrg-menu-hue: var(--snrg-account-hue);
+  }
 
   nav.snrg-menu :is( a, button ) {
-      all: unset;
-      cursor: default;
-      display: inline-flex;
-      border-radius: 50%;
-      width: var(--snrg-menu-button-width);
-      height: var(--snrg-menu-height);
-      justify-content: center;
-      align-items: center;
-      background: hsl(var(--snrg-menu-hue), var(--SNRG-BACKGROUND-SATURATION), calc(var(--snrg-background-lightness) - var(--snrg-light-sign) * 15%), 75%);
-    }
-
-    nav.snrg-menu a {
-      cursor: pointer;
-    }
+    display: inline-flex;
+    border-radius: 50%;
+    width: var(--snrg-menu-button-width);
+    height: var(--snrg-menu-height);
+    justify-content: center;
+    align-items: center;
+    background: hsl(var(--snrg-menu-hue), calc(var(--snrg-button-saturation)), var(--snrg-button-lightness));
+  }
 
   nav.snrg-menu :is( a, button ) > svg {
-      width: 55%;
-      height: 55%;
-      fill: hsl(var(--snrg-menu-hue), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-text-lightness));
-    }
+    width: 55%;
+    height: 55%;
+    fill: hsl(var(--snrg-menu-hue), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
+  }
 
   nav.snrg-menu > :is( a, button ):not( :first-child ) {
-      margin-left: var(--snrg-menu-button-gap);
-    }
+    margin-left: var(--snrg-menu-button-gap);
+  }
 
   nav.snrg-menu > :is( a, button ).snrg-enter-active {
-      transition: margin-left var(--snrg-menu-transition-duration) ease-in var(--snrg-menu-transition-duration), width var(--snrg-menu-transition-duration) ease-in var(--snrg-menu-transition-duration), opacity var(--snrg-menu-transition-duration) ease-in var(--snrg-menu-transition-duration);
-    }
+    transition: margin-left var(--snrg-menu-transition-duration) ease-in var(--snrg-menu-transition-duration), width var(--snrg-menu-transition-duration) ease-in var(--snrg-menu-transition-duration), opacity var(--snrg-menu-transition-duration) ease-in var(--snrg-menu-transition-duration);
+  }
 
   nav.snrg-menu > :is( a, button ).snrg-leave-active {
-      transition: margin-left var(--snrg-menu-transition-duration) ease-in, width var(--snrg-menu-transition-duration) ease-in, opacity var(--snrg-menu-transition-duration) ease-in;
-    }
+    transition: margin-left var(--snrg-menu-transition-duration) ease-in, width var(--snrg-menu-transition-duration) ease-in, opacity var(--snrg-menu-transition-duration) ease-in;
+  }
 
   nav.snrg-menu > :is( a, button ).snrg-enter-from,
   nav.snrg-menu > :is( a, button ).snrg-leave-to {
-      width: 0;
-      opacity: 0;
-    }
+    width: 0;
+    opacity: 0;
+  }
 
   nav.snrg-menu > :is( a, button ):not( :first-child ).snrg-enter-from,
   nav.snrg-menu > :is( a, button ):not( :first-child ).snrg-leave-to {
-      margin-left: 0;
-    }
+    margin-left: 0;
+  }
 </style>

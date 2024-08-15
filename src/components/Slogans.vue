@@ -34,6 +34,7 @@
 
 <style scoped>
   div.snrg-slogans {
+    --snrg-slogan-transition-duration: 2s;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
@@ -43,17 +44,17 @@
   div.snrg-slogans > blockquote {
     position: absolute;
     top: calc(var(--snrg-top-margin) + 25%);
-    font-family: 'Roboto';
+    font-family: 'Roboto Condensed';
     font-size: calc(var(--snrg-font-size-h1));
-    font-weight: 100;
+    font-weight: 300;
   }
 
   div.snrg-slogans > blockquote.snrg-enter-active {
-    transition: opacity 2s ease 2s;
+    transition: opacity var(--snrg-slogan-transition-duration) ease var(--snrg-slogan-transition-duration);
   }
 
   div.snrg-slogans > blockquote.snrg-leave-active {
-    transition: opacity 2s ease;
+    transition: opacity var(--snrg-slogan-transition-duration) ease;
   }
 
   div.snrg-slogans > blockquote.snrg-enter-from,

@@ -202,7 +202,7 @@
       <mountains clip-id="snrg-starry-night-mountains-clip" />
     </Graphic>
     <div class="snrg-blog-access">
-      <p><button type="button" @click="menu.openOrClose">Lire le blog</button></p>
+      <p><button type="button" class="snrg-action-button" @click="menu.openOrClose">Lire le blog</button></p>
     </div>
     <Graphic class="snrg-plain" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-plain-clip">
       <plain clip-id="snrg-starry-night-plain-clip" />
