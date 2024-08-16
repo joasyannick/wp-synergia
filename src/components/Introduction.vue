@@ -31,7 +31,7 @@
     margin-top: -10vh;
     padding-left: calc(var(--snrg-outer-margin) + var(--snrg-middle-content-margin));
     padding-right: calc(var(--snrg-outer-margin) + var(--snrg-middle-content-margin));
-    background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
+    background-color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
   }
   
   article.snrg-introduction > div > p:last-child {

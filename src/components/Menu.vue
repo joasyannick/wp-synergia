@@ -172,15 +172,20 @@
     height: calc(var(--snrg-menu-button-length));
     justify-content: center;
     align-items: center;
-    background: hsl(var(--snrg-menu-hue), calc(var(--snrg-button-saturation)), var(--snrg-button-lightness));
   }
 
-  nav.snrg-menu a {
+  div#snrg-app nav.snrg-menu :is( a, button ) {
     border-radius: 50%;
+    background-color: hsl(var(--snrg-menu-hue), calc(var(--snrg-button-saturation)), var(--snrg-button-lightness));
+    box-shadow: 0 0 calc(1/3 * var(--snrg-menu-button-length)) inset hsl(var(--snrg-menu-hue), calc(var(--snrg-button-saturation)), calc(var(--snrg-button-lightness) - (var(--snrg-light-sign)) * 10%));
+    transition: filter 0.5s ease;
+  }
+
+  div#snrg-app nav.snrg-menu :is( a, button ):hover {
+    filter: brightness(calc(1 - (var(--snrg-light-sign)) * 1/3));
   }
 
   div#snrg-app nav.snrg-menu button {
-    border-radius: 50%;
     padding: 0;
   }
 
@@ -194,12 +199,20 @@
     margin-left: calc(var(--snrg-menu-button-gap));
   }
 
-  nav.snrg-menu > :is( a, button ).snrg-enter-active {
-    transition: margin-left var(--snrg-menu-transition-duration) ease-in var(--snrg-menu-transition-duration), width var(--snrg-menu-transition-duration) ease-in var(--snrg-menu-transition-duration), opacity var(--snrg-menu-transition-duration) ease-in var(--snrg-menu-transition-duration);
+  div#snrg-app nav.snrg-menu > :is( a, button ).snrg-enter-active {
+    transition:
+      filter 0.5s ease,
+      margin-left var(--snrg-menu-transition-duration) ease-in-out var(--snrg-menu-transition-duration),
+      width var(--snrg-menu-transition-duration) ease-in-out var(--snrg-menu-transition-duration),
+      opacity calc(2/3 * var(--snrg-menu-transition-duration)) ease-in-out calc(4/3 * var(--snrg-menu-transition-duration));
   }
 
-  nav.snrg-menu > :is( a, button ).snrg-leave-active {
-    transition: margin-left var(--snrg-menu-transition-duration) ease-in, width var(--snrg-menu-transition-duration) ease-in, opacity var(--snrg-menu-transition-duration) ease-in;
+  div#snrg-app nav.snrg-menu > :is( a, button ).snrg-leave-active {
+    transition:
+      filter 0.5s ease,
+      margin-left var(--snrg-menu-transition-duration) ease-in-out,
+      width var(--snrg-menu-transition-duration) ease-in-out,
+      opacity calc(2/3 * var(--snrg-menu-transition-duration)) ease-in-out;
   }
 
   nav.snrg-menu > :is( a, button ).snrg-enter-from,

@@ -269,6 +269,7 @@
     border-radius: calc(4/3 * var(--snrg-font-size-h3))/50%;
     padding: calc(2/3 * var(--snrg-font-size-h3)) calc(4/3 * var(--snrg-font-size-h3));
     font-size: calc(var(--snrg-font-size-h3));
+    box-shadow: 0 0 calc(0.5 * 4/3 * var(--snrg-font-size-h3)) inset hsl(var(--SNRG-BACKGROUND-HUE), calc(var(--snrg-button-saturation)), calc(var(--snrg-button-lightness) - (var(--snrg-light-sign)) * 10%));
   }
 
   aside.snrg-starry-night > svg.snrg-graphic.snrg-plain {

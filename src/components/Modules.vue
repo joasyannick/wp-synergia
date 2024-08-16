@@ -15,7 +15,7 @@
   nav.snrg-modules {
     width: 100vw;
     height: 100vh;
-    background: black;
+    background-color: black;
   }
 
   nav.snrg-modules.snrg-enter-active {

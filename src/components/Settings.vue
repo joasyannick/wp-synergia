@@ -10,7 +10,7 @@
   nav.snrg-settings {
     width: 100vw;
     height: 100vh;
-    background: black;
+    background-color: black;
   }
 
   nav.snrg-settings.snrg-enter-active {

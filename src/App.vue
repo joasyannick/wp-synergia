@@ -121,7 +121,7 @@
     --snrg-font-size: #{ $NUNITO-SANS-SIZE-AT-1584 };
     --snrg-font-size-2: (#{ $ROBOTO-RATIO } * (var(--snrg-font-size)));
     position: relative;
-    background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
+    background-color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
     color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
     font: calc(var(--snrg-font-size))/calc(5/3) 'Nunito Sans';
   }
@@ -174,6 +174,12 @@
     background-color: hsl(var(--SNRG-BACKGROUND-HUE), calc(var(--snrg-button-saturation)), var(--snrg-button-lightness));
     padding: calc(2/3 * var(--snrg-font-size-2)) calc(4/3 * var(--snrg-font-size-2));
     color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
+    box-shadow: 0 0 calc(0.5 * 4/3 * var(--snrg-font-size-2)) inset hsl(var(--SNRG-BACKGROUND-HUE), calc(var(--snrg-button-saturation)), calc(var(--snrg-button-lightness) - (var(--snrg-light-sign)) * 10%));
+    transition: filter 0.5s ease;
+  }
+
+  div#snrg-app button:hover {
+    filter: string.unquote( 'brightness(calc(1 - (var(--snrg-light-sign)) * 1/3))' );    
   }
 
   @media screen and (min-width: rem( 396, true ) ) {

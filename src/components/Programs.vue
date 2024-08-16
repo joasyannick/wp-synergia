@@ -32,7 +32,7 @@
   nav.snrg-programs {
     position: relative;
     min-height: 100vh;
-    background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
+    background-color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
     padding-top: 2rem;
     padding-left: calc(var(--snrg-outer-margin) + var(--snrg-middle-content-margin));
     padding-right: calc(var(--snrg-outer-margin) + var(--snrg-middle-content-margin));
