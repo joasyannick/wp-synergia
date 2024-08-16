@@ -66,6 +66,7 @@
 </template>
 
 <style lang="scss">
+  @use 'sass:string';
   @use 'sass:math';
 
   @function rem( $px, $em: false ) {
@@ -118,7 +119,7 @@
     --snrg-content-margin: ((var(--snrg-inner-margin)) - (var(--snrg-outer-margin)));
     --snrg-middle-content-margin: (0.5 * var(--snrg-content-margin));
     --snrg-font-size: #{ $NUNITO-SANS-SIZE-AT-1584 };
-    --snrg-font-size-h4-h5-h6: #{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO };
+    --snrg-font-size-2: (#{ $ROBOTO-RATIO } * (var(--snrg-font-size)));
     position: relative;
     background: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
     color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
@@ -149,32 +150,30 @@
       --snrg-font-size-h#{ $heading-level }: (#{ $NUNITO-SANS-SIZE-AT-1584 * $ROBOTO-RATIO * $snrg-heading-coefficient });
     }
 
-    h#{ $heading-level } {
+    div#snrg-app h#{ $heading-level } {
       font-size: calc(var(--snrg-font-size-h#{ $heading-level }));
     }
   }
 
-  :is(button, h1, h2, h3, h4, h5, h6) {
+  div#snrg-app :is(h4, h5, h6, button) {
+    font-size: calc(var(--snrg-font-size-2));
+  }
+
+  div#snrg-app :is(button, h1, h2, h3, h4, h5, h6) {
     font-family: 'Roboto';
   }
 
-  :is(h1, h2, h3, h4, h5, h6) {
+  div#snrg-app :is(h1, h2, h3, h4, h5, h6, button) {
     font-weight: 500;
   }
 
-  :is(button, a) {
-    all: unset;
-  }
-
-  button {
-    cursor: default;
-    background-color: hsl(var(--SNRG-BACKGROUND-HUE), calc(var(--snrg-button-saturation)), var(--snrg-button-lightness));
-    color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
-    font-weight: 300;
-  }
-
-  a {
+  div#snrg-app button {
     cursor: pointer;
+    border-width: 0;
+    border-radius: calc(4/3 * var(--snrg-font-size-2))/50%;
+    background-color: hsl(var(--SNRG-BACKGROUND-HUE), calc(var(--snrg-button-saturation)), var(--snrg-button-lightness));
+    padding: calc(2/3 * var(--snrg-font-size-2)) calc(4/3 * var(--snrg-font-size-2));
+    color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
   }
 
   @media screen and (min-width: rem( 396, true ) ) {
@@ -204,10 +203,6 @@
       div#snrg-app {
         --snrg-font-size-h#{ $heading-level }: (#{ $ROBOTO-RATIO * $snrg-heading-coefficient } * var(--snrg-font-size));
       }
-    }
-
-    div#snrg-app {
-      --snrg-font-size-h4-h5-h6: (#{ $ROBOTO-RATIO } * (var(--snrg-font-size)));
     }
   }
 </style>

@@ -202,7 +202,7 @@
       <mountains clip-id="snrg-starry-night-mountains-clip" />
     </Graphic>
     <div class="snrg-blog-access">
-      <p><button type="button" class="snrg-action-button" @click="menu.openOrClose">Lire le blog</button></p>
+      <button type="button" class="snrg-action-button" @click="menu.openOrClose">Lire le blog</button>
     </div>
     <Graphic class="snrg-plain" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-plain-clip">
       <plain clip-id="snrg-starry-night-plain-clip" />
@@ -263,6 +263,12 @@
   aside.snrg-starry-night > div.snrg-blog-access::before {
     content: '';
     height: calc( var(--snrg-top-margin) + 45% );
+  }
+
+  div#snrg-app aside.snrg-starry-night > div.snrg-blog-access > button {
+    border-radius: calc(4/3 * var(--snrg-font-size-h3))/50%;
+    padding: calc(2/3 * var(--snrg-font-size-h3)) calc(4/3 * var(--snrg-font-size-h3));
+    font-size: calc(var(--snrg-font-size-h3));
   }
 
   aside.snrg-starry-night > svg.snrg-graphic.snrg-plain {

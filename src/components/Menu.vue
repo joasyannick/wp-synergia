@@ -136,8 +136,8 @@
     --snrg-hesychia-hue: 285;
     --snrg-account-hue: 75;
     --snrg-menu-top: 1rem;
-    --snrg-menu-button-width: var(--snrg-menu-height);
-    --snrg-menu-button-gap: 0.25rem;
+    --snrg-menu-button-length: (0.85 * var(--snrg-font-size-h1));
+    --snrg-menu-button-gap: (0.25 * var(--snrg-font-size-h1));
     --snrg-header-lightness-1: (var(--snrg-background-lightness) - (var(--snrg-light-sign) * 30%));
     --snrg-header-lightness-2: (var(--snrg-header-lightness-1) - (var(--snrg-light-sign) * 30%));
     position: absolute;
@@ -168,12 +168,20 @@
 
   nav.snrg-menu :is( a, button ) {
     display: inline-flex;
-    border-radius: 50%;
-    width: var(--snrg-menu-button-width);
-    height: var(--snrg-menu-height);
+    width: calc(var(--snrg-menu-button-length));
+    height: calc(var(--snrg-menu-button-length));
     justify-content: center;
     align-items: center;
     background: hsl(var(--snrg-menu-hue), calc(var(--snrg-button-saturation)), var(--snrg-button-lightness));
+  }
+
+  nav.snrg-menu a {
+    border-radius: 50%;
+  }
+
+  div#snrg-app nav.snrg-menu button {
+    border-radius: 50%;
+    padding: 0;
   }
 
   nav.snrg-menu :is( a, button ) > svg {
@@ -183,7 +191,7 @@
   }
 
   nav.snrg-menu > :is( a, button ):not( :first-child ) {
-    margin-left: var(--snrg-menu-button-gap);
+    margin-left: calc(var(--snrg-menu-button-gap));
   }
 
   nav.snrg-menu > :is( a, button ).snrg-enter-active {

@@ -61,17 +61,19 @@
 <style scoped>
   nav.snrg-posts {
     position: relative;
+    box-sizing: border-box;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    padding: var(--snrg-outer-margin);
   }
 
   nav.snrg-posts.snrg-enter-active {
-    transition: opacity var( --snrg-menu-transition-duration ) ease-in-out var( --snrg-menu-transition-duration );
+    transition: opacity var(--snrg-menu-transition-duration) ease-in-out var(--snrg-menu-transition-duration);
   }
 
   nav.snrg-posts.snrg-leave-active {
-    transition: opacity var( --snrg-menu-transition-duration ) ease-in-out;
+    transition: opacity var(--snrg-menu-transition-duration) ease-in-out;
   }
 
   nav.snrg-posts.snrg-enter-from,
