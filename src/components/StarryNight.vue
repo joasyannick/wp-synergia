@@ -1,13 +1,11 @@
 <script setup lang="tsx">
-  import { defineComponent, inject, ref, computed, watch, onUnmounted } from 'vue'
+  import { defineComponent, ref, computed, watch, onUnmounted } from 'vue'
   import type { Ref } from 'vue'
   import constants from '@/constants'
-  import type { IMenu } from '@/injection'
-  import { iMenu } from '@/injection'
   import Graphic from '@/components/Graphic.vue'
   import Slogans from '@/components/Slogans.vue'
 
-  const menu = inject( iMenu ) as IMenu
+
 
   const props = defineProps< { starCount: number } >()
 
@@ -197,16 +195,15 @@
     <Graphic class="snrg-stars" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-stars-clip">
       <stars :star-count="props.starCount" clip-id="snrg-starry-night-stars-clip" />
     </Graphic>
-    <Slogans />
     <Graphic class="snrg-mountains" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-mountains-clip">
       <mountains clip-id="snrg-starry-night-mountains-clip" />
     </Graphic>
-    <div class="snrg-blog-access">
-      <button type="button" class="snrg-action-button" @click="menu.openOrClose">Lire le blog</button>
-    </div>
     <Graphic class="snrg-plain" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-plain-clip">
       <plain clip-id="snrg-starry-night-plain-clip" />
     </Graphic>
+    <div class="snrg-blog-access">
+      <Slogans />
+    </div>
     <Graphic class="snrg-forest" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-forest-clip">
       <forest clip-id="snrg-starry-night-forest-clip" />
     </Graphic>
@@ -252,19 +249,6 @@
     transform: translateZ( -40px ) scale( 1.4 );
   }
 
-  aside.snrg-starry-night > div.snrg-blog-access {
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    pointer-events: auto;
-    transform: translateZ( -30px ) scale( 1.3 );
-  }
-
-  aside.snrg-starry-night > div.snrg-blog-access::before {
-    content: '';
-    height: calc( var(--snrg-top-margin) + 45% );
-  }
-
   div#snrg-app aside.snrg-starry-night > div.snrg-blog-access > button {
     border-radius: calc(4/3 * var(--snrg-font-size-h3))/50%;
     padding: calc(2/3 * var(--snrg-font-size-h3)) calc(4/3 * var(--snrg-font-size-h3));
@@ -273,8 +257,21 @@
   }
 
   aside.snrg-starry-night > svg.snrg-graphic.snrg-plain {
+    transform: translateZ( -30px ) scale( 1.3 );
+  }
+
+  aside.snrg-starry-night > div.snrg-blog-access {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    pointer-events: auto;
     transform: translateZ( -20px ) scale( 1.2 );
   }
+
+  /*aside.snrg-starry-night > div.snrg-blog-access::before {
+    content: '';
+    height: calc( var(--snrg-top-margin) + 45% );
+  }*/
 
   aside.snrg-starry-night > svg.snrg-graphic.snrg-forest {
     transform: translateZ( -10px ) scale( 1.1 );

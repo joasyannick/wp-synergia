@@ -112,6 +112,8 @@
     --SNRG-BACKGROUND-SATURATION: 70%;
     --SNRG-TEXT-HUE: 210;
     --SNRG-TEXT-SATURATION: 29%;
+    --SNRG-BUTTON-HUE: var(--SNRG-BACKGROUND-HUE);
+    --SNRG-BUTTON-SATURATION: var(--SNRG-BACKGROUND-SATURATION);
     --SNRG-DARK-FILTER: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
     --snrg-menu-height: 2rem;
     --snrg-top-margin: 1rem;
@@ -120,10 +122,11 @@
     --snrg-middle-content-margin: (0.5 * var(--snrg-content-margin));
     --snrg-font-size: #{ $NUNITO-SANS-SIZE-AT-1584 };
     --snrg-font-size-2: (#{ $ROBOTO-RATIO } * (var(--snrg-font-size)));
+    --snrg-line-height: 5/3;
     position: relative;
     background-color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
     color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
-    font: calc(var(--snrg-font-size))/calc(5/3) 'Nunito Sans';
+    font: calc(var(--snrg-font-size))/calc(var(--snrg-line-height)) 'Nunito Sans';
   }
 
   div#snrg-app[data-snrg-theme='light'] {
@@ -179,7 +182,7 @@
   }
 
   div#snrg-app button:hover {
-    filter: string.unquote( 'brightness(calc(1 - (var(--snrg-light-sign)) * 1/3))' );    
+    filter: string.unquote( 'brightness(calc(1 - (var(--snrg-light-sign)) * 1/3))' );
   }
 
   @media screen and (min-width: rem( 396, true ) ) {

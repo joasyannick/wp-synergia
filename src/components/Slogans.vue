@@ -38,15 +38,19 @@
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    transform: translateZ(-60px) scale(1.6);
+    /*transform: translateZ(-60px) scale(1.6);*/
   }
 
   div.snrg-slogans > blockquote {
-    position: absolute;
-    top: calc(var(--snrg-top-margin) + 25%);
+    /*position: absolute;*/
+    /*top: calc(var(--snrg-top-margin) + 25%);*/
+    margin: 0;
     font-family: 'Roboto Condensed';
     font-size: calc(var(--snrg-font-size-h1));
+    max-width: 50%;
+    max-height: calc(2 * var(--snrg-font-size-h1) * var(--snrg-line-height));
     font-weight: 300;
+    text-align: center;
   }
 
   div.snrg-slogans > blockquote.snrg-enter-active {

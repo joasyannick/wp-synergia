@@ -1,6 +1,10 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, inject } from 'vue'
   import constants from '@/constants'
+  import type { IMenu } from '@/injection'
+  import { iMenu } from '@/injection'
+
+  const menu = inject( iMenu ) as IMenu
 
   const introduction = ref( null as null | { id: number, title: string, data: Map< string, any > } )
 
@@ -22,6 +26,7 @@
     <div v-else>
       <p>Présenter le site.</p>
     </div>
+    <footer><button type="button" class="snrg-action-button" @click="menu.openOrClose">Lire le blog</button></footer>
   </article>
 </template>
 

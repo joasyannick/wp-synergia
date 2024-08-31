@@ -131,10 +131,13 @@
 
 <style scoped>
   nav.snrg-menu {
-    --snrg-paddy-hue: var(--SNRG-BACKGROUND-HUE);
-    --snrg-helikia-hue: 30;
-    --snrg-hesychia-hue: 285;
-    --snrg-account-hue: 75;
+    --SNRG-MENU-BUTTON-HUE: var(--SNRG-BUTTON-HUE);
+    --SNRG-MENU-BUTTON-SATURATION: var(--SNRG-BUTTON-SATURATION);
+    --SNRG-MENU-BUTTON-OPACITY: 1;
+    --SNRG-PADDY-HUE: var(--SNRG-BACKGROUND-HUE);
+    --SNRG-HELIKIA-HUE: 30;
+    --SNRG-HESYCHIA-HUE: 285;
+    --SNRG-ACCOUNT-HUE: 75;
     --snrg-menu-top: 1rem;
     --snrg-menu-button-length: (0.85 * var(--snrg-font-size-h1));
     --snrg-menu-button-gap: (0.25 * var(--snrg-font-size-h1));
@@ -149,21 +152,21 @@
 
   div#snrg-app[data-snrg-route^='/'] nav.snrg-menu,
   nav.snrg-menu a.snrg-home-link {
-    --snrg-menu-hue: var(--snrg-paddy-hue);
+    --snrg-menu-hue: var(--SNRG-PADDY-HUE);
   }
 
   div#snrg-app[data-snrg-route^='/helikia'] nav.snrg-menu,
   nav.snrg-menu a.snrg-helikia-link {
-    --snrg-menu-hue: var(--snrg-helikia-hue);
+    --snrg-menu-hue: var(--SNRG-HELIKIA-HUE);
   }
 
   nav.snrg-menu a.snrg-hesychia-link {
-    --snrg-menu-hue: var(--snrg-hesychia-hue);
+    --snrg-menu-hue: var(--SNRG-HESYCHIA-HUE);
   }
 
   div#snrg-app[data-snrg-route^='/compte'] nav.snrg-menu,
   nav.snrg-menu a.snrg-account-link {
-    --snrg-menu-hue: var(--snrg-account-hue);
+    --snrg-menu-hue: var(--SNRG-ACCOUNT-HUE);
   }
 
   nav.snrg-menu :is( a, button ) {
