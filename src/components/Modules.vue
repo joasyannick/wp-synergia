@@ -19,11 +19,11 @@
   }
 
   nav.snrg-modules.snrg-enter-active {
-    transition: opacity var( --snrg-menu-transition-duration ) ease-in-out var( --snrg-menu-transition-duration );
+    transition: opacity var( --snrg-menu-transition ) ease-in-out var( --snrg-menu-transition );
   }
 
   nav.snrg-modules.snrg-leave-active {
-    transition: opacity var( --snrg-menu-transition-duration ) ease-in-out;
+    transition: opacity var( --snrg-menu-transition ) ease-in-out;
   }
 
   nav.snrg-modules.snrg-enter-from,

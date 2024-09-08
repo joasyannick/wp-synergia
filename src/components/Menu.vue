@@ -10,7 +10,6 @@
   import BiographyIcon from '@/components/icons/BiographyIcon.vue'
   import SynergiaIcon from '@/components/icons/SynergiaIcon.vue'
   import ThemeIcon from '@/components/icons/ThemeIcon.vue'
-  import ContactIcon from '@/components/icons/ContactIcon.vue'
   import HomeIcon from '@/components/icons/HomeIcon.vue'
   import HelikiaIcon from '@/components/icons/HelikiaIcon.vue'
   import HesychiaIcon from '@/components/icons/HesychiaIcon.vue'
@@ -25,8 +24,10 @@
   const hesychiaUrl = ref( '' )
 
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
+  const isPaddyHomeView = computed( () => ! route.name ? false : observers.isPaddyHomeView( route.name.toString() ) )
   const isBiographyView = computed( () => ! route.name ? false : observers.isBiographyView( route.name.toString() ) )
   const isHelikiaView = computed( () => ! route.name ? false : observers.isHelikiaView( route.name.toString() ) )
+  const isHelikiaHomeView = computed( () => ! route.name ? false : observers.isHelikiaHomeView( route.name.toString() ) )
   const isSynergiaView = computed( () => ! route.name ? false : observers.isSynergiaView( route.name.toString() ) )
   const isAccountView = computed( () => ! route.name ? false : observers.isAccountView( route.name.toString() ) )
   const buttons = computed( () => [
@@ -58,21 +59,12 @@
           onClick: () => { theme.toggle() }
         },
       {
-          class: 'snrg-contact-button',
-          icon: ContactIcon,
-          label: 'Contact',
-          link: '',
-          external: false,
-          condition: ! menu.opened.value && isPaddyView.value,
-          onClick: () => { return }
-        },
-      {
           class: 'snrg-home-link',
           icon: HomeIcon,
           label: 'Paddy Fontaine',
           link: constants.route.paddy.fullPath,
           external: false,
-          condition: ! menu.opened.value,
+          condition: ! menu.opened.value && ! isPaddyHomeView.value,
           onClick: () => { return }
         },
       {
@@ -81,7 +73,7 @@
           label: 'Helikia',
           link: constants.route.helikia.fullPath,
           external: false,
-          condition: ! menu.opened.value,
+          condition: ! menu.opened.value && ! isHelikiaHomeView.value,
           onClick: () => { return }
         },
       {
@@ -99,7 +91,7 @@
           label: 'Compte',
           link: constants.route.account.fullPath,
           external: false,
-          condition: ! menu.opened.value,
+          condition: ! menu.opened.value && ! isAccountView.value,
           onClick: () => { return }
         }
     ] )
@@ -131,16 +123,13 @@
 
 <style scoped>
   nav.snrg-menu {
-    --SNRG-MENU-BUTTON-HUE: var(--SNRG-BUTTON-HUE);
-    --SNRG-MENU-BUTTON-SATURATION: var(--SNRG-BUTTON-SATURATION);
-    --SNRG-MENU-BUTTON-OPACITY: 1;
     --SNRG-PADDY-HUE: var(--SNRG-BACKGROUND-HUE);
     --SNRG-HELIKIA-HUE: 30;
     --SNRG-HESYCHIA-HUE: 285;
     --SNRG-ACCOUNT-HUE: 75;
     --snrg-menu-top: 1rem;
-    --snrg-menu-button-length: (0.85 * var(--snrg-font-size-h1));
-    --snrg-menu-button-gap: (0.25 * var(--snrg-font-size-h1));
+    --snrg-menu-button-length: (0.85 * var(--snrg-h1-size));
+    --snrg-menu-button-gap: (0.25 * var(--snrg-h1-size));
     --snrg-header-lightness-1: (var(--snrg-background-lightness) - (var(--snrg-light-sign) * 30%));
     --snrg-header-lightness-2: (var(--snrg-header-lightness-1) - (var(--snrg-light-sign) * 30%));
     position: absolute;
@@ -150,26 +139,23 @@
     display: inline-flex;
   }
 
-  div#snrg-app[data-snrg-route^='/'] nav.snrg-menu,
-  nav.snrg-menu a.snrg-home-link {
-    --snrg-menu-hue: var(--SNRG-PADDY-HUE);
+  div#snrg-app[data-snrg-route^='/'] nav.snrg-menu, nav.snrg-menu a.snrg-home-link {
+    --snrg-button-hue: var(--SNRG-PADDY-HUE);
   }
 
-  div#snrg-app[data-snrg-route^='/helikia'] nav.snrg-menu,
-  nav.snrg-menu a.snrg-helikia-link {
-    --snrg-menu-hue: var(--SNRG-HELIKIA-HUE);
+  div#snrg-app[data-snrg-route^='/helikia'] nav.snrg-menu, nav.snrg-menu a.snrg-helikia-link {
+    --snrg-button-hue: var(--SNRG-HELIKIA-HUE);
   }
 
   nav.snrg-menu a.snrg-hesychia-link {
-    --snrg-menu-hue: var(--SNRG-HESYCHIA-HUE);
+    --snrg-button-hue: var(--SNRG-HESYCHIA-HUE);
   }
 
-  div#snrg-app[data-snrg-route^='/compte'] nav.snrg-menu,
-  nav.snrg-menu a.snrg-account-link {
-    --snrg-menu-hue: var(--SNRG-ACCOUNT-HUE);
+  div#snrg-app[data-snrg-route^='/compte'] nav.snrg-menu, nav.snrg-menu a.snrg-account-link {
+    --snrg-button-hue: var(--SNRG-ACCOUNT-HUE);
   }
 
-  nav.snrg-menu :is( a, button ) {
+  nav.snrg-menu > :is(a, button) {
     display: inline-flex;
     width: calc(var(--snrg-menu-button-length));
     height: calc(var(--snrg-menu-button-length));
@@ -177,55 +163,62 @@
     align-items: center;
   }
 
-  div#snrg-app nav.snrg-menu :is( a, button ) {
-    border-radius: 50%;
-    background-color: hsl(var(--snrg-menu-hue), calc(var(--snrg-button-saturation)), var(--snrg-button-lightness));
-    box-shadow: 0 0 calc(1/3 * var(--snrg-menu-button-length)) inset hsl(var(--snrg-menu-hue), calc(var(--snrg-button-saturation)), calc(var(--snrg-button-lightness) - (var(--snrg-light-sign)) * 10%));
-    transition: filter 0.5s ease;
-  }
-
-  div#snrg-app nav.snrg-menu :is( a, button ):hover {
-    filter: brightness(calc(1 - (var(--snrg-light-sign)) * 1/3));
-  }
-
-  div#snrg-app nav.snrg-menu button {
-    padding: 0;
-  }
-
-  nav.snrg-menu :is( a, button ) > svg {
-    width: 55%;
-    height: 55%;
-    fill: hsl(var(--snrg-menu-hue), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
-  }
-
-  nav.snrg-menu > :is( a, button ):not( :first-child ) {
-    margin-left: calc(var(--snrg-menu-button-gap));
-  }
-
-  div#snrg-app nav.snrg-menu > :is( a, button ).snrg-enter-active {
-    transition:
-      filter 0.5s ease,
-      margin-left var(--snrg-menu-transition-duration) ease-in-out var(--snrg-menu-transition-duration),
-      width var(--snrg-menu-transition-duration) ease-in-out var(--snrg-menu-transition-duration),
-      opacity calc(2/3 * var(--snrg-menu-transition-duration)) ease-in-out calc(4/3 * var(--snrg-menu-transition-duration));
-  }
-
-  div#snrg-app nav.snrg-menu > :is( a, button ).snrg-leave-active {
-    transition:
-      filter 0.5s ease,
-      margin-left var(--snrg-menu-transition-duration) ease-in-out,
-      width var(--snrg-menu-transition-duration) ease-in-out,
-      opacity calc(2/3 * var(--snrg-menu-transition-duration)) ease-in-out;
-  }
-
-  nav.snrg-menu > :is( a, button ).snrg-enter-from,
-  nav.snrg-menu > :is( a, button ).snrg-leave-to {
+  nav.snrg-menu > :is(a, button):is(.snrg-enter-from, .snrg-leave-to) {
     width: 0;
     opacity: 0;
   }
 
-  nav.snrg-menu > :is( a, button ):not( :first-child ).snrg-enter-from,
-  nav.snrg-menu > :is( a, button ):not( :first-child ).snrg-leave-to {
+  nav.snrg-menu > :is(a, button):not(:first-child) {
+    margin-left: calc(var(--snrg-menu-button-gap));
+  }
+
+  nav.snrg-menu > :is(a, button):not(:first-child):is(.snrg-enter-from, .snrg-leave-to) {
     margin-left: 0;
+  }
+
+  div#snrg-app nav.snrg-menu > :is(a, button).snrg-enter-active {
+    transition:
+      filter 0.5s ease,
+      margin-left var(--snrg-menu-transition) ease-in-out var(--snrg-menu-transition),
+      width var(--snrg-menu-transition) ease-in-out var(--snrg-menu-transition),
+      opacity calc(2/3 * var(--snrg-menu-transition)) ease-in-out calc(4/3 * var(--snrg-menu-transition));
+  }
+
+  div#snrg-app nav.snrg-menu > :is(a, button).snrg-leave-active {
+    transition:
+      filter 0.5s ease,
+      margin-left var(--snrg-menu-transition) ease-in-out,
+      width var(--snrg-menu-transition) ease-in-out,
+      opacity calc(2/3 * var(--snrg-menu-transition)) ease-in-out;
+  }
+
+  div#snrg-app nav.snrg-menu button.snrg-menu-button {
+    --snrg-horizontal-button-radius: 50%;
+    --snrg-button-shadow-radius: (1/3 * var(--snrg-menu-button-length));
+    padding: initial;
+  }
+
+  div#snrg-app nav.snrg-menu button:not(.snrg-menu-button) {
+    border-radius: initial;
+    background-color: initial;
+    padding: initial;
+    color: transparent;
+    box-shadow: initial;
+  }
+
+  nav.snrg-menu button.snrg-menu-button > svg {
+    width: 55%;
+    height: 55%;
+  }
+
+  nav.snrg-menu :is(a, button:not(.snrg-menu-button)) > svg {
+    width: 75%;
+    height: 75%;
+    fill: hsl(var(--snrg-button-hue), calc(var(--snrg-button-saturation)), calc(var(--snrg-button-lightness)));
+    transition: fill var(--SNRG-BUTTON-TRANSITION) ease;
+  }
+
+  nav.snrg-menu :is(a, button:not(.snrg-menu-button)):hover > svg {
+    fill: hsl(var(--snrg-button-hue), calc(var(--snrg-button-saturation)), calc(var(--snrg-button-lightness-on-hover)));
   }
 </style>

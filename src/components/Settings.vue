@@ -14,11 +14,11 @@
   }
 
   nav.snrg-settings.snrg-enter-active {
-    transition: opacity var( --snrg-menu-transition-duration ) ease-in-out var( --snrg-menu-transition-duration );
+    transition: opacity var( --snrg-menu-transition ) ease-in-out var( --snrg-menu-transition );
   }
 
   nav.snrg-settings.snrg-leave-active {
-    transition: opacity var( --snrg-menu-transition-duration ) ease-in-out;
+    transition: opacity var( --snrg-menu-transition ) ease-in-out;
   }
 
   nav.snrg-settings.snrg-enter-from,

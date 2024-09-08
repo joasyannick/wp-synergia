@@ -34,7 +34,7 @@
 
 <style scoped>
   div.snrg-slogans {
-    --snrg-slogan-transition-duration: 2s;
+    --snrg-slogan-transition: 2s;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
@@ -46,19 +46,19 @@
     /*top: calc(var(--snrg-top-margin) + 25%);*/
     margin: 0;
     font-family: 'Roboto Condensed';
-    font-size: calc(var(--snrg-font-size-h1));
+    font-size: calc(var(--snrg-h1-size));
     max-width: 50%;
-    max-height: calc(2 * var(--snrg-font-size-h1) * var(--snrg-line-height));
+    max-height: calc(2 * var(--snrg-h1-size) * var(--snrg-line-height));
     font-weight: 300;
     text-align: center;
   }
 
   div.snrg-slogans > blockquote.snrg-enter-active {
-    transition: opacity var(--snrg-slogan-transition-duration) ease var(--snrg-slogan-transition-duration);
+    transition: opacity var(--snrg-slogan-transition) ease var(--snrg-slogan-transition);
   }
 
   div.snrg-slogans > blockquote.snrg-leave-active {
-    transition: opacity var(--snrg-slogan-transition-duration) ease;
+    transition: opacity var(--snrg-slogan-transition) ease;
   }
 
   div.snrg-slogans > blockquote.snrg-enter-from,

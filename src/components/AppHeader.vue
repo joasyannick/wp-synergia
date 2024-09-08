@@ -14,7 +14,7 @@
 
   const route = useRoute()
 
-  const style = { '--snrg-menu-transition-duration': ( Math.round(0.5 * constants.menu.animation * 1000) / 1000 ) + 's' }
+  const style = { '--snrg-menu-transition': ( Math.round(0.5 * constants.menu.animation * 1000) / 1000 ) + 's' }
 
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
   const isHelikiaView = computed( () => ! route.name ? false : observers.isHelikiaView( route.name.toString() ) )
