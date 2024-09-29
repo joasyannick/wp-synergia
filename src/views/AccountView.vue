@@ -9,13 +9,4 @@
 </template>
 
 <style scoped>
-  main.snrg-account {
-    margin-right: calc(var(--snrg-content-margin));
-    margin-left: calc(var(--snrg-content-margin));
-  }
-
-  main.snrg-account span.alt {
-    font-size: 0.9rem;
-    font-family: 'Roboto';
-  }
 </style>

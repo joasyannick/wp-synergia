@@ -64,7 +64,7 @@
     box-sizing: border-box;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    overflow: clip;
     padding: var(--snrg-outer-margin);
   }
 

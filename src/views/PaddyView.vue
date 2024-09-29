@@ -13,12 +13,14 @@
 </template>
 
 <style scoped>
-  main.snrg-paddy {
-    position: relative;
-    box-sizing: border-box;
+  div#snrg-app > main.snrg-paddy {
     width: 100vw;
     height: 100vh;
-    overflow: hidden auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  main.snrg-paddy {
     perspective: 100px;
   }
 </style>

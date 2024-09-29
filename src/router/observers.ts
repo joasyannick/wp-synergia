@@ -7,7 +7,8 @@ const observers = Object.freeze( {
     isHelikiaView: ( route: string ) => [ constants.route.helikia.name, constants.route.helikia.synergia.name, constants.route.helikia.module.name ].includes( route ),
     isHelikiaHomeView: ( route: string ) => route === constants.route.helikia.name,
     isSynergiaView: ( route: string ) => route === constants.route.helikia.synergia.name,
-    isAccountView: ( route: string ) => route === constants.route.account.name
+    isAccountView: ( route: string ) => route === constants.route.account.name,
+    isErrorView: ( route: string ) => route === constants.route.error.name
   } )
 
 export default observers

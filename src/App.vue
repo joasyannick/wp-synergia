@@ -129,6 +129,9 @@
     --snrg-roboto-size: (#{ $ROBOTO-RATIO } * (var(--snrg-nunito-sans-size)));
     --snrg-line-height: 5/3;
     position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
     background-color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
     color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
     font: calc(var(--snrg-nunito-sans-size))/calc(var(--snrg-line-height)) 'Nunito Sans';
@@ -148,6 +151,15 @@
     --snrg-text-lightness: 92.2%;
     --snrg-button-saturation: (0.75 * var(--SNRG-BACKGROUND-SATURATION));
     --snrg-default-button-lightness: 70%;
+  }
+
+  div#snrg-app > main {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    overflow: clip auto;
+    padding-left: calc(var(--snrg-content-margin));
+    padding-right: calc(var(--snrg-content-margin));
   }
 
   $snrg-heading-coefficient: 1;
