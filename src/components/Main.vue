@@ -33,4 +33,12 @@
 </template>
 
 <style scoped>
+  main {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    overflow: clip auto;
+    padding-left: calc(var(--snrg-content-margin));
+    padding-right: calc(var(--snrg-content-margin));
+  }
 </style>

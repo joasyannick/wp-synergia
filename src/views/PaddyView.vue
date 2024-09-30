@@ -14,14 +14,11 @@
 </template>
 
 <style scoped>
-  div#snrg-app > main.snrg-paddy {
+  main.snrg-paddy {
     width: 100vw;
     height: 100vh;
     padding-left: 0;
     padding-right: 0;
-  }
-
-  main.snrg-paddy {
     perspective: 100px;
   }
 </style>

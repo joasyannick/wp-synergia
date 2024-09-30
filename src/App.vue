@@ -158,15 +158,6 @@
     --snrg-default-button-lightness: 70%;
   }
 
-  div#snrg-app > main {
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    overflow: clip auto;
-    padding-left: calc(var(--snrg-content-margin));
-    padding-right: calc(var(--snrg-content-margin));
-  }
-
   $snrg-heading-coefficient: 1;
   @each $heading-level in 3, 2, 1 {
     $snrg-heading-coefficient: $MAJOR-SECOND * $MAJOR-SECOND * $snrg-heading-coefficient;
