@@ -66,6 +66,7 @@
     height: 100vh;
     overflow: clip;
     padding: var(--snrg-outer-margin);
+    background-color: black;
   }
 
   nav.snrg-posts.snrg-enter-active {

@@ -1,1 +1,1 @@
-export enum Media { TEXT, AUDIO, VIDEO }
+export enum ScrollDirection { DOWN, UP }

@@ -4,6 +4,7 @@
   import constants from '@/constants'
   import observers from '@/router/observers'
   import type { IMenu } from '@/injection'
+  import { ScrollDirection } from '@/types'
   import { iMenu } from '@/injection'
   import { useThemeStore } from '@/stores/theme'
   import MenuIcon from '@/components/icons/MenuIcon.vue'
@@ -15,6 +16,8 @@
   import HesychiaIcon from '@/components/icons/HesychiaIcon.vue'
   import AccountIcon from '@/components/icons/AccountIcon.vue'
 
+  const props = defineProps< { scrollDirection: null | ScrollDirection } >()
+
   const menu = inject( iMenu ) as IMenu
 
   const route = useRoute()
@@ -22,6 +25,8 @@
 
   const menuIconAnimated = ref( false )
   const hesychiaUrl = ref( '' )
+
+  const classes = computed( () => [ { 'snrg-down': props.scrollDirection === ScrollDirection.DOWN } ] )
 
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
   const isPaddyHomeView = computed( () => ! route.name ? false : observers.isPaddyHomeView( route.name.toString() ) )
@@ -111,7 +116,7 @@
 </script>
 
 <template>
-  <TransitionGroup name="snrg" tag="nav" class="snrg-menu">
+  <TransitionGroup name="snrg" tag="nav" class="snrg-menu" :class="classes" >
     <button key="Menu" class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="menu.opened.value" @animated="onMenuIconAnimated" /></button>
     <template v-for="button in buttons" :key="button.label">
       <a v-if="button.condition && button.link && button.external" :class="button.class" :href="button.link" :data-snrg-label="button.label" target="_blank" rel="noopener noreferrer"><component :is="button.icon" /></a>

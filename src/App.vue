@@ -3,14 +3,17 @@
   import { RouterView, useRoute } from 'vue-router'
   import { storeToRefs } from 'pinia'
   import { throttle } from 'throttle-debounce'
+  import constants from '@/constants'
   import { iMenu } from '@/injection'
   import { useThemeStore } from '@/stores/theme'
   import AppHeader from '@/components/AppHeader.vue'
+  import type { ScrollDirection } from '@/types'
 
   const route = useRoute()
   const { theme } = storeToRefs( useThemeStore() )
 
   const menuOpened = ref( false )
+  const scrollDirection = ref( null  as null | ScrollDirection )
   const appElement = ref( null as null | HTMLDivElement )
 
   const openOrCloseMenu = () => { menuOpened.value = ! menuOpened.value }
@@ -32,7 +35,9 @@
       appElement.value!.style.setProperty( '--snrg-outer-margin',  `${ outerMargin }rem` )
     }
 
-  const onResize = throttle( 100, updateMargins )
+  const onResize = throttle( constants.throttle.period, updateMargins )
+
+  const onScrolled = ( direction: ScrollDirection ) => { scrollDirection.value = direction }
 
   provide( iMenu, { opened: menuOpened, openOrClose: openOrCloseMenu } )
 
@@ -60,8 +65,8 @@
 
 <template>
   <div id="snrg-app" ref="appElement">
-    <AppHeader />
-    <RouterView />
+    <AppHeader :scroll-direction="scrollDirection" />
+    <RouterView @scrolled="onScrolled" />
   </div>
 </template>
 

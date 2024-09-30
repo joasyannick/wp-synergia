@@ -1,15 +1,16 @@
 <script setup lang="ts">
   import { RouterView } from 'vue-router'
+  import Main from '@/components/Main.vue'
 </script>
 
 <template>
-  <main class="snrg-paddy">
+  <Main class="snrg-paddy">
     <RouterView v-slot="{ Component }">
       <KeepAlive>
         <component :is="Component" />
       </KeepAlive>
     </RouterView>
-  </main>
+  </Main>
 </template>
 
 <style scoped>

@@ -1,3 +1,5 @@
+import { throttle } from "throttle-debounce"
+
 const buildRequestParameters = ( options: Map< string, boolean >, parameters: string[] ): void => {
     const embedded = options.get( 'wp:featuredmedia' ) || options.get( 'wp:term' )
     if ( embedded ) {
@@ -39,6 +41,9 @@ const buildPostData = ( options: Map< string, boolean >, post: any, data: Map< s
   }
 
 const constants = Object.freeze( {
+    throttle: {
+        period: 100 // milliseconds
+      },
     menu: {
         animation: 1 // second
       },

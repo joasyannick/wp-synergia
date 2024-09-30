@@ -1,16 +1,17 @@
 <script setup lang="ts">
   import { KeepAlive } from 'vue'
   import { RouterView } from 'vue-router'
+  import Main from '@/components/Main.vue'
 </script>
 
 <template>
-  <main class="snrg-helikia">
+  <Main class="snrg-helikia">
     <RouterView v-slot="{ Component }">
       <KeepAlive>
         <component :is="Component" />
       </KeepAlive>
     </RouterView>
-  </main>
+  </Main>
 </template>
 
 <style scoped>

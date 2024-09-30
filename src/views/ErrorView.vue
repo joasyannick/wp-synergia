@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import constants from '@/constants'
+  import Main from '@/components/Main.vue'
 
   const error = ref ( null as null | { id: number, title: string, data: Map< string, any > } )
 
@@ -13,7 +14,7 @@
 </script>
 
 <template>
-  <main class="snrg-404">
+  <Main class="snrg-404">
     <article class="snrg-404">
       <header>
         <h1 v-if="error" v-html="error.title"></h1>
@@ -24,7 +25,7 @@
         <p>La page recherchée n'existe pas.</p>
       </div>
     </article>
-  </main>
+  </Main>
 </template>
 
 <style scoped>
