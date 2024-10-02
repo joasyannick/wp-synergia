@@ -10,30 +10,24 @@
   const props = defineProps< { starCount: number } >()
 
   const sky = defineComponent( ( props: { clipId: string } ) => {
-      const image = ref( '' )
-
-      const fetchSkyImage = async () => {
-          try {
-            const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/home-image' )
-            image.value = await response.json()
-          } catch ( exception ) {
-            console.error( 'Failed to fetch the stary night image' )
-          }
-        }
-
-      fetchSkyImage()
 
       return () => (
           <g class="snrg-sky" clip-path={ 'url(#' + props.clipId + ')' }>
             <defs>
-              <linearGradient id="snrg-starry-night-sky-gradient" gradientTransform="rotate(90)">
+              <radialGradient id="snrg-starry-night-radial-sky-gradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(11311.4,0,0,15629.4,10073.3,2098.1)">
+                <stop style="stop-color:hsl(215,70%,60%)" offset="0%" />
+                <stop style="stop-color:hsl(195,95%,25%)" offset="30%" />
+                <stop style="stop-color:hsl(215,95%,10%)" offset="73%" />
+                <stop style="stop-color:hsl(205,100%,10%)" offset="100%" />
+            </radialGradient>
+              <linearGradient id="snrg-starry-night-linear-sky-gradient" gradientTransform="rotate(90)">
                 <stop style="stop-color:hsl(225,100%,25%)" offset="0%" />
                 <stop style="stop-color:hsl(200,100%,50%)" offset="44.6%" />
                 <stop style="stop-color:hsl(190,100%,50%)" offset="66.3%" />
               </linearGradient>
             </defs>
-            <image href={ image.value } width={ constants.starryNight.viewBoxWidth } height={ constants.starryNight.viewBoxHeight } />
-            <rect style="fill:url(#snrg-starry-night-sky-gradient)" class="snrg-overlay" x="0" y="0" width={ constants.starryNight.viewBoxWidth } height={ constants.starryNight.viewBoxHeight } />
+            <rect style="fill:url(#snrg-starry-night-radial-sky-gradient)" class="snrg-overlay" x="0" y="0" width={ constants.starryNight.viewBoxWidth } height={ constants.starryNight.viewBoxHeight } />
+            <rect style="fill:url(#snrg-starry-night-linear-sky-gradient)" class="snrg-overlay" x="0" y="0" width={ constants.starryNight.viewBoxWidth } height={ constants.starryNight.viewBoxHeight } />
           </g>
         )
     }, { props: ['clipId' ] } )
