@@ -16,6 +16,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "@vueuse/core": "^11.1.0",
     "leaflet": "^1.9.4",
     "pinia": "^2.0.36",
     "throttle-debounce": "^5.0.2",

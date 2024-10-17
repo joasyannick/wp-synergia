@@ -44,9 +44,6 @@ const constants = Object.freeze( {
     throttle: {
         period: 100 // milliseconds
       },
-    menu: {
-        animation: 1 // second
-      },
     starryNight: {
         starCount: 300,
         viewBoxWidth: 16000,

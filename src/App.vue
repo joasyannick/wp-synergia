@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { ref, provide , watch, onMounted, onUnmounted } from 'vue'
+  import { ref, provide , watch, onMounted } from 'vue'
   import { RouterView, useRoute } from 'vue-router'
+  import { useEventListener } from '@vueuse/core'
   import { storeToRefs } from 'pinia'
   import { throttle } from 'throttle-debounce'
   import constants from '@/constants'
@@ -57,10 +58,8 @@
       appElement.value!.dataset.snrgRoute = route.path
       appElement.value!.dataset.snrgTheme = theme.value
       updateMargins()
-      window.addEventListener( 'resize', onResize )
+      useEventListener( 'resize', onResize )
     } )
-
-  onUnmounted( () => window.removeEventListener( 'resize', onResize ) )
 </script>
 
 <template>
@@ -118,13 +117,13 @@
     --SNRG-TEXT-HUE: 210;
     --SNRG-TEXT-SATURATION: 29%;
     --SNRG-DARK-FILTER: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    --SNRG-BUTTON-OPACITY: 0.5;
     --SNRG-BUTTON-TRANSITION: 0.5s;
     --snrg-button-hue: var(--SNRG-BACKGROUND-HUE);
     --snrg-button-lightness: var(--snrg-default-button-lightness);
     --snrg-button-lightness-on-hover: ((1 - (var(--snrg-light-sign)) * 1/3) * var(--snrg-default-button-lightness));
     --snrg-horizontal-button-radius: (4/3 * var(--snrg-roboto-size));
     --snrg-vertical-button-radius: 50%;
-    --snrg-button-shadow-radius: (0.5 * 4/3 * var(--snrg-roboto-size));
     --snrg-menu-height: 2rem;
     --snrg-top-margin: 1rem;
     --snrg-bottom-margin: 1rem;
@@ -137,7 +136,7 @@
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    background-color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
+    background-color: hsl(var(--SNRG-BACKGROUND-HUE) var(--SNRG-BACKGROUND-SATURATION) var(--snrg-background-lightness));
     color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
     font: calc(var(--snrg-nunito-sans-size))/calc(var(--snrg-line-height)) 'Nunito Sans';
   }
@@ -184,14 +183,21 @@
   }
 
   div#snrg-app button {
+    /* Remove default browser styles from buttons */
+    display: inline-block;
     cursor: pointer;
-    border-width: 0;
-    border-radius: calc(var(--snrg-horizontal-button-radius))/var(--snrg-vertical-button-radius);
-    background-color: hsl(var(--snrg-button-hue), calc(var(--snrg-button-saturation)), calc(var(--snrg-button-lightness)));
-    padding: calc(2/3 * var(--snrg-roboto-size)) calc(4/3 * var(--snrg-roboto-size));
-    color: hsl(var(--SNRG-BACKGROUND-HUE), var(--SNRG-BACKGROUND-SATURATION), var(--snrg-background-lightness));
-    box-shadow: 0 0 calc(var(--snrg-button-shadow-radius)) inset hsl(var(--snrg-button-hue), calc(var(--snrg-button-saturation)), calc(var(--snrg-button-lightness) - (var(--snrg-light-sign)) * 10%));
-    transition: background-color var(--SNRG-BUTTON-TRANSITION) ease, box-shadow var(--SNRG-BUTTON-TRANSITION) ease;
+    padding: initial;
+    margin: initial;
+    border: initial;
+    border-radius: initial;
+    background: initial;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    text-decoration: initial;
+    box-shadow: initial;
+    outline: initial;
+    appearance: initial;
   }
 
   div#snrg-app button:hover {

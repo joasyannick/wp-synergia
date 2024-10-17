@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { inject, computed } from 'vue'
   import { useRoute } from 'vue-router'
-  import constants from '@/constants'
   import observers from '@/router/observers'
   import type { IMenu } from '@/injection'
   import type { ScrollDirection } from '@/types'
@@ -17,8 +16,6 @@
 
   const route = useRoute()
 
-  const style = { '--snrg-menu-transition': ( Math.round(0.5 * constants.menu.animation * 1000) / 1000 ) + 's' }
-
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
   const isHelikiaView = computed( () => ! route.name ? false : observers.isHelikiaView( route.name.toString() ) )
   const isAccountView = computed( () => ! route.name ? false : observers.isAccountView( route.name.toString() ) )
@@ -26,7 +23,7 @@
 </script>
 
 <template>
-  <header class="snrg-header" :style="style">
+  <header class="snrg-header">
     <Menu :scroll-direction="props.scrollDirection" />
     <Transition name="snrg">
       <Posts v-if="isPaddyView || isErrorView" v-show="menu.opened.value" />
@@ -38,6 +35,8 @@
 
 <style scoped>
   header.snrg-header {
+    --SNRG-HEADER-TRANSITION-DURATION: 1s;
+    --SNRG-HEADER-TRANSITION-TIMING: ease-in-out;
     position: absolute;
     left: 0;
     top: 0;

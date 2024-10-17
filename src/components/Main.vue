@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { ref, onMounted, onUnmounted } from 'vue'
+  import { ref } from 'vue'
+  import { useEventListener } from '@vueuse/core'
   import { throttle } from 'throttle-debounce'
   import constants from '@/constants'
   import { ScrollDirection } from '@/types'
@@ -20,10 +21,7 @@
     }
 
   const onScroll = throttle( constants.throttle.period, getScrollDirection )
-
-  onMounted( () => { mainElement.value!.addEventListener( 'scroll', onScroll ) } )
-
-  onUnmounted( () => { mainElement.value!.removeEventListener( 'scroll', onScroll ) } )
+  useEventListener( mainElement, 'scroll', onScroll )
 </script>
 
 <template>

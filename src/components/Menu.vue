@@ -23,10 +23,9 @@
   const route = useRoute()
   const theme = useThemeStore()
 
-  const menuIconAnimated = ref( false )
   const hesychiaUrl = ref( '' )
 
-  const classes = computed( () => [ { 'snrg-down': props.scrollDirection === ScrollDirection.DOWN } ] )
+  const classes = computed( () => [ { 'snrg-opened': menu.opened.value }, { 'snrg-down': props.scrollDirection === ScrollDirection.DOWN } ] )
 
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
   const isPaddyHomeView = computed( () => ! route.name ? false : observers.isPaddyHomeView( route.name.toString() ) )
@@ -101,8 +100,6 @@
         }
     ] )
 
-  const openOrClose = () => { if ( ! menuIconAnimated.value ) { menu.openOrClose() } }
-  const onMenuIconAnimated = ( state: boolean ) => { menuIconAnimated.value = state }
   const fetchHesychiaUrl = async () => {
       try {
           const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/hesychia-url' )
@@ -117,7 +114,7 @@
 
 <template>
   <TransitionGroup name="snrg" tag="nav" class="snrg-menu" :class="classes" >
-    <button key="Menu" class="snrg-menu-button" type="button" @click="openOrClose" data-snrg-label="Menu"><MenuIcon :opened="menu.opened.value" @animated="onMenuIconAnimated" /></button>
+    <button key="Menu" class="snrg-menu-button" type="button" @click="menu.openOrClose" data-snrg-label="Menu"><MenuIcon /></button>
     <template v-for="button in buttons" :key="button.label">
       <a v-if="button.condition && button.link && button.external" :class="button.class" :href="button.link" :data-snrg-label="button.label" target="_blank" rel="noopener noreferrer"><component :is="button.icon" /></a>
       <RouterLink v-else-if="button.condition && button.link && ! button.external" :class="button.class" :to="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
@@ -132,11 +129,18 @@
     --SNRG-HELIKIA-HUE: 30;
     --SNRG-HESYCHIA-HUE: 285;
     --SNRG-ACCOUNT-HUE: 75;
+    --snrg-menu-button-hue: var(--SNRG-PADDY-HUE);
+    --snrg-menu-button-saturation: 40%;
+    --snrg-menu-button-lightness: 60%;
+    --snrg-menu-button-opacity: 0.1;
+    --snrg-menu-button-border-hue: var(--snrg-menu-button-hue);
+    --snrg-menu-button-border-saturation: var(--snrg-menu-button-saturation);
+    --snrg-menu-border-lightness: 90%;
+    --snrg-menu-button-border-opacity: 0.2;
+    --snrg-menu-button-icon-opacity: 1;
     --snrg-menu-top: 1rem;
     --snrg-menu-button-length: (0.85 * var(--snrg-h1-size));
     --snrg-menu-button-gap: (0.25 * var(--snrg-h1-size));
-    --snrg-header-lightness-1: (var(--snrg-background-lightness) - (var(--snrg-light-sign) * 30%));
-    --snrg-header-lightness-2: (var(--snrg-header-lightness-1) - (var(--snrg-light-sign) * 30%));
     position: absolute;
     left: var(--snrg-outer-margin);
     top: var(--snrg-menu-top);
@@ -144,28 +148,32 @@
     display: inline-flex;
   }
 
-  div#snrg-app[data-snrg-route^='/'] nav.snrg-menu, nav.snrg-menu a.snrg-home-link {
-    --snrg-button-hue: var(--SNRG-PADDY-HUE);
-  }
-
   div#snrg-app[data-snrg-route^='/helikia'] nav.snrg-menu, nav.snrg-menu a.snrg-helikia-link {
-    --snrg-button-hue: var(--SNRG-HELIKIA-HUE);
+    --snrg-menu-button-hue: var(--SNRG-HELIKIA-HUE);
   }
 
   nav.snrg-menu a.snrg-hesychia-link {
-    --snrg-button-hue: var(--SNRG-HESYCHIA-HUE);
+    --snrg-menu-button-hue: var(--SNRG-HESYCHIA-HUE);
   }
 
   div#snrg-app[data-snrg-route^='/compte'] nav.snrg-menu, nav.snrg-menu a.snrg-account-link {
-    --snrg-button-hue: var(--SNRG-ACCOUNT-HUE);
+    --snrg-menu-button-hue: var(--SNRG-ACCOUNT-HUE);
+  }
+
+  div#snrg-app nav.snrg-menu > :is(a, button) {
+    display: inline-flex;
+    border: 1px solid hsl(var(--snrg-menu-button-border-hue) var(--snrg-menu-button-border-saturation) var(--snrg-menu-border-lightness) / var(--snrg-menu-button-border-opacity));
+    border-radius: 50%;
+    background-color: hsl(var(--snrg-menu-button-hue) calc(var(--snrg-menu-button-saturation)) calc(var(--snrg-menu-button-lightness)) / var(--snrg-menu-button-opacity));
   }
 
   nav.snrg-menu > :is(a, button) {
-    display: inline-flex;
     width: calc(var(--snrg-menu-button-length));
     height: calc(var(--snrg-menu-button-length));
     justify-content: center;
     align-items: center;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
   }
 
   nav.snrg-menu > :is(a, button):is(.snrg-enter-from, .snrg-leave-to) {
@@ -183,47 +191,30 @@
 
   div#snrg-app nav.snrg-menu > :is(a, button).snrg-enter-active {
     transition:
-      filter 0.5s ease,
-      margin-left var(--snrg-menu-transition) ease-in-out var(--snrg-menu-transition),
-      width var(--snrg-menu-transition) ease-in-out var(--snrg-menu-transition),
-      opacity calc(2/3 * var(--snrg-menu-transition)) ease-in-out calc(4/3 * var(--snrg-menu-transition));
+      margin-left var(--SNRG-HEADER-TRANSITION-DURATION) var(--SNRG-HEADER-TRANSITION-TIMING) var(--SNRG-HEADER-TRANSITION-DURATION),
+      width var(--SNRG-HEADER-TRANSITION-DURATION) var(--SNRG-HEADER-TRANSITION-TIMING) var(--SNRG-HEADER-TRANSITION-DURATION),
+      opacity calc(2/3 * var(--SNRG-HEADER-TRANSITION-DURATION)) var(--SNRG-HEADER-TRANSITION-TIMING) calc(4/3 * var(--SNRG-HEADER-TRANSITION-DURATION));
   }
 
   div#snrg-app nav.snrg-menu > :is(a, button).snrg-leave-active {
     transition:
-      filter 0.5s ease,
-      margin-left var(--snrg-menu-transition) ease-in-out,
-      width var(--snrg-menu-transition) ease-in-out,
-      opacity calc(2/3 * var(--snrg-menu-transition)) ease-in-out;
+      margin-left var(--SNRG-HEADER-TRANSITION-DURATION) var(--SNRG-HEADER-TRANSITION-TIMING),
+      width var(--SNRG-HEADER-TRANSITION-DURATION) var(--SNRG-HEADER-TRANSITION-TIMING),
+      opacity calc(2/3 * var(--SNRG-HEADER-TRANSITION-DURATION)) var(--SNRG-HEADER-TRANSITION-TIMING);
   }
 
-  div#snrg-app nav.snrg-menu button.snrg-menu-button {
-    --snrg-horizontal-button-radius: 50%;
-    --snrg-button-shadow-radius: (1/3 * var(--snrg-menu-button-length));
-    padding: initial;
-  }
-
-  div#snrg-app nav.snrg-menu button:not(.snrg-menu-button) {
-    border-radius: initial;
-    background-color: initial;
-    padding: initial;
-    color: transparent;
-    box-shadow: initial;
-  }
-
-  nav.snrg-menu button.snrg-menu-button > svg {
+  nav.snrg-menu :is(a, button) > svg {
     width: 55%;
-    height: 55%;
+    height: auto;
+    fill: hsl(var(--SNRG-TEXT-HUE) var(--SNRG-TEXT-SATURATION) var(--snrg-text-lightness));
   }
 
-  nav.snrg-menu :is(a, button:not(.snrg-menu-button)) > svg {
-    width: 75%;
-    height: 75%;
-    fill: hsl(var(--snrg-button-hue), calc(var(--snrg-button-saturation)), calc(var(--snrg-button-lightness)));
-    transition: fill var(--SNRG-BUTTON-TRANSITION) ease;
+  nav.snrg-menu :is(a, button) > svg :deep(.snrg-fill),
+  nav.snrg-menu.snrg-opened :is(a, button) > svg :deep(.snrg-stroke) {
+    fill-opacity: 0;
   }
 
-  nav.snrg-menu :is(a, button:not(.snrg-menu-button)):hover > svg {
-    fill: hsl(var(--snrg-button-hue), calc(var(--snrg-button-saturation)), calc(var(--snrg-button-lightness-on-hover)));
+  nav.snrg-menu.snrg-opened :is(a, button) > svg :deep(.snrg-fill) {
+    fill-opacity: 1;
   }
 </style>
