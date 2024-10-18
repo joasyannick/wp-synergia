@@ -181,11 +181,13 @@
     opacity: 0;
   }
 
-  nav.snrg-menu > :is(a, button):not(:first-child) {
+  nav.snrg-menu > a,
+  div#snrg-app nav.snrg-menu > button:not(.snrg-menu-button) {
     margin-left: calc(var(--snrg-menu-button-gap));
   }
 
-  nav.snrg-menu > :is(a, button):not(:first-child):is(.snrg-enter-from, .snrg-leave-to) {
+  nav.snrg-menu > a:is(.snrg-enter-from, .snrg-leave-to),
+  div#snrg-app nav.snrg-menu > button:not(.snrg-menu-button):is(.snrg-enter-from, .snrg-leave-to) {
     margin-left: 0;
   }
 
@@ -203,18 +205,27 @@
       opacity calc(2/3 * var(--SNRG-HEADER-TRANSITION-DURATION)) var(--SNRG-HEADER-TRANSITION-TIMING);
   }
 
-  nav.snrg-menu :is(a, button) > svg {
-    width: 55%;
+  nav.snrg-menu > :is(a, button) > svg {
+    width: 60%;
     height: auto;
     fill: hsl(var(--SNRG-TEXT-HUE) var(--SNRG-TEXT-SATURATION) var(--snrg-text-lightness));
   }
 
-  nav.snrg-menu :is(a, button) > svg :deep(.snrg-fill),
-  nav.snrg-menu.snrg-opened :is(a, button) > svg :deep(.snrg-stroke) {
+  nav.snrg-menu > :is(a, button) > svg :deep(.snrg-fill),
+  nav.snrg-menu > :is(a, button):hover > svg :deep(.snrg-stroke) {
     fill-opacity: 0;
   }
 
-  nav.snrg-menu.snrg-opened :is(a, button) > svg :deep(.snrg-fill) {
+  nav.snrg-menu > :is(a, button):hover > svg :deep(.snrg-fill) {
     fill-opacity: 1;
+  }
+
+  nav.snrg-menu.snrg-opened > button.snrg-menu-button > svg :deep(.snrg-fill),
+  nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-stroke) {
+    fill-opacity: 1;
+  }
+
+  nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-fill) {
+    fill-opacity: 0;
   }
 </style>
