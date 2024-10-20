@@ -9,5 +9,6 @@ body {
 }
 
 body > div#snrg-vue {
-  flex-grow: 1; /* fill the remaining vertical space */
+  flex: 1 1 auto;
+  height: 100vh;
 }

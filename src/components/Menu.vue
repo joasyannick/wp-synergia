@@ -10,6 +10,7 @@
   import MenuIcon from '@/components/icons/MenuIcon.vue'
   import BiographyIcon from '@/components/icons/BiographyIcon.vue'
   import SynergiaIcon from '@/components/icons/SynergiaIcon.vue'
+  import ContactIcon from '@/components/icons/ContactIcon.vue'
   import ThemeIcon from '@/components/icons/ThemeIcon.vue'
   import HomeIcon from '@/components/icons/HomeIcon.vue'
   import HelikiaIcon from '@/components/icons/HelikiaIcon.vue'
@@ -21,12 +22,11 @@
   const menu = inject( iMenu ) as IMenu
 
   const route = useRoute()
-  const theme = useThemeStore()
+  const themeStore = useThemeStore()
 
   const hesychiaUrl = ref( '' )
 
   const classes = computed( () => [ { 'snrg-opened': menu.opened.value }, { 'snrg-down': props.scrollDirection === ScrollDirection.DOWN } ] )
-
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
   const isPaddyHomeView = computed( () => ! route.name ? false : observers.isPaddyHomeView( route.name.toString() ) )
   const isBiographyView = computed( () => ! route.name ? false : observers.isBiographyView( route.name.toString() ) )
@@ -42,7 +42,7 @@
           link: constants.route.paddy.biography.fullPath,
           external: false,
           condition: ! menu.opened.value && isPaddyView.value && ! isBiographyView.value,
-          onClick: () => { return }
+          onClick: () => {}
         },
       {
           class: 'snrg-synergia-link',
@@ -51,7 +51,7 @@
           link: constants.route.helikia.synergia.fullPath,
           external: false,
           condition: ! menu.opened.value && isHelikiaView.value && ! isSynergiaView.value,
-          onClick: () => { return }
+          onClick: () => {}
         },
       {
           class: 'snrg-theme-button',
@@ -60,7 +60,7 @@
           link: '',
           external: false,
           condition: ! menu.opened.value && isAccountView.value,
-          onClick: () => { theme.toggle() }
+          onClick: () => { themeStore.toggle() }
         },
       {
           class: 'snrg-home-link',
@@ -69,7 +69,7 @@
           link: constants.route.paddy.fullPath,
           external: false,
           condition: ! menu.opened.value && ! isPaddyHomeView.value,
-          onClick: () => { return }
+          onClick: () => {}
         },
       {
           class: 'snrg-helikia-link',
@@ -78,7 +78,7 @@
           link: constants.route.helikia.fullPath,
           external: false,
           condition: ! menu.opened.value && ! isHelikiaHomeView.value,
-          onClick: () => { return }
+          onClick: () => {}
         },
       {
           class: 'snrg-hesychia-link',
@@ -87,7 +87,7 @@
           link: hesychiaUrl.value,
           external: true,
           condition: ! menu.opened.value,
-          onClick: () => { return }
+          onClick: () => {}
         },
       {
           class: 'snrg-account-link',
@@ -96,8 +96,17 @@
           link: constants.route.account.fullPath,
           external: false,
           condition: ! menu.opened.value && ! isAccountView.value,
-          onClick: () => { return }
-        }
+          onClick: () => {}
+        },
+      {
+          class: 'snrg-contact-link',
+          icon: ContactIcon,
+          label: 'Contact',
+          link: '',
+          external: false,
+          condition: ! menu.opened.value,
+          onClick: () => {}
+        },
     ] )
 
   const fetchHesychiaUrl = async () => {
@@ -125,18 +134,13 @@
 
 <style scoped>
   nav.snrg-menu {
-    --SNRG-PADDY-HUE: var(--SNRG-BACKGROUND-HUE);
-    --SNRG-HELIKIA-HUE: 30;
-    --SNRG-HESYCHIA-HUE: 285;
-    --SNRG-ACCOUNT-HUE: 75;
-    --snrg-menu-button-hue: var(--SNRG-PADDY-HUE);
-    --snrg-menu-button-saturation: 40%;
-    --snrg-menu-button-lightness: 60%;
+    --snrg-menu-button-hue: var(--snrg-background-hue);
     --snrg-menu-button-opacity: 0.1;
+    --snrg-menu-button-blur: 5px;
     --snrg-menu-button-border-hue: var(--snrg-menu-button-hue);
     --snrg-menu-button-border-saturation: var(--snrg-menu-button-saturation);
-    --snrg-menu-border-lightness: 90%;
-    --snrg-menu-button-border-opacity: 0.2;
+    --snrg-menu-button-border-opacity: 0.1;
+    --snrg-menu-button-border-lightness: 95%;
     --snrg-menu-button-icon-opacity: 1;
     --snrg-menu-top: 1rem;
     --snrg-menu-button-length: (0.85 * var(--snrg-h1-size));
@@ -148,7 +152,37 @@
     display: inline-flex;
   }
 
-  div#snrg-app[data-snrg-route^='/helikia'] nav.snrg-menu, nav.snrg-menu a.snrg-helikia-link {
+  div#snrg-app[data-snrg-theme='light'] nav.snrg-menu {
+    --snrg-menu-button-saturation: 100%;
+    --snrg-menu-button-lightness: 30%;
+    --snrg-menu-button-opacity: 0.2;
+  }
+
+  nav.snrg-menu,
+  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu {
+    --snrg-menu-button-saturation: 100%;
+    --snrg-menu-button-lightness: 90%;
+    --snrg-menu-button-opacity: 0.15;
+  }
+
+  div#snrg-app[data-snrg-theme='light'] nav.snrg-menu :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link, .snrg-contact-link) {
+    --snrg-menu-button-saturation: 20%;
+    --snrg-menu-button-lightness: 70%;
+    --snrg-menu-button-opacity: 0.35;
+  }
+
+  nav.snrg-menu :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link, .snrg-contact-link),
+  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link, .snrg-contact-link) {
+    --snrg-menu-button-saturation: 20%;
+    --snrg-menu-button-lightness: 70%;
+    --snrg-menu-button-opacity: 0.35;
+  }
+
+  nav.snrg-menu a.snrg-home-link {
+    --snrg-menu-button-hue: var(--SNRG-PADDY-HUE);
+  }
+
+  nav.snrg-menu a.snrg-helikia-link {
     --snrg-menu-button-hue: var(--SNRG-HELIKIA-HUE);
   }
 
@@ -156,13 +190,17 @@
     --snrg-menu-button-hue: var(--SNRG-HESYCHIA-HUE);
   }
 
-  div#snrg-app[data-snrg-route^='/compte'] nav.snrg-menu, nav.snrg-menu a.snrg-account-link {
+  nav.snrg-menu a.snrg-account-link {
     --snrg-menu-button-hue: var(--SNRG-ACCOUNT-HUE);
+  }
+
+  nav.snrg-menu button.snrg-contact-link {
+    --snrg-menu-button-hue: var(--SNRG-CONTACT-HUE);
   }
 
   div#snrg-app nav.snrg-menu > :is(a, button) {
     display: inline-flex;
-    border: 1px solid hsl(var(--snrg-menu-button-border-hue) var(--snrg-menu-button-border-saturation) var(--snrg-menu-border-lightness) / var(--snrg-menu-button-border-opacity));
+    border: 1px solid hsl(var(--snrg-menu-button-border-hue) var(--snrg-menu-button-border-saturation) var(--snrg-menu-button-border-lightness) / var(--snrg-menu-button-border-opacity));
     border-radius: 50%;
     background-color: hsl(var(--snrg-menu-button-hue) calc(var(--snrg-menu-button-saturation)) calc(var(--snrg-menu-button-lightness)) / var(--snrg-menu-button-opacity));
   }
@@ -172,8 +210,8 @@
     height: calc(var(--snrg-menu-button-length));
     justify-content: center;
     align-items: center;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(var(--snrg-menu-button-blur));
+    backdrop-filter: blur(var(--snrg-menu-button-blur));
   }
 
   nav.snrg-menu > :is(a, button):is(.snrg-enter-from, .snrg-leave-to) {
@@ -208,7 +246,7 @@
   nav.snrg-menu > :is(a, button) > svg {
     width: 60%;
     height: auto;
-    fill: hsl(var(--SNRG-TEXT-HUE) var(--SNRG-TEXT-SATURATION) var(--snrg-text-lightness));
+    fill: hsl(var(--snrg-text-hue) var(--SNRG-TEXT-SATURATION) var(--snrg-text-lightness));
   }
 
   nav.snrg-menu > :is(a, button) > svg :deep(.snrg-fill),
@@ -221,11 +259,14 @@
   }
 
   nav.snrg-menu.snrg-opened > button.snrg-menu-button > svg :deep(.snrg-fill),
-  nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-stroke) {
+  nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-stroke),
+  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu > button.snrg-theme-button > svg :deep(.snrg-fill),
+  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu > button.snrg-theme-button:hover > svg :deep(.snrg-stroke) {
     fill-opacity: 1;
   }
 
-  nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-fill) {
+  nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-fill),
+  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu > button.snrg-theme-button:hover > svg :deep(.snrg-fill) {
     fill-opacity: 0;
   }
 </style>

@@ -112,16 +112,20 @@
   $ROBOTO-RATIO: 0.9;
 
   div#snrg-app {
-    --SNRG-BACKGROUND-HUE: 225;
+    --SNRG-PADDY-HUE: 255;
+    --SNRG-HELIKIA-HUE: 75;
+    --SNRG-HESYCHIA-HUE: 315;
+    --SNRG-ACCOUNT-HUE: 135;
+    --SNRG-CONTACT-HUE: 195;
+    --SNRG-ERROR-HUE: 15;
     --SNRG-BACKGROUND-SATURATION: 70%;
-    --SNRG-TEXT-HUE: 210;
     --SNRG-TEXT-SATURATION: 29%;
     --SNRG-DARK-FILTER: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
     --SNRG-BUTTON-OPACITY: 0.5;
     --SNRG-BUTTON-TRANSITION: 0.5s;
-    --snrg-button-hue: var(--SNRG-BACKGROUND-HUE);
-    --snrg-button-lightness: var(--snrg-default-button-lightness);
-    --snrg-button-lightness-on-hover: ((1 - (var(--snrg-light-sign)) * 1/3) * var(--snrg-default-button-lightness));
+    --snrg-background-hue: var(--SNRG-PADDY-HUE);
+    --snrg-text-hue: var(--snrg-background-hue);
+    --snrg-button-hue: var(--snrg-background-hue);
     --snrg-horizontal-button-radius: (4/3 * var(--snrg-roboto-size));
     --snrg-vertical-button-radius: 50%;
     --snrg-menu-height: 2rem;
@@ -136,25 +140,32 @@
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    background-color: hsl(var(--SNRG-BACKGROUND-HUE) var(--SNRG-BACKGROUND-SATURATION) var(--snrg-background-lightness));
-    color: hsl(var(--SNRG-TEXT-HUE), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
+    background-color: hsl(var(--snrg-background-hue) var(--SNRG-BACKGROUND-SATURATION) var(--snrg-background-lightness));
+    color: hsl(var(--snrg-text-hue), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
     font: calc(var(--snrg-nunito-sans-size))/calc(var(--snrg-line-height)) 'Nunito Sans';
+  }
+
+  div#snrg-app[data-snrg-route^='/helikia'] {
+    --snrg-background-hue: var(--SNRG-HELIKIA-HUE);
+  }
+
+  div#snrg-app[data-snrg-route^='/compte'] {
+    --snrg-background-hue: var(--SNRG-ACCOUNT-HUE);
   }
 
   div#snrg-app[data-snrg-theme='light'] {
     --snrg-light-sign: 1;
-    --snrg-background-lightness: 100%;
-    --snrg-text-lightness: 24.3%;
+    --snrg-background-lightness: 95%;
+    --snrg-text-lightness: 5%;
     --snrg-button-saturation: var(--SNRG-BACKGROUND-SATURATION);
-    --snrg-default-button-lightness: 40%;
   }
 
+  div#snrg-app,
   div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) {
     --snrg-light-sign: -1;
-    --snrg-background-lightness: 10%;
-    --snrg-text-lightness: 92.2%;
+    --snrg-background-lightness: 5%;
+    --snrg-text-lightness: 95%;
     --snrg-button-saturation: (0.75 * var(--SNRG-BACKGROUND-SATURATION));
-    --snrg-default-button-lightness: 70%;
   }
 
   $snrg-heading-coefficient: 1;
@@ -198,10 +209,6 @@
     box-shadow: initial;
     outline: initial;
     appearance: initial;
-  }
-
-  div#snrg-app button:hover {
-    --snrg-button-lightness: var(--snrg-button-lightness-on-hover);
   }
 
   @media screen and (min-width: rem( 396, true ) ) {

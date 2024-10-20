@@ -1,18 +1,11 @@
-import { ref, computed, watch } from 'vue'
+import { computed } from 'vue'
+import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import constants from '@/constants'
 
 export const useThemeStore = defineStore( 'theme', () => {
-
-  const storedTheme = localStorage.getItem( constants.theme.storageKey )
-
-  const theme = ref( storedTheme ? storedTheme : ( matchMedia( '( prefers-color-scheme : dark )' ).matches ? constants.theme.dark : constants.theme.light ) )
-  
-  const isLight = computed( () => theme.value === constants.theme.light )
-
-  const toggle = () => theme.value = isLight.value ? constants.theme.dark : constants.theme.light
-
-  watch( theme, async ( now ) => { localStorage.setItem( constants.theme.storageKey, now ) }, { immediate: true } )
-
+  const storedTheme = useStorage( constants.theme.storageKey, constants.theme.dark )
+  const theme = computed( () => storedTheme.value )
+  const toggle = () => storedTheme.value = theme.value === constants.theme.light ? constants.theme.dark : constants.theme.light
   return { theme, toggle }
 } )
