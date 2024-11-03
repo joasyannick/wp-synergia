@@ -48,7 +48,7 @@
     font-family: 'Roboto Condensed';
     font-size: calc(var(--snrg-h1-size));
     max-width: 50%;
-    max-height: calc(2 * var(--snrg-h1-size) * var(--snrg-line-height));
+    max-height: calc(2 * var(--snrg-h1-size) * var(--SNRG-LINE-HEIGHT));
     font-weight: 300;
     text-align: center;
   }

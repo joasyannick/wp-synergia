@@ -63,6 +63,15 @@
           onClick: () => { themeStore.toggle() }
         },
       {
+          class: 'snrg-contact-link',
+          icon: ContactIcon,
+          label: 'Contact',
+          link: '',
+          external: false,
+          condition: ! menu.opened.value && isPaddyView.value,
+          onClick: () => {}
+        },
+      {
           class: 'snrg-home-link',
           icon: HomeIcon,
           label: 'Paddy Fontaine',
@@ -97,16 +106,7 @@
           external: false,
           condition: ! menu.opened.value && ! isAccountView.value,
           onClick: () => {}
-        },
-      {
-          class: 'snrg-contact-link',
-          icon: ContactIcon,
-          label: 'Contact',
-          link: '',
-          external: false,
-          condition: ! menu.opened.value,
-          onClick: () => {}
-        },
+        }
     ] )
 
   const fetchHesychiaUrl = async () => {
@@ -135,16 +135,20 @@
 <style scoped>
   nav.snrg-menu {
     --snrg-menu-button-hue: var(--snrg-background-hue);
-    --snrg-menu-button-opacity: 0.1;
+    --snrg-menu-button-saturation: 0%;
+    --snrg-menu-button-lightness: (var(--snrg-background-lightness) - (var(--snrg-light-sign)) * 25%);
+    --snrg-menu-button-opacity: 0.5;
     --snrg-menu-button-blur: 5px;
     --snrg-menu-button-border-hue: var(--snrg-menu-button-hue);
-    --snrg-menu-button-border-saturation: var(--snrg-menu-button-saturation);
-    --snrg-menu-button-border-opacity: 0.1;
+    --snrg-menu-button-border-saturation: 100%;
+    --snrg-menu-button-border-opacity: 0.15;
     --snrg-menu-button-border-lightness: 95%;
-    --snrg-menu-button-icon-opacity: 1;
-    --snrg-menu-top: 1rem;
-    --snrg-menu-button-length: (0.85 * var(--snrg-h1-size));
+    --snrg-menu-button-size: (0.85 * var(--snrg-h1-size));
     --snrg-menu-button-gap: (0.25 * var(--snrg-h1-size));
+    --snrg-menu-icon-hue: var(--snrg-text-hue);
+    --snrg-menu-icon-saturation: var(--SNRG-TEXT-SATURATION);
+    --snrg-menu-icon-lightness: var(--snrg-text-lightness);
+    --snrg-menu-top: 1rem;
     position: absolute;
     left: var(--snrg-outer-margin);
     top: var(--snrg-menu-top);
@@ -152,62 +156,45 @@
     display: inline-flex;
   }
 
-  div#snrg-app[data-snrg-theme='light'] nav.snrg-menu {
-    --snrg-menu-button-saturation: 100%;
-    --snrg-menu-button-lightness: 30%;
-    --snrg-menu-button-opacity: 0.2;
-  }
-
-  nav.snrg-menu,
-  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu {
-    --snrg-menu-button-saturation: 100%;
-    --snrg-menu-button-lightness: 90%;
-    --snrg-menu-button-opacity: 0.15;
-  }
-
-  div#snrg-app[data-snrg-theme='light'] nav.snrg-menu :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link, .snrg-contact-link) {
-    --snrg-menu-button-saturation: 20%;
-    --snrg-menu-button-lightness: 70%;
-    --snrg-menu-button-opacity: 0.35;
-  }
-
-  nav.snrg-menu :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link, .snrg-contact-link),
-  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link, .snrg-contact-link) {
-    --snrg-menu-button-saturation: 20%;
-    --snrg-menu-button-lightness: 70%;
-    --snrg-menu-button-opacity: 0.35;
-  }
-
-  nav.snrg-menu a.snrg-home-link {
+  div#snrg-app[data-snrg-route='/'] nav.snrg-menu {
     --snrg-menu-button-hue: var(--SNRG-PADDY-HUE);
   }
 
-  nav.snrg-menu a.snrg-helikia-link {
+  div#snrg-app[data-snrg-route='/helikia'] nav.snrg-menu {
     --snrg-menu-button-hue: var(--SNRG-HELIKIA-HUE);
   }
 
-  nav.snrg-menu a.snrg-hesychia-link {
-    --snrg-menu-button-hue: var(--SNRG-HESYCHIA-HUE);
-  }
-
-  nav.snrg-menu a.snrg-account-link {
+  div#snrg-app[data-snrg-route='/compte'] nav.snrg-menu {
     --snrg-menu-button-hue: var(--SNRG-ACCOUNT-HUE);
   }
 
-  nav.snrg-menu button.snrg-contact-link {
-    --snrg-menu-button-hue: var(--SNRG-CONTACT-HUE);
+  nav.snrg-menu a.snrg-home-link {
+    --snrg-menu-icon-hue: var(--SNRG-PADDY-HUE);
+  }
+
+  nav.snrg-menu a.snrg-helikia-link {
+    --snrg-menu-icon-hue: var(--SNRG-HELIKIA-HUE);
+  }
+
+  nav.snrg-menu a.snrg-hesychia-link {
+    --snrg-menu-icon-hue: var(--SNRG-HESYCHIA-HUE);
+  }
+
+  nav.snrg-menu a.snrg-account-link {
+    --snrg-menu-icon-hue: var(--SNRG-ACCOUNT-HUE);
   }
 
   div#snrg-app nav.snrg-menu > :is(a, button) {
     display: inline-flex;
     border: 1px solid hsl(var(--snrg-menu-button-border-hue) var(--snrg-menu-button-border-saturation) var(--snrg-menu-button-border-lightness) / var(--snrg-menu-button-border-opacity));
     border-radius: 50%;
-    background-color: hsl(var(--snrg-menu-button-hue) calc(var(--snrg-menu-button-saturation)) calc(var(--snrg-menu-button-lightness)) / var(--snrg-menu-button-opacity));
+    background-color: hsl(var(--snrg-menu-button-hue) var(--snrg-menu-button-saturation) calc(var(--snrg-menu-button-lightness)) / var(--snrg-menu-button-opacity));
+    box-shadow: 0 3px 6px hsl(0 0% 0% / 0.15), 0 3px 6px hsl(0 0% 0% / 0.25);
   }
 
   nav.snrg-menu > :is(a, button) {
-    width: calc(var(--snrg-menu-button-length));
-    height: calc(var(--snrg-menu-button-length));
+    width: calc(var(--snrg-menu-button-size));
+    height: calc(var(--snrg-menu-button-size));
     justify-content: center;
     align-items: center;
     -webkit-backdrop-filter: blur(var(--snrg-menu-button-blur));
@@ -246,27 +233,33 @@
   nav.snrg-menu > :is(a, button) > svg {
     width: 60%;
     height: auto;
-    fill: hsl(var(--snrg-text-hue) var(--SNRG-TEXT-SATURATION) var(--snrg-text-lightness));
+  }
+
+  nav.snrg-menu > :is(a, button) > svg :deep(:is(.snrg-stroke, .snrg-fill)) {
+    fill: hsl(var(--snrg-menu-icon-hue) var(--snrg-menu-icon-saturation) calc(var(--snrg-menu-icon-lightness)));
+  }
+
+  nav.snrg-menu > :is(a, button) > svg :deep(.snrg-fill) {
+    --snrg-menu-icon-lightness: (var(--snrg-text-lightness) + (var(--snrg-light-sign)) * 25%);
   }
 
   nav.snrg-menu > :is(a, button) > svg :deep(.snrg-fill),
-  nav.snrg-menu > :is(a, button):hover > svg :deep(.snrg-stroke) {
+  nav.snrg-menu > :is(a, button):hover > svg :deep(.snrg-stroke),
+  nav.snrg-menu > :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link) > svg :deep(.snrg-stroke),
+  nav.snrg-menu > :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link):hover > svg :deep(.snrg-fill),
+  nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-fill),
+  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu > button.snrg-theme-button:hover > svg :deep(.snrg-fill) {
     fill-opacity: 0;
   }
 
-  nav.snrg-menu > :is(a, button):hover > svg :deep(.snrg-fill) {
-    fill-opacity: 1;
-  }
-
+  nav.snrg-menu > :is(a, button) > svg :deep(.snrg-stroke),
+  nav.snrg-menu > :is(a, button):hover > svg :deep(.snrg-fill),
+  nav.snrg-menu > :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link) > svg :deep(.snrg-fill),
+  nav.snrg-menu > :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link):hover > svg :deep(.snrg-stroke),
   nav.snrg-menu.snrg-opened > button.snrg-menu-button > svg :deep(.snrg-fill),
   nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-stroke),
   div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu > button.snrg-theme-button > svg :deep(.snrg-fill),
   div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu > button.snrg-theme-button:hover > svg :deep(.snrg-stroke) {
     fill-opacity: 1;
-  }
-
-  nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-fill),
-  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu > button.snrg-theme-button:hover > svg :deep(.snrg-fill) {
-    fill-opacity: 0;
   }
 </style>

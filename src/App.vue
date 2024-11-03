@@ -116,33 +116,30 @@
     --SNRG-HELIKIA-HUE: 75;
     --SNRG-HESYCHIA-HUE: 315;
     --SNRG-ACCOUNT-HUE: 135;
-    --SNRG-CONTACT-HUE: 195;
     --SNRG-ERROR-HUE: 15;
-    --SNRG-BACKGROUND-SATURATION: 70%;
-    --SNRG-TEXT-SATURATION: 29%;
+    --SNRG-BACKGROUND-SATURATION: 66.6666667%;
+    --SNRG-TEXT-SATURATION: 33.3333333%;
     --SNRG-DARK-FILTER: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
     --SNRG-BUTTON-OPACITY: 0.5;
     --SNRG-BUTTON-TRANSITION: 0.5s;
+    --SNRG-LINE-HEIGHT: 1.6666667;
     --snrg-background-hue: var(--SNRG-PADDY-HUE);
     --snrg-text-hue: var(--snrg-background-hue);
     --snrg-button-hue: var(--snrg-background-hue);
-    --snrg-horizontal-button-radius: (4/3 * var(--snrg-roboto-size));
-    --snrg-vertical-button-radius: 50%;
-    --snrg-menu-height: 2rem;
+    /*--snrg-horizontal-button-radius: (4/3 * var(--snrg-roboto-size));*/
+    /*--snrg-vertical-button-radius: 50%;*/
     --snrg-top-margin: 1rem;
-    --snrg-bottom-margin: 1rem;
     --snrg-content-margin: ((var(--snrg-inner-margin)) - (var(--snrg-outer-margin)));
     --snrg-middle-content-margin: (0.5 * var(--snrg-content-margin));
     --snrg-nunito-sans-size: #{ $NUNITO-SANS-SIZE-AT-1584 };
     --snrg-roboto-size: (#{ $ROBOTO-RATIO } * (var(--snrg-nunito-sans-size)));
-    --snrg-line-height: 5/3;
     position: relative;
     box-sizing: border-box;
     width: 100%;
     height: 100%;
     background-color: hsl(var(--snrg-background-hue) var(--SNRG-BACKGROUND-SATURATION) var(--snrg-background-lightness));
     color: hsl(var(--snrg-text-hue), var(--SNRG-TEXT-SATURATION), var(--snrg-text-lightness));
-    font: calc(var(--snrg-nunito-sans-size))/calc(var(--snrg-line-height)) 'Nunito Sans';
+    font: calc(var(--snrg-nunito-sans-size))/var(--SNRG-LINE-HEIGHT) 'Nunito Sans';
   }
 
   div#snrg-app[data-snrg-route^='/helikia'] {
