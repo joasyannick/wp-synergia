@@ -23,14 +23,14 @@
   }
 
   function enqueue_styles() {
-    $synergia_style = '/assets/synergia.css';
-    $vue_style = '/assets/app/index.css';
+    $synergia_style = '/assets/css/synergia.css';
+    $vue_style = '/assets/css/index.css';
     wp_enqueue_style( 'snrg-synergia', get_template_directory_uri() . $synergia_style, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $synergia_style ) ) );
     wp_enqueue_style( 'snrg-vue', get_template_directory_uri() . $vue_style, [ 'snrg-synergia' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_style ) ) );
   }
 
   function enqueue_scripts() {
-    $vue_script = '/assets/app/index.js';
+    $vue_script = '/assets/js/index.js';
     wp_enqueue_script( 'snrg-vue', get_template_directory_uri() . $vue_script, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_script ) ), true );
   }
 
@@ -257,7 +257,7 @@
             'item_link' => __( 'Module Link', DOMAIN ),
             'item_link_description' => __( 'A link to a module', DOMAIN ),
           ],
-        'menu_icon' => 'data:image/svg+xml;base64,' . base64_encode( file_get_contents( get_template_directory() . '/assets/icons/module.svg' ) ),
+        'menu_icon' => 'data:image/svg+xml;base64,' . base64_encode( file_get_contents( get_template_directory() . '/assets/images/icons/module.svg' ) ),
         'menu_position' => 20,
         'public' => true,
         'supports' => [ 'title', 'thumbnail', 'excerpt' ],
