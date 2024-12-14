@@ -11,33 +11,30 @@
     "build": "run-p type-check build-for-production",
     "build-for-production": "run-s build-production-files build-for-wp",
     "build-production-files": "vite build",
-    "build-for-wp": "make-dir wp/assets/app && rimraf -g wp/assets/app/* && cpy --flat dist/assets/*.js wp/assets/app && cpy --flat dist/assets/*.css wp/assets/app",
-    "preview": "vite preview",
-    "clean": "rimraf dist"
+    "build-for-wp": "cpy --flat dist/assets/index.js wp/assets/js && cpy --flat dist/assets/index.css wp/assets/css",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@vueuse/core": "^11.1.0",
+    "@vueuse/core": "^12.0.0",
     "leaflet": "^1.9.4",
-    "pinia": "^2.0.36",
+    "pinia": "^2.3.0",
     "throttle-debounce": "^5.0.2",
-    "vue": "^3.3.2",
-    "vue-router": "^4.2.0"
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@tsconfig/node18": "^2.0.1",
-    "@types/node": "^18.16.8",
+    "@tsconfig/node22": "^22.0.0",
+    "@types/node": "^22.10.2",
     "@types/throttle-debounce": "^5.0.2",
-    "@vitejs/plugin-vue": "^4.2.3",
-    "@vitejs/plugin-vue-jsx": "^3.1.0",
-    "@vue-leaflet/vue-leaflet": "^0.9.0",
-    "@vue/tsconfig": "^0.4.0",
-    "cpy-cli": "^4.2.0",
-    "make-dir-cli": "^3.0.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitejs/plugin-vue-jsx": "^4.1.1",
+    "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "@vue/tsconfig": "^0.7.0",
+    "cpy-cli": "^5.0.0",
     "npm-run-all": "^4.1.5",
-    "rimraf": "^5.0.1",
-    "sass": "^1.77.6",
-    "typescript": "~5.0.4",
-    "vite": "^4.3.5",
-    "vue-tsc": "^1.6.4"
+    "sass": "^1.83.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.3",
+    "vue-tsc": "^2.1.10"
   }
 }

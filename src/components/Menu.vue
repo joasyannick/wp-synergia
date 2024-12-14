@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { inject, ref, computed } from 'vue'
   import { RouterLink, useRoute } from 'vue-router'
-  import constants from '@/constants'
-  import observers from '@/router/observers'
+  import * as constants from '@/constants'
+  import * as observers from '@/router/observers'
   import type { IMenu } from '@/injection'
   import { ScrollDirection } from '@/types'
   import { iMenu } from '@/injection'
@@ -39,7 +39,7 @@
           class: 'snrg-biography-link',
           icon: BiographyIcon,
           label: 'Biographie',
-          link: constants.route.paddy.biography.fullPath,
+          link: constants.BIOGRAPHY_FULL_PATH,
           external: false,
           condition: ! menu.opened.value && isPaddyView.value && ! isBiographyView.value,
           onClick: () => {}
@@ -48,7 +48,7 @@
           class: 'snrg-synergia-link',
           icon: SynergiaIcon,
           label: 'Synergia',
-          link: constants.route.helikia.synergia.fullPath,
+          link: constants.SYNERGIA_FULL_PATH,
           external: false,
           condition: ! menu.opened.value && isHelikiaView.value && ! isSynergiaView.value,
           onClick: () => {}
@@ -75,7 +75,7 @@
           class: 'snrg-home-link',
           icon: HomeIcon,
           label: 'Paddy Fontaine',
-          link: constants.route.paddy.fullPath,
+          link: constants.PADDY_FULL_PATH,
           external: false,
           condition: ! menu.opened.value && ! isPaddyHomeView.value,
           onClick: () => {}
@@ -84,7 +84,7 @@
           class: 'snrg-helikia-link',
           icon: HelikiaIcon,
           label: 'Helikia',
-          link: constants.route.helikia.fullPath,
+          link: constants.HELIKIA_FULL_PATH,
           external: false,
           condition: ! menu.opened.value && ! isHelikiaHomeView.value,
           onClick: () => {}
@@ -102,7 +102,7 @@
           class: 'snrg-account-link',
           icon: AccountIcon,
           label: 'Compte',
-          link: constants.route.account.fullPath,
+          link: constants.ACCOUNT_FULL_PATH,
           external: false,
           condition: ! menu.opened.value && ! isAccountView.value,
           onClick: () => {}

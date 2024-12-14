@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref, inject } from 'vue'
-  import constants from '@/constants'
+  import { INTRODUCTION_PAGE, WP_CONTENT_RENDERED, WP_PAGES } from '@/constants'
+  import { fetchPost } from '@/wordpress'
   import type { IMenu } from '@/injection'
   import { iMenu } from '@/injection'
 
@@ -9,11 +10,9 @@
   const introduction = ref( null as null | { id: number, title: string, data: Map< string, any > } )
 
   const options = new Map()
-  options.set( 'content.rendered', true )
-  Promise.all( [
-      constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'pages', constants.page.introduction, options ),
-      constants.function.fetchPost( import.meta.env.VITE_WP_REST_URL, 'posts', constants.page.introduction, options )
-    ] ).then( results => results.filter( result => result ).forEach( result => introduction.value = result ) )
+  options.set( WP_CONTENT_RENDERED, true )
+  fetchPost( import.meta.env.VITE_WP_REST_URL, WP_PAGES, INTRODUCTION_PAGE, options )
+      .then( result => introduction.value = result )
 </script>
 
 <template>
@@ -22,7 +21,7 @@
       <h1 v-if="introduction" v-html="introduction.title"></h1>
       <h1 v-else>Bienvenue</h1>
     </header>
-    <div v-if="introduction && introduction.data.get( 'content.rendered' )" v-html="introduction.data.get( 'content.rendered' )"></div>
+    <div v-if="introduction && introduction.data.get( WP_CONTENT_RENDERED )" v-html="introduction.data.get( WP_CONTENT_RENDERED )"></div>
     <div v-else>
       <p>Présenter le site.</p>
     </div>

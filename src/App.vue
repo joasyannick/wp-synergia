@@ -4,7 +4,7 @@
   import { useEventListener } from '@vueuse/core'
   import { storeToRefs } from 'pinia'
   import { throttle } from 'throttle-debounce'
-  import constants from '@/constants'
+  import { THROTTLING_PERIOD } from '@/constants'
   import { iMenu } from '@/injection'
   import { useThemeStore } from '@/stores/theme'
   import AppHeader from '@/components/AppHeader.vue'
@@ -36,7 +36,7 @@
       appElement.value!.style.setProperty( '--snrg-outer-margin',  `${ outerMargin }rem` )
     }
 
-  const onResize = throttle( constants.throttle.period, updateMargins )
+  const onResize = throttle( THROTTLING_PERIOD, updateMargins )
 
   const onScrolled = ( direction: ScrollDirection ) => { scrollDirection.value = direction }
 

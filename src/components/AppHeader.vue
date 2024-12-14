@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { inject, computed } from 'vue'
   import { useRoute } from 'vue-router'
-  import observers from '@/router/observers'
+  import * as observers from '@/router/observers'
   import type { IMenu } from '@/injection'
   import type { ScrollDirection } from '@/types'
   import { iMenu } from '@/injection'

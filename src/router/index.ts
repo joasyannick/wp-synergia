@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import constants from '@/constants'
+import * as constants from '@/constants'
 import PaddyView from '@/views/PaddyView.vue'
 import PaddyHomeView from '@/views/PaddyHomeView.vue'
 import BiographyView from '@/views/BiographyView.vue'
@@ -15,55 +15,55 @@ const router = createRouter( {
     history: createWebHistory( import.meta.env.BASE_URL ),
     routes: [
         {
-            path: constants.route.paddy.path,
+            path: constants.PADDY_PATH,
             component: PaddyView,
             children: [
                 {
                     path: '',
-                    name: constants.route.paddy.name,
+                    name: constants.PADDY_ROUTE,
                     component: PaddyHomeView
                   },
                 {
-                    path: constants.route.paddy.biography.path,
-                    name: constants.route.paddy.biography.name,
+                    path: constants.BIOGRAPHY_PATH,
+                    name: constants.BIOGRAPHY_ROUTE,
                     component: BiographyView
                   },
                 {
-                    path: constants.route.paddy.post.path,
-                    name: constants.route.paddy.post.name,
+                    path: constants.POST_PATH,
+                    name: constants.POST_ROUTE,
                     component: PostView
                   }
               ]
           },
         {
-            path: constants.route.helikia.path,
+            path: constants.HELIKIA_PATH,
             component: HelikiaView,
             children: [
                 {
                     path: '',
-                    name: constants.route.helikia.name,
+                    name: constants.HELIKIA_ROUTE,
                     component: HelikiaHomeView
                   },
                 {
-                    path: constants.route.helikia.synergia.path,
-                    name: constants.route.helikia.synergia.name,
+                    path: constants.SYNERGIA_PATH,
+                    name: constants.SYNERGIA_ROUTE,
                     component: SynergiaView
                   },
                 {
-                    path: constants.route.helikia.module.path,
-                    name: constants.route.helikia.module.name,
+                    path: constants.MODULE_PATH,
+                    name: constants.MODULE_ROUTE,
                     component: ModuleView
                   }
               ]
           },
         {
-            path: constants.route.account.path,
-            name: constants.route.account.name,
+            path: constants.ACCOUNT_PATH,
+            name: constants.ACCOUNT_ROUTE,
             component: AccountView
           },
         {
-            path: constants.route.error.path,
-            name: constants.route.error.name,
+            path: constants.ERROR_PATH,
+            name: constants.ERROR_ROUTE,
             component: ErrorView
           }
       ]

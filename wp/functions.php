@@ -10,39 +10,44 @@
   //-----------
 
 
+  // Add jQuery support
   function add_jquery() {
     wp_enqueue_script( 'jquery' );
   }
 
   add_action( 'init', 'snrg\add_jquery' );
 
+  // Load Google Fonts
   function add_fonts() {
     wp_enqueue_style( 'google-font-nunito-sans', 'https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap' );
     wp_enqueue_style( 'google-font-roboto', 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap' );
     wp_enqueue_style( 'google-font-roboto-condensed', 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap' );
   }
 
+  // Enqueue theme styles
   function enqueue_styles() {
-    $synergia_style = '/assets/css/synergia.css';
-    $vue_style = '/assets/css/index.css';
-    wp_enqueue_style( 'snrg-synergia', get_template_directory_uri() . $synergia_style, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $synergia_style ) ) );
-    wp_enqueue_style( 'snrg-vue', get_template_directory_uri() . $vue_style, [ 'snrg-synergia' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_style ) ) );
+    $styles = [ '/assets/css/synergia.css', '/assets/css/index.css' ];
+    wp_enqueue_style( 'snrg-css-1', get_template_directory_uri() . $styles[ 0 ], [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $styles[ 0 ] ) ) );
+    wp_enqueue_style( 'snrg-css-2', get_template_directory_uri() . $styles[ 1 ], [ 'snrg-css-1' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $styles[ 1 ] ) ) );
   }
 
+  // Enqueue theme scripts
   function enqueue_scripts() {
-    $vue_script = '/assets/js/index.js';
-    wp_enqueue_script( 'snrg-vue', get_template_directory_uri() . $vue_script, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $vue_script ) ), true );
+    $script = '/assets/js/index.js';
+    wp_enqueue_script( 'snrg-js', get_template_directory_uri() . $script, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $script ) ), true );
   }
 
   add_action( 'wp_enqueue_scripts', 'snrg\add_fonts' );
   add_action( 'wp_enqueue_scripts', 'snrg\enqueue_styles' );
   add_action( 'wp_enqueue_scripts', 'snrg\enqueue_scripts' );
 
+  // Add the type="module" attribute to the script whose handle is snrg-js for compatibility with ES6 modules
+  // TODO type="module" crossorigin? See index.html in dist/
   function add_vue_js_html_attributes( $tag, $handle, $src ) {
-    $prefix = 'snrg-vue';
-    if ( substr($handle, 0, strlen( $prefix ) ) === $prefix ) {
+    $prefix = 'snrg-js';
+    if ( substr( $handle, 0, strlen( $prefix ) ) === $prefix ):
       return preg_replace( '/(type\s*=\s*["\']).*?(["\'])/', '$1module$2', $tag, 1 );
-    }
+    endif;
     return $tag;
   }
 
@@ -55,6 +60,7 @@
   //--------
 
 
+  // Add the route query var
   function add_query_vars( $query_vars ) {
     $query_vars[] = 'route';
     return $query_vars;
@@ -62,34 +68,37 @@
 
   add_filter( 'query_vars', 'snrg\add_query_vars' );
 
+  // Custom rewrite rules
   function add_rewrite_rules() {
-    /* Routes by which the single page application can be accessed (visible by search engines):
-     * - /
-     * - /bio
-     * - /compte
-     * - /helikia
-     * - /helikia/:module
-     * - /blog/:slug
-     */
-    add_rewrite_rule( '^(' . SLUG_FOR_BIOGRAPHY_PAGE . ')/?$', 'index.php?route=$matches[1]', 'top' );
-    add_rewrite_rule( '^(' . SLUG_FOR_ACCOUNT_PAGE . ')/?$', 'index.php?route=$matches[1]', 'top' );
-    add_rewrite_rule( '^(' . SLUG_FOR_HELIKIA_PAGE . ')/?$', 'index.php?route=$matches[1]', 'top' );
-    add_rewrite_rule( '^(' . SLUG_FOR_HELIKIA_PAGE . '/[^/]+)/?$', 'index.php?route=$matches[1]', 'top' );
-    add_rewrite_rule( '^(' . SLUG_FOR_BLOG_PAGE . '/[^/]+)/?$', 'index.php?route=$matches[1]', 'top' );
-    add_rewrite_rule( '^.+/?$', 'index.php?route=' . SLUG_FOR_ERROR_PAGE, 'top' );
+    add_rewrite_rule( '^(' . BIOGRAPHY_PATH . ')/?$', 'index.php?route=$matches[1]', 'top' );
+    add_rewrite_rule( '^(' . ACCOUNT_PATH . ')/?$', 'index.php?route=$matches[1]', 'top' );
+    add_rewrite_rule( '^(' . HELIKIA_PATH . ')/?$', 'index.php?route=$matches[1]', 'top' );
+    add_rewrite_rule( '^(' . HELIKIA_PATH . '/[^/]+)/?$', 'index.php?route=$matches[1]', 'top' );
+    add_rewrite_rule( '^(' . BLOG_PATH . '/[^/]+)/?$', 'index.php?route=$matches[1]', 'top' );
+    add_rewrite_rule( '^.+/?$', 'index.php?route=' . ERROR_PATH, 'top' );
   }
 
   add_action( 'init', 'snrg\add_rewrite_rules' );
 
+  // Custom routing logic
   function change_template_selection( $template ) {
     $route = get_query_var( 'route' );
     if ( $route ):
-      if ( SLUG_FOR_ERROR_PAGE !== $route ):
+      if ( ERROR_PATH !== $route ):
         $matches = [];
-        if ( SLUG_FOR_BIOGRAPHY_PAGE === $route || SLUG_FOR_HELIKIA_PAGE === $route || SLUG_FOR_ACCOUNT_PAGE === $route ):
-          return locate_template( 'singular.php' );
-        elseif ( ( preg_match( '@^' . SLUG_FOR_HELIKIA_PAGE . '/([^/]+)/?$@', $route, $matches ) || preg_match( '@^' . SLUG_FOR_BLOG_PAGE . '/([^/]+)/?$@', $route, $matches ) ) && substr( $matches[ 1 ], 0, 5 ) !== 'snrg-' && get_posts( [ 'name' => $matches[ 1 ], 'post_type' => [ 'post', 'page', MODULE_POST_TYPE ], 'post_status' => 'publish', 'posts_per_page' => 1 ] ) ):
-          return locate_template( 'singular.php' );
+        if ( BIOGRAPHY_PATH === $route || HELIKIA_PATH === $route || ACCOUNT_PATH === $route ):
+          return $template;
+        endif;
+        if ( preg_match( '@^' . HELIKIA_PATH . '/([^/]+)/?$@', $route, $matches ) &&
+            // Page slugs prefixed with 'snrg-' are reserved for the theme (e.g. 'snrg-biography', 'snrg-helikia', 'snrg-account', etc.)
+            substr( $matches[ 1 ], 0, strlen( 'snrg-' ) ) !== 'snrg-' &&
+            get_posts( [ 'name' => $matches[ 1 ], 'post_type' => MODULE_POST_TYPE, 'post_status' => 'publish', 'posts_per_page' => 1 ] ) ):
+          return $template;
+        endif;
+        if ( preg_match( '@^' . BLOG_PATH . '/([^/]+)/?$@', $route, $matches ) &&
+            substr( $matches[ 1 ], 0, strlen( 'snrg-' ) ) !== 'snrg-' &&
+            get_posts( [ 'name' => $matches[ 1 ], 'post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => 1 ] ) ):
+          return $template;
         endif;
       endif;
       global $wp_query;
@@ -110,24 +119,24 @@
 
 
   function render_section( $args ) { ?>
-    <p><?php esc_html_e( 'Please enter the following settings', DOMAIN ); ?>:</p>
+    <p><?= __( 'Please enter the following settings', DOMAIN ) ?>:</p>
   <?php }
 
   function render_setting( $args ) {
     $setting = $args[ SETTINGS_ID ];
     $options = get_option( SETTINGS_DATA );
     if ( $setting[ SETTING_TYPE ] === SETTINGS_TYPE_FOR_URLS ): ?>
-      <input type="url" id="<?php echo esc_attr( $setting[ SETTING_ID ] ); ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $setting[ SETTING_KEY ] ) . ']'; ?>" value="<?php echo isset( $options[ $setting[ SETTING_KEY ] ] ) ? esc_attr( $options[ $setting[ SETTING_KEY ] ] ) : ''; ?>" placeholder="https://example.com" pattern="https://.*" size="30" required />
+      <input type="url" id="<?= esc_attr( $setting[ SETTING_ID ] ) ?>" name="<?= esc_attr( SETTINGS_DATA . '[' . $setting[ SETTING_KEY ] . ']' ) ?>" value="<?= esc_attr( isset( $options[ $setting[ SETTING_KEY ] ] ) ? $options[ $setting[ SETTING_KEY ] ]  : '' ) ?>" placeholder="https://example.com" pattern="https://.*" size="30" required />
     <?php elseif ( $setting[ SETTING_TYPE ] === SETTINGS_TYPE_FOR_TEXT_ARRAYS ): ?>
       <?php if ( isset( $options[ $setting[ SETTING_KEY ] ] ) && ! empty( $options[ $setting[ SETTING_KEY ] ] ) ): ?>
         <?php foreach ( $options[ $setting[ SETTING_KEY ] ] as $index => $value )  { ?>
           <div class="snrg-slogan">
-            <input type="text" id="<?php echo esc_attr( $setting[ SETTING_ID ] ) . '-' . $index; ?>" name="<?php echo SETTINGS_DATA . '[' . esc_attr( $setting[ SETTING_KEY ] ) . '][]'; ?>" value="<?php echo esc_attr( $value ); ?>" size="30" required />
+            <input type="text" id="<?= esc_attr( $setting[ SETTING_ID ] . '-' . $index ) ?>" name="<?= esc_attr( SETTINGS_DATA . '[' . $setting[ SETTING_KEY ] . '][]' ) ?>" value="<?= esc_attr( $value ) ?>" size="30" required />
             <button type="button" class="snrg-remove-slogan">–</button>
           </div>
         <?php } ?>
       <?php endif; ?>
-      <button type="button" id="snrg-add-slogan"><?php esc_html_e( 'Add New', DOMAIN ); ?></button>
+      <button type="button" id="snrg-add-slogan"><?= __( 'Add New', DOMAIN ) ?></button>
     <?php endif;
   }
 
@@ -140,13 +149,13 @@
     endif;
     settings_errors( 'snrg_messages' ); ?>
     <div class="wrap">
-      <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+      <h1><?= esc_html( get_admin_page_title() ) ?></h1>
       <form action="options.php" method="post"> <?php
         settings_fields( SETTINGS_ID );
         do_settings_sections( SETTINGS_ID );
         submit_button( __( 'Save Settings', DOMAIN ) ); ?>
       </form>
-    </div> <?php
+    </div><?php
   }
 
   function add_settings() {
@@ -157,20 +166,20 @@
     }
   }
 
-  function enqueue_styles_for_options_page() {
-    $style = '/assets/options.css';
-    wp_enqueue_style( 'snrg-options', get_template_directory_uri() . $style, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $style ) ) );
+  function enqueue_styles_for_settings_page() {
+    $style = '/assets/css/settings.css';
+    wp_enqueue_style( 'snrg-settings', get_template_directory_uri() . $style, [], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $style ) ) );
   }
 
-  function enqueue_scripts_for_options_page() {
-    $script = '/assets/options.js';
-    wp_enqueue_script( 'snrg-options', get_template_directory_uri() . $script, [ 'jquery' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $script ) ), true );
+  function enqueue_scripts_for_settings_page() {
+    $script = '/assets/js/settings.js';
+    wp_enqueue_script( 'snrg-settings', get_template_directory_uri() . $script, [ 'jquery' ], date( 'Y.m.d.H.i.s', filemtime( get_template_directory() . $script ) ), true );
   }
 
   function add_settings_page() {
     $theme_page_hook = add_menu_page( 'WP Synergia', 'WP Synergia', CAPABILITY_REQUIRED_FOR_SETTINGS, SETTINGS_ID, 'snrg\render_settings_page', 'dashicons-menu' );
-    add_action( 'load-' . $theme_page_hook, 'snrg\enqueue_styles_for_options_page' );
-    add_action( 'load-' . $theme_page_hook, 'snrg\enqueue_scripts_for_options_page' );
+    add_action( 'load-' . $theme_page_hook, 'snrg\enqueue_styles_for_settings_page' );
+    add_action( 'load-' . $theme_page_hook, 'snrg\enqueue_scripts_for_settings_page' );
   }
 
   add_action( 'admin_init', 'snrg\add_settings' );
@@ -218,14 +227,14 @@
             'item_scheduled' => __( 'Program scheduled', DOMAIN ),
             'item_updated' => __( 'Program updated', DOMAIN ),
             'item_link' => __( 'Program Link', DOMAIN ),
-            'item_link_description' => __( 'A link to a program', DOMAIN ),
+            'item_link_description' => __( 'A link to a program', DOMAIN )
           ],
         'menu_icon' => 'dashicons-pressthis',
         'menu_position' => 20,
         'public' => true,
         'supports' => [ 'title', 'editor' ],
         'show_in_rest' => true,
-        'rest_base' => PROGRAM_BASE_IN_REST,
+        'rest_base' => PROGRAM_IN_REST
       ] );
     register_post_type( MODULE_POST_TYPE, [
         'labels' => [
@@ -255,14 +264,14 @@
             'item_scheduled' => __( 'Module scheduled', DOMAIN ),
             'item_updated' => __( 'Module updated', DOMAIN ),
             'item_link' => __( 'Module Link', DOMAIN ),
-            'item_link_description' => __( 'A link to a module', DOMAIN ),
+            'item_link_description' => __( 'A link to a module', DOMAIN )
           ],
         'menu_icon' => 'data:image/svg+xml;base64,' . base64_encode( file_get_contents( get_template_directory() . '/assets/images/icons/module.svg' ) ),
         'menu_position' => 20,
         'public' => true,
         'supports' => [ 'title', 'thumbnail', 'excerpt' ],
         'show_in_rest' => true,
-        'rest_base' => MODULE_BASE_IN_REST,
+        'rest_base' => MODULE_IN_REST
       ] );
     register_post_type( SESSION_POST_TYPE, [
         'labels' => [
@@ -292,14 +301,14 @@
             'item_scheduled' => __( 'Session scheduled', DOMAIN ),
             'item_updated' => __( 'Session updated', DOMAIN ),
             'item_link' => __( 'Session Link', DOMAIN ),
-            'item_link_description' => __( 'A link to a session', DOMAIN ),
+            'item_link_description' => __( 'A link to a session', DOMAIN )
           ],
         'menu_icon' => 'dashicons-microphone',
         'menu_position' => 20,
         'public' => true,
         'supports' => [ 'title', 'editor', 'custom-fields' ],
         'show_in_rest' => true,
-        'rest_base' => SESSION_BASE_IN_REST,
+        'rest_base' => SESSION_IN_REST
       ] );
   }
 
@@ -309,21 +318,21 @@
         'type' => 'integer',
         'single' => true,
         'default' => DEFAULT_MODULE_OF_SESSION,
-        'show_in_rest' => true,
+        'show_in_rest' => true
       ] );
     register_post_meta( SESSION_POST_TYPE, SESSION_NUMBER_META, [
         'description' => __( 'Session number', DOMAIN ),
         'type' => 'integer',
         'single' => true,
         'default' => DEFAULT_SESSION_NUMBER,
-        'show_in_rest' => true,
+        'show_in_rest' => true
       ] );
     register_post_meta( SESSION_POST_TYPE, AUDIO_OF_SESSION_META, [
         'description' => __( 'Audio of the session', DOMAIN ),
         'type' => 'integer',
         'single' => true,
-              'default' => DEFAULT_AUDIO_OF_SESSION,
-        'show_in_rest' => true,
+        'default' => DEFAULT_AUDIO_OF_SESSION,
+        'show_in_rest' => true
       ] );
   }
 
@@ -333,7 +342,7 @@
   function add_sessions_in_rest( $response, $post, $request ) {
     $module = get_post( get_post_meta( $post->ID, MODULE_OF_SESSION_META, true ) );
     if ( $module ):
-      $response->add_link( MODULE_LINK_IN_REST, esc_url( rest_url( WP_BASE_IN_REST . '/' . MODULE_BASE_IN_REST . '/' . $module->ID ) ), [ 'embeddable' => true ] );
+      $response->add_link( MODULE_LINK_IN_REST, esc_url( rest_url( WP_IN_REST . '/' . MODULE_IN_REST . '/' . $module->ID ) ), [ 'embeddable' => true ] );
     endif;
     return $response;
   }
@@ -408,11 +417,12 @@
         'public' => true,
         'hierarchical' => false,
         'show_in_rest' => true,
-        'rest_base' => SERIES_BASE_IN_REST,
+        'rest_base' => SERIES_IN_REST
       ] );
   }
 
   add_action( 'init', 'snrg\register_taxonomies' );
+
 
 
   //---------
@@ -421,27 +431,20 @@
 
 
   function extend_rest_api() {
-    register_rest_route( REST_ROUTE, HOME_IMAGE_IN_REST, [
-        'methods' => \WP_REST_Server::READABLE,
-        'callback' => function( $request ) {
-          return rest_ensure_response( esc_url( get_template_directory_uri() ) . HOME_IMAGE_PATH );
-        },
-        'permission_callback' => '__return_true'
-      ] );
     register_rest_route( REST_ROUTE, DEFAULT_IMAGE_IN_REST, [
         'methods' => \WP_REST_Server::READABLE,
         'callback' => function( $request ) {
-          return rest_ensure_response( esc_url( get_template_directory_uri() ) . DEFAULT_IMAGE_PATH );
-        },
+            return rest_ensure_response( esc_url( get_template_directory_uri() ) . DEFAULT_IMAGE_PATH );
+          },
         'permission_callback' => '__return_true'
       ] );
     foreach ( SETTINGS as $setting ) {
       register_rest_route( REST_ROUTE, $setting[ SETTING_REST_ROUTE ], [
           'methods' => \WP_REST_Server::READABLE,
           'callback' => function( $request ) use ( $setting ) {
-            $options = get_option( SETTINGS_DATA );
-            return rest_ensure_response( isset( $options[ $setting[ SETTING_KEY ] ] ) ? $options[ $setting[ SETTING_KEY ] ] : $setting[ SETTING_DEFAULT ] );
-          },
+              $options = get_option( SETTINGS_DATA );
+              return rest_ensure_response( isset( $options[ $setting[ SETTING_KEY ] ] ) ? $options[ $setting[ SETTING_KEY ] ] : $setting[ SETTING_DEFAULT ] );
+            },
           'permission_callback' => '__return_true'
         ] );
     }

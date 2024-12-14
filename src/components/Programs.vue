@@ -1,12 +1,13 @@
 <script setup lang="ts">
   import { ref } from 'vue'
-  import constants from '@/constants'
+  import { WP_CONTENT_RENDERED } from '@/constants'
+  import { fetchAllPosts } from '@/wordpress'
 
   const programs = ref( [] as { id: number, slug: string, title: string, data: Map< string, any > }[] )
 
   const options = new Map()
-  options.set( 'content.rendered', true )
-  constants.function.fetchAllPosts( import.meta.env.VITE_WP_REST_URL, 'snrg-programs', options ).then( results => programs.value = results )
+  options.set( WP_CONTENT_RENDERED, true )
+  fetchAllPosts( import.meta.env.VITE_WP_REST_URL, 'snrg-programs', options ).then( results => programs.value = results )
 </script>
 
 <template>
@@ -19,7 +20,7 @@
         <header>
           <h2 v-html="program.title"></h2>
         </header>
-        <div v-if="program.data.get( 'content.rendered' )" v-html="program.data.get( 'content.rendered' )"></div>
+        <div v-if="program.data.get( WP_CONTENT_RENDERED )" v-html="program.data.get( WP_CONTENT_RENDERED )"></div>
       </article>
       <article v-else>
         <p>Pas de programme pour le moment.</p>

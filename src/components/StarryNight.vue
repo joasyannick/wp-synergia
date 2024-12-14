@@ -1,7 +1,7 @@
 <script setup lang="tsx">
   import { defineComponent, ref, computed, watch, onUnmounted } from 'vue'
   import type { Ref } from 'vue'
-  import constants from '@/constants'
+  import * as constants from '@/constants'
   import Graphic from '@/components/Graphic.vue'
   import Slogans from '@/components/Slogans.vue'
 
@@ -26,8 +26,8 @@
                 <stop style="stop-color:hsl(190 100% 50%)" offset="66.3%" />
               </linearGradient>
             </defs>
-            <rect style="fill:url(#snrg-starry-night-radial-sky-gradient)" class="snrg-overlay" x="0" y="0" width={ constants.starryNight.viewBoxWidth } height={ constants.starryNight.viewBoxHeight } />
-            <rect style="fill:url(#snrg-starry-night-linear-sky-gradient)" class="snrg-overlay" x="0" y="0" width={ constants.starryNight.viewBoxWidth } height={ constants.starryNight.viewBoxHeight } />
+            <rect style="fill:url(#snrg-starry-night-radial-sky-gradient)" class="snrg-overlay" x="0" y="0" width={ constants.VIEWBOX_WIDTH } height={ constants.VIEWBOX_HEIGHT } />
+            <rect style="fill:url(#snrg-starry-night-linear-sky-gradient)" class="snrg-overlay" x="0" y="0" width={ constants.VIEWBOX_WIDTH } height={ constants.VIEWBOX_HEIGHT } />
           </g>
         )
     }, { props: ['clipId' ] } )
@@ -35,11 +35,11 @@
   const stars = defineComponent( ( props: { starCount: number, clipId: string } ) => {
       const stars: { x: number, y: number }[] = []
       for (let i = 0; i < props.starCount; i++) {
-        stars.push( { x: Math.random() * constants.starryNight.viewBoxWidth, y: Math.random() * constants.starryNight.viewBoxHeight } )
+        stars.push( { x: Math.random() * constants.VIEWBOX_WIDTH, y: Math.random() * constants.VIEWBOX_HEIGHT } )
       }
       const maxShootingStarY = 4790
       const shootingStarDistance = 7000
-      const trailHalfHeight = 2/3 * constants.starryNight.twinklingStarRadius
+      const trailHalfHeight = 2/3 * constants.TWINKLING_STAR_RADIUS
       const trailLength = 0.25 * shootingStarDistance
       const shootingStarDelay = 10 // seconds
       const shootingStarDuration = 2 // seconds
@@ -65,10 +65,10 @@
                 shootingStarTimeout = setTimeout(
                     async () => {
                         shootingStarNow.value = true
-                        const x = Math.random() * constants.starryNight.viewBoxWidth
+                        const x = Math.random() * constants.VIEWBOX_WIDTH
                         const y = Math.random() * maxShootingStarY
                         let angle = Math.random() * 90
-                        if ( x > constants.starryNight.viewBoxWidth / 2 ) {
+                        if ( x > constants.VIEWBOX_WIDTH / 2 ) {
                           angle += 90
                         }
                         const sign = y <= maxShootingStarY / 2 ? 1 : -1
@@ -97,7 +97,7 @@
                 </linearGradient>
               </defs>
               <path id="snrg-starry-night-star-path" style="visibility:hidden" d={ 'M0,0l' + shootingStarEnd.value.x + ',' + shootingStarEnd.value.y } />
-              <circle style="fill:hsl(210 100% 90%)" cx={ shootingStar.value.x } cy={ shootingStar.value.y } r={ constants.starryNight.twinklingStarRadius } />
+              <circle style="fill:hsl(210 100% 90%)" cx={ shootingStar.value.x } cy={ shootingStar.value.y } r={ constants.TWINKLING_STAR_RADIUS } />
               <rect style="fill:url(#snrg-starry-night-trail-gradient)" x={ shootingStar.value.x } y={ shootingStar.value.y - trailHalfHeight } width={ trailLength } height={ 2 * trailHalfHeight } />
               <animate ref={ shootingStarOpacityRef } attributeType="CSS" attributeName="opacity" begin="indefinite" from="0" to="0" values="0;1;0" keyTimes="0;0.5;1" dur={ shootingStarDuration + 's' } />
               <animateMotion ref={ shootingStarMotionRef } begin="indefinite" dur={ shootingStarDuration + 's' }>
@@ -106,7 +106,7 @@
             </g>
             { stars.map( ( { x, y }, index ) => (
                 <circle style="fill:hsl(210 100% 90% / 66%)" cx={ x } cy={ y }>
-                  <animate  attributeName="r" from={ constants.starryNight.starRadius } to={ constants.starryNight.starRadius } values={ constants.starryNight.starRadius + ';' + constants.starryNight.twinklingStarRadius + ';' + constants.starryNight.starRadius } keyTimes="0;0.5;1" begin={ ( index % constants.starryNight.twinklingStarDuration ) + 's' } dur={ constants.starryNight.twinklingStarDuration + 's' } repeatCount="indefinite" />
+                  <animate  attributeName="r" from={ constants.STAR_RADIUS } to={ constants.STAR_RADIUS } values={ constants.STAR_RADIUS + ';' + constants.TWINKLING_STAR_RADIUS + ';' + constants.STAR_RADIUS } keyTimes="0;0.5;1" begin={ ( index % constants.TWINKLING_STAR_PERIOD ) + 's' } dur={ constants.TWINKLING_STAR_PERIOD + 's' } repeatCount="indefinite" />
                 </circle>
               ) ) }
           </g>
@@ -125,7 +125,7 @@
           </linearGradient>
           <filter id="snrg-starry-night-mountain-glow">
             <feDropShadow dx="0" dy="208" stdDeviation="208" flood-color="white" flood-opacity="80%">
-              <animate attributeName="stdDeviation" values="208;278;208" dur={ constants.starryNight.mountainGlowDuration + 's' } repeatCount="indefinite" /> 
+              <animate attributeName="stdDeviation" values="208;278;208" dur={ constants.MOUNTAIN_GLOW_PERIOD + 's' } repeatCount="indefinite" /> 
             </feDropShadow>
           </filter>
           <linearGradient id="snrg-starry-night-mountain-gradient-2">
@@ -183,25 +183,25 @@
 
 <template>
   <aside class="snrg-starry-night">
-    <Graphic class="snrg-sky" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-sky-clip">
+    <Graphic class="snrg-sky" :view-box-width="constants.VIEWBOX_WIDTH" :view-box-height="constants.VIEWBOX_HEIGHT" clip-id="snrg-starry-night-sky-clip">
       <sky clip-id="snrg-starry-night-sky-clip" />
     </Graphic>
-    <Graphic class="snrg-stars" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-stars-clip">
+    <Graphic class="snrg-stars" :view-box-width="constants.VIEWBOX_WIDTH" :view-box-height="constants.VIEWBOX_HEIGHT" clip-id="snrg-starry-night-stars-clip">
       <stars :star-count="props.starCount" clip-id="snrg-starry-night-stars-clip" />
     </Graphic>
-    <Graphic class="snrg-mountains" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-mountains-clip">
+    <Graphic class="snrg-mountains" :view-box-width="constants.VIEWBOX_WIDTH" :view-box-height="constants.VIEWBOX_HEIGHT" clip-id="snrg-starry-night-mountains-clip">
       <mountains clip-id="snrg-starry-night-mountains-clip" />
     </Graphic>
-    <Graphic class="snrg-plain" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-plain-clip">
+    <Graphic class="snrg-plain" :view-box-width="constants.VIEWBOX_WIDTH" :view-box-height="constants.VIEWBOX_HEIGHT" clip-id="snrg-starry-night-plain-clip">
       <plain clip-id="snrg-starry-night-plain-clip" />
     </Graphic>
     <div class="snrg-text">
       <Slogans />
     </div>
-    <Graphic class="snrg-forest" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-forest-clip">
+    <Graphic class="snrg-forest" :view-box-width="constants.VIEWBOX_WIDTH" :view-box-height="constants.VIEWBOX_HEIGHT" clip-id="snrg-starry-night-forest-clip">
       <forest clip-id="snrg-starry-night-forest-clip" />
     </Graphic>
-    <Graphic class="snrg-deer" :view-box-width="constants.starryNight.viewBoxWidth" :view-box-height="constants.starryNight.viewBoxHeight" clip-id="snrg-starry-night-deer-clip">
+    <Graphic class="snrg-deer" :view-box-width="constants.VIEWBOX_WIDTH" :view-box-height="constants.VIEWBOX_HEIGHT" clip-id="snrg-starry-night-deer-clip">
       <deer clip-id="snrg-starry-night-deer-clip" />
     </Graphic>
   </aside>

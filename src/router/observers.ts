@@ -1,14 +1,10 @@
-import constants from '@/constants'
+import * as constants from '@/constants'
 
-const observers = Object.freeze( {
-    isPaddyView: ( route: string ) => [ constants.route.paddy.name, constants.route.paddy.biography.name, constants.route.paddy.post.name ].includes( route ),
-    isPaddyHomeView: ( route: string ) => route === constants.route.paddy.name,
-    isBiographyView: ( route: string ) => route === constants.route.paddy.biography.name,
-    isHelikiaView: ( route: string ) => [ constants.route.helikia.name, constants.route.helikia.synergia.name, constants.route.helikia.module.name ].includes( route ),
-    isHelikiaHomeView: ( route: string ) => route === constants.route.helikia.name,
-    isSynergiaView: ( route: string ) => route === constants.route.helikia.synergia.name,
-    isAccountView: ( route: string ) => route === constants.route.account.name,
-    isErrorView: ( route: string ) => route === constants.route.error.name
-  } )
-
-export default observers
+export const isPaddyView = ( route: string ) => [ constants.PADDY_ROUTE, constants.BIOGRAPHY_ROUTE, constants.POST_ROUTE ].includes( route )
+export const isPaddyHomeView = ( route: string ) => route === constants.PADDY_ROUTE
+export const isBiographyView = ( route: string ) => route === constants.BIOGRAPHY_ROUTE
+export const isHelikiaView = ( route: string ) => [ constants.HELIKIA_ROUTE, constants.SYNERGIA_ROUTE, constants.MODULE_ROUTE ].includes( route )
+export const isHelikiaHomeView = ( route: string ) => route === constants.HELIKIA_ROUTE
+export const isSynergiaView = ( route: string ) => route === constants.SYNERGIA_ROUTE
+export const isAccountView = ( route: string ) => route === constants.ACCOUNT_ROUTE
+export const isErrorView = ( route: string ) => route === constants.ERROR_ROUTE

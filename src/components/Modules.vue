@@ -1,9 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
-  import constants from '@/constants'
 
   const modules = ref( [] )
-  //constants.function.fetchAllPosts( import.meta.env.VITE_WP_REST_URL, 'snrg-programs', false, true, programs.value )
 </script>
 
 <template>

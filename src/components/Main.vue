@@ -2,7 +2,7 @@
   import { ref } from 'vue'
   import { useEventListener } from '@vueuse/core'
   import { throttle } from 'throttle-debounce'
-  import constants from '@/constants'
+  import { THROTTLING_PERIOD } from '@/constants'
   import { ScrollDirection } from '@/types'
 
   const emit = defineEmits< { scrolled: [ direction: ScrollDirection ] } >()
@@ -20,7 +20,7 @@
         scrollPosition.value = currentScrollPosition
     }
 
-  const onScroll = throttle( constants.throttle.period, getScrollDirection )
+  const onScroll = throttle( THROTTLING_PERIOD, getScrollDirection )
   useEventListener( mainElement, 'scroll', onScroll )
 </script>
 

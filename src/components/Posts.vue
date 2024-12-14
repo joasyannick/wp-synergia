@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
-  import constants from '@/constants'
+  import * as constants from '@/constants'
+  import { fetchAllPosts } from '@/wordpress'
 
   const defaultImage = ref( '' )
   const posts = ref( [] as { id: number, slug: string, title: string, data: Map< string, any > }[] )
@@ -22,8 +23,8 @@
   fetchDefaultImage()
   const options = new Map()
   options.set( 'excerpt.rendered', true )
-  options.set( 'wp:featuredmedia', true )
-  constants.function.fetchAllPosts( 'https://paddyfontaine.fr/wp-json', 'posts', options ).then( results => {
+  options.set( constants.WP_FEATURED_MEDIA, true )
+  fetchAllPosts( 'https://paddyfontaine.fr/wp-json', 'posts', options ).then( results => {
       if ( results.length ) {
         posts.value = results
         current.value = 0
@@ -39,7 +40,7 @@
     </header>
     <aside>
       <Transition name="snrg">
-        <img v-if="current !== undefined && posts[ current ].data.get( 'wp:featuredmedia' )" :src="posts[ current ].data.get( 'wp:featuredmedia' )" />
+        <img v-if="current !== undefined && posts[ current ].data.get( constants.WP_FEATURED_MEDIA )" :src="posts[ current ].data.get( constants.WP_FEATURED_MEDIA )" />
         <img v-else-if="current !== undefined" :src="defaultImage" />
       </Transition>
     </aside>
@@ -49,7 +50,7 @@
           <h1 v-html="post.title"></h1>
         </header>
         <aside>
-          <img v-if="post.data.get( 'wp:featuredmedia' )" :src="post.data.get( 'wp:featuredmedia' )" style="width:400px; height:auto" />
+          <img v-if="post.data.get( constants.WP_FEATURED_MEDIA )" :src="post.data.get( constants.WP_FEATURED_MEDIA )" style="width:400px; height:auto" />
           <img v-else :src="defaultImage" style="width:400px; height:auto" />
         </aside>
         <div v-if="current !== undefined && current === index && post.data.get( 'excerpt.rendered' )" v-html="post.data.get( 'excerpt.rendered' )"></div>
