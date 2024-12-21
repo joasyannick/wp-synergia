@@ -32,6 +32,9 @@ export const ERROR_PAGE = 'snrg-404'
 export const HELIKIA_PAGE = 'snrg-helikia'
 export const INTRODUCTION_PAGE = 'snrg-intro'
 
+export const DOWNWARD = 'down'
+export const UPWARD = 'up'
+
 export const MOUNTAIN_GLOW_PERIOD = 4 // seconds
 export const STAR_COUNT = 300
 export const STAR_RADIUS = 5

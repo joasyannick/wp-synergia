@@ -5,16 +5,15 @@
   import { storeToRefs } from 'pinia'
   import { throttle } from 'throttle-debounce'
   import { THROTTLING_PERIOD } from '@/constants'
-  import { iMenu } from '@/injection'
+  import { iMenu, iScrollDirection } from '@/injection'
   import { useThemeStore } from '@/stores/theme'
   import AppHeader from '@/components/AppHeader.vue'
-  import type { ScrollDirection } from '@/types'
 
   const route = useRoute()
   const { theme } = storeToRefs( useThemeStore() )
 
   const menuOpened = ref( false )
-  const scrollDirection = ref( null  as null | ScrollDirection )
+  const scrollDirection = ref( '' )
   const appElement = ref( null as null | HTMLDivElement )
 
   const openOrCloseMenu = () => { menuOpened.value = ! menuOpened.value }
@@ -38,9 +37,14 @@
 
   const onResize = throttle( THROTTLING_PERIOD, updateMargins )
 
-  const onScrolled = ( direction: ScrollDirection ) => { scrollDirection.value = direction }
+  const onScrolled = ( direction: string ) => {
+      if ( appElement.value ) {
+        scrollDirection.value = direction
+      }
+    }
 
   provide( iMenu, { opened: menuOpened, openOrClose: openOrCloseMenu } )
+  provide( iScrollDirection, scrollDirection )
 
   watch( () => route.path, ( now ) => {
       if ( appElement.value ) {
@@ -64,7 +68,7 @@
 
 <template>
   <div id="snrg-app" ref="appElement">
-    <AppHeader :scroll-direction="scrollDirection" />
+    <AppHeader />
     <RouterView @scrolled="onScrolled" />
   </div>
 </template>
@@ -112,17 +116,17 @@
   $ROBOTO-RATIO: 0.9;
 
   div#snrg-app {
-    --SNRG-PADDY-HUE: 255;
-    --SNRG-HELIKIA-HUE: 75;
+    --SNRG-PADDY-HUE: 225;
+    --SNRG-HELIKIA-HUE: 30;
     --SNRG-HESYCHIA-HUE: 315;
-    --SNRG-ACCOUNT-HUE: 135;
+    --SNRG-ACCOUNT-HUE: 165;
     --SNRG-ERROR-HUE: 15;
-    --SNRG-BACKGROUND-SATURATION: 66.6666667%;
-    --SNRG-TEXT-SATURATION: 33.3333333%;
+    --SNRG-BACKGROUND-SATURATION: 66.666667%;
+    --SNRG-TEXT-SATURATION: 33.333333%;
     --SNRG-DARK-FILTER: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
     --SNRG-BUTTON-OPACITY: 0.5;
     --SNRG-BUTTON-TRANSITION: 0.5s;
-    --SNRG-LINE-HEIGHT: 1.6666667;
+    --SNRG-LINE-HEIGHT: 1.666667;
     --snrg-background-hue: var(--SNRG-PADDY-HUE);
     --snrg-text-hue: var(--snrg-background-hue);
     --snrg-button-hue: var(--snrg-background-hue);

@@ -3,14 +3,11 @@
   import { useRoute } from 'vue-router'
   import * as observers from '@/router/observers'
   import type { IMenu } from '@/injection'
-  import type { ScrollDirection } from '@/types'
   import { iMenu } from '@/injection'
   import Menu from '@/components/Menu.vue'
   import Posts from '@/components/Posts.vue'
   import Modules from '@/components/Modules.vue'
   import Settings from '@/components/Settings.vue'
-
-  const props = defineProps< { scrollDirection: null | ScrollDirection } >()
 
   const menu = inject( iMenu ) as IMenu
 
@@ -24,7 +21,7 @@
 
 <template>
   <header class="snrg-header">
-    <Menu :scroll-direction="props.scrollDirection" />
+    <Menu />
     <Transition name="snrg">
       <Posts v-if="isPaddyView || isErrorView" v-show="menu.opened.value" />
       <Modules v-else-if="isHelikiaView" v-show="menu.opened.value" />
@@ -35,7 +32,7 @@
 
 <style scoped>
   header.snrg-header {
-    --SNRG-HEADER-TRANSITION-DURATION: 1s;
+    --SNRG-HEADER-TRANSITION-DURATION: 0.666667s;
     --SNRG-HEADER-TRANSITION-TIMING: ease-in-out;
     position: absolute;
     left: 0;

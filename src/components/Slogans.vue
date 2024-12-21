@@ -7,7 +7,7 @@
 
   const fetchSlogans = async () => {
       try {
-        const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/slogans' )
+        const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/settings/slogans' )
         slogans.value = await response.json()
         if ( slogans.value.length ) {
           interval = setInterval( () => { for ( let before = current.value; before === current.value; ) current.value = Math.floor( Math.random() * slogans.value.length ) }, 12000 )

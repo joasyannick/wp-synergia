@@ -1,11 +1,10 @@
 <script setup lang="ts">
-  import { inject, ref, computed } from 'vue'
+  import { inject, ref, computed, type Ref } from 'vue'
   import { RouterLink, useRoute } from 'vue-router'
   import * as constants from '@/constants'
   import * as observers from '@/router/observers'
   import type { IMenu } from '@/injection'
-  import { ScrollDirection } from '@/types'
-  import { iMenu } from '@/injection'
+  import { iMenu, iScrollDirection } from '@/injection'
   import { useThemeStore } from '@/stores/theme'
   import MenuIcon from '@/components/icons/MenuIcon.vue'
   import BiographyIcon from '@/components/icons/BiographyIcon.vue'
@@ -17,16 +16,15 @@
   import HesychiaIcon from '@/components/icons/HesychiaIcon.vue'
   import AccountIcon from '@/components/icons/AccountIcon.vue'
 
-  const props = defineProps< { scrollDirection: null | ScrollDirection } >()
-
   const menu = inject( iMenu ) as IMenu
+  const scrollDirection = inject( iScrollDirection ) as Ref< string >
 
   const route = useRoute()
   const themeStore = useThemeStore()
 
   const hesychiaUrl = ref( '' )
 
-  const classes = computed( () => [ { 'snrg-opened': menu.opened.value }, { 'snrg-down': props.scrollDirection === ScrollDirection.DOWN } ] )
+  const downscroll = computed( () => constants.DOWNWARD === scrollDirection.value )
   const isPaddyView = computed( () => ! route.name ? false : observers.isPaddyView( route.name.toString() ) )
   const isPaddyHomeView = computed( () => ! route.name ? false : observers.isPaddyHomeView( route.name.toString() ) )
   const isBiographyView = computed( () => ! route.name ? false : observers.isBiographyView( route.name.toString() ) )
@@ -41,7 +39,7 @@
           label: 'Biographie',
           link: constants.BIOGRAPHY_FULL_PATH,
           external: false,
-          condition: ! menu.opened.value && isPaddyView.value && ! isBiographyView.value,
+          condition: isPaddyView.value && ! isBiographyView.value,
           onClick: () => {}
         },
       {
@@ -50,7 +48,7 @@
           label: 'Synergia',
           link: constants.SYNERGIA_FULL_PATH,
           external: false,
-          condition: ! menu.opened.value && isHelikiaView.value && ! isSynergiaView.value,
+          condition: isHelikiaView.value && ! isSynergiaView.value,
           onClick: () => {}
         },
       {
@@ -59,7 +57,7 @@
           label: 'Mode nuit',
           link: '',
           external: false,
-          condition: ! menu.opened.value && isAccountView.value,
+          condition: isAccountView.value,
           onClick: () => { themeStore.toggle() }
         },
       {
@@ -68,7 +66,7 @@
           label: 'Contact',
           link: '',
           external: false,
-          condition: ! menu.opened.value && isPaddyView.value,
+          condition: isPaddyView.value,
           onClick: () => {}
         },
       {
@@ -77,7 +75,7 @@
           label: 'Paddy Fontaine',
           link: constants.PADDY_FULL_PATH,
           external: false,
-          condition: ! menu.opened.value && ! isPaddyHomeView.value,
+          condition: ! isPaddyHomeView.value,
           onClick: () => {}
         },
       {
@@ -86,7 +84,7 @@
           label: 'Helikia',
           link: constants.HELIKIA_FULL_PATH,
           external: false,
-          condition: ! menu.opened.value && ! isHelikiaHomeView.value,
+          condition: ! isHelikiaHomeView.value,
           onClick: () => {}
         },
       {
@@ -95,7 +93,7 @@
           label: 'Cap Hesychia',
           link: hesychiaUrl.value,
           external: true,
-          condition: ! menu.opened.value,
+          condition: hesychiaUrl.value,
           onClick: () => {}
         },
       {
@@ -104,14 +102,14 @@
           label: 'Compte',
           link: constants.ACCOUNT_FULL_PATH,
           external: false,
-          condition: ! menu.opened.value && ! isAccountView.value,
+          condition: ! isAccountView.value,
           onClick: () => {}
         }
     ] )
 
   const fetchHesychiaUrl = async () => {
       try {
-          const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/hesychia-url' )
+          const response = await fetch( import.meta.env.VITE_WP_REST_URL + '/synergia/v1/settings/hesychia-url' )
           hesychiaUrl.value = await response.json()
         } catch ( exception ) {
           console.error( 'Failed to fetch the URL of Cap Hesychia' )
@@ -122,12 +120,13 @@
 </script>
 
 <template>
-  <TransitionGroup name="snrg" tag="nav" class="snrg-menu" :class="classes" >
+  <TransitionGroup ref="menuRef" name="snrg" tag="nav" class="snrg-menu">
     <button key="Menu" class="snrg-menu-button" type="button" @click="menu.openOrClose" data-snrg-label="Menu"><MenuIcon /></button>
+    <span class="snrg-transitioner" v-if="menu.opened.value"></span>
     <template v-for="button in buttons" :key="button.label">
-      <a v-if="button.condition && button.link && button.external" :class="button.class" :href="button.link" :data-snrg-label="button.label" target="_blank" rel="noopener noreferrer"><component :is="button.icon" /></a>
-      <RouterLink v-else-if="button.condition && button.link && ! button.external" :class="button.class" :to="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
-      <button v-else-if="button.condition && ! button.link" :class="button.class" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
+      <a v-if="! menu.opened.value && ! downscroll && button.condition && button.link && button.external" :class="button.class" :href="button.link" :data-snrg-label="button.label" target="_blank" rel="noopener noreferrer"><component :is="button.icon" /></a>
+      <RouterLink v-else-if="! menu.opened.value && ! downscroll && button.condition && button.link && ! button.external" :class="button.class" :to="button.link" :data-snrg-label="button.label"><component :is="button.icon" /></RouterLink>
+      <button v-else-if="! menu.opened.value && ! downscroll && button.condition && ! button.link" :class="button.class" type="button" @click="button.onClick" :data-snrg-label="button.label"><component :is="button.icon" /></button>
     </template>
   </TransitionGroup>
 </template>
@@ -135,8 +134,8 @@
 <style scoped>
   nav.snrg-menu {
     --snrg-menu-button-hue: var(--snrg-background-hue);
-    --snrg-menu-button-saturation: 0%;
-    --snrg-menu-button-lightness: (var(--snrg-background-lightness) - (var(--snrg-light-sign)) * 25%);
+    --snrg-menu-button-saturation: 10%;
+    --snrg-menu-button-lightness: (var(--snrg-background-lightness) - 25% * (var(--snrg-light-sign)));
     --snrg-menu-button-opacity: 0.5;
     --snrg-menu-button-blur: 5px;
     --snrg-menu-button-border-hue: var(--snrg-menu-button-hue);
@@ -156,16 +155,27 @@
     display: inline-flex;
   }
 
-  div#snrg-app[data-snrg-route='/'] nav.snrg-menu {
+  div#snrg-app[data-snrg-route='/'] nav.snrg-menu,
+  nav.snrg-menu > a.snrg-home-link:hover {
     --snrg-menu-button-hue: var(--SNRG-PADDY-HUE);
   }
 
-  div#snrg-app[data-snrg-route='/helikia'] nav.snrg-menu {
+  div#snrg-app[data-snrg-route='/helikia'] nav.snrg-menu,
+  nav.snrg-menu > a.snrg-helikia-link:hover {
     --snrg-menu-button-hue: var(--SNRG-HELIKIA-HUE);
   }
 
-  div#snrg-app[data-snrg-route='/compte'] nav.snrg-menu {
+  nav.snrg-menu > a.snrg-hesychia-link:hover {
+    --snrg-menu-button-hue: var(--SNRG-HESYCHIA-HUE);
+  }
+
+  div#snrg-app[data-snrg-route='/compte'] nav.snrg-menu,
+  nav.snrg-menu > a.snrg-account-link:hover {
     --snrg-menu-button-hue: var(--SNRG-ACCOUNT-HUE);
+  }
+
+  nav.snrg-menu > span.snrg-transitioner {
+    display: none;
   }
 
   nav.snrg-menu a.snrg-home-link {
@@ -185,14 +195,13 @@
   }
 
   div#snrg-app nav.snrg-menu > :is(a, button) {
+    /* Override div#snrg-app button */
     display: inline-flex;
     border: 1px solid hsl(var(--snrg-menu-button-border-hue) var(--snrg-menu-button-border-saturation) var(--snrg-menu-button-border-lightness) / var(--snrg-menu-button-border-opacity));
     border-radius: 50%;
     background-color: hsl(var(--snrg-menu-button-hue) var(--snrg-menu-button-saturation) calc(var(--snrg-menu-button-lightness)) / var(--snrg-menu-button-opacity));
     box-shadow: 0 3px 6px hsl(0 0% 0% / 0.15), 0 3px 6px hsl(0 0% 0% / 0.25);
-  }
-
-  nav.snrg-menu > :is(a, button) {
+    /* End of override */
     width: calc(var(--snrg-menu-button-size));
     height: calc(var(--snrg-menu-button-size));
     justify-content: center;
@@ -201,22 +210,38 @@
     backdrop-filter: blur(var(--snrg-menu-button-blur));
   }
 
-  nav.snrg-menu > :is(a, button):is(.snrg-enter-from, .snrg-leave-to) {
-    width: 0;
-    opacity: 0;
+  div#snrg-app nav.snrg-menu > :is(a, button):hover {
+    --snrg-menu-button-lightness: (var(--snrg-background-lightness) - 40% * (var(--snrg-light-sign)));
   }
 
-  nav.snrg-menu > a,
-  div#snrg-app nav.snrg-menu > button:not(.snrg-menu-button) {
+  div#snrg-app nav.snrg-menu > :is(a, button):not(.snrg-menu-button) {
     margin-left: calc(var(--snrg-menu-button-gap));
   }
 
-  nav.snrg-menu > a:is(.snrg-enter-from, .snrg-leave-to),
-  div#snrg-app nav.snrg-menu > button:not(.snrg-menu-button):is(.snrg-enter-from, .snrg-leave-to) {
+  div#snrg-app nav.snrg-menu > :is(span.snrg-transitioner, a, button):is(.snrg-enter-from, .snrg-leave-to) {
+    opacity: 0;
+  }
+
+  div#snrg-app nav.snrg-menu > :is(a, button):is(.snrg-enter-from, .snrg-leave-to) {
+    width: 0;
+  }
+
+  div#snrg-app nav.snrg-menu > :is(a, button):not(.snrg-menu-button):is(.snrg-enter-from, .snrg-leave-to) {
     margin-left: 0;
   }
 
+  div#snrg-app nav.snrg-menu > span.snrg-transitioner:is(.snrg-enter-active, .snrg-leave-active) {
+    transition: opacity calc(2 * var(--SNRG-HEADER-TRANSITION-DURATION));
+  }
+
   div#snrg-app nav.snrg-menu > :is(a, button).snrg-enter-active {
+    transition:
+        margin-left var(--SNRG-HEADER-TRANSITION-TIMING) var(--SNRG-HEADER-TRANSITION-DURATION),
+        width var(--SNRG-HEADER-TRANSITION-TIMING) var(--SNRG-HEADER-TRANSITION-DURATION),
+        opacity var(--SNRG-HEADER-TRANSITION-TIMING) calc(4/3 * var(--SNRG-HEADER-TRANSITION-DURATION));
+  }
+
+  div#snrg-app nav.snrg-menu > span.snrg-transitioner ~ :is(a, button).snrg-enter-active {
     transition:
       margin-left var(--SNRG-HEADER-TRANSITION-DURATION) var(--SNRG-HEADER-TRANSITION-TIMING) var(--SNRG-HEADER-TRANSITION-DURATION),
       width var(--SNRG-HEADER-TRANSITION-DURATION) var(--SNRG-HEADER-TRANSITION-TIMING) var(--SNRG-HEADER-TRANSITION-DURATION),
@@ -235,31 +260,7 @@
     height: auto;
   }
 
-  nav.snrg-menu > :is(a, button) > svg :deep(:is(.snrg-stroke, .snrg-fill)) {
+  nav.snrg-menu > :is(a, button) > svg :deep(path) {
     fill: hsl(var(--snrg-menu-icon-hue) var(--snrg-menu-icon-saturation) calc(var(--snrg-menu-icon-lightness)));
-  }
-
-  nav.snrg-menu > :is(a, button) > svg :deep(.snrg-fill) {
-    --snrg-menu-icon-lightness: (var(--snrg-text-lightness) + (var(--snrg-light-sign)) * 25%);
-  }
-
-  nav.snrg-menu > :is(a, button) > svg :deep(.snrg-fill),
-  nav.snrg-menu > :is(a, button):hover > svg :deep(.snrg-stroke),
-  nav.snrg-menu > :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link) > svg :deep(.snrg-stroke),
-  nav.snrg-menu > :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link):hover > svg :deep(.snrg-fill),
-  nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-fill),
-  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu > button.snrg-theme-button:hover > svg :deep(.snrg-fill) {
-    fill-opacity: 0;
-  }
-
-  nav.snrg-menu > :is(a, button) > svg :deep(.snrg-stroke),
-  nav.snrg-menu > :is(a, button):hover > svg :deep(.snrg-fill),
-  nav.snrg-menu > :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link) > svg :deep(.snrg-fill),
-  nav.snrg-menu > :is(a, button):is(.snrg-home-link, .snrg-helikia-link, .snrg-hesychia-link, .snrg-account-link):hover > svg :deep(.snrg-stroke),
-  nav.snrg-menu.snrg-opened > button.snrg-menu-button > svg :deep(.snrg-fill),
-  nav.snrg-menu.snrg-opened > button.snrg-menu-button:hover > svg :deep(.snrg-stroke),
-  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu > button.snrg-theme-button > svg :deep(.snrg-fill),
-  div#snrg-app:is([data-snrg-theme='dark'], [data-snrg-route='/']) nav.snrg-menu > button.snrg-theme-button:hover > svg :deep(.snrg-stroke) {
-    fill-opacity: 1;
   }
 </style>

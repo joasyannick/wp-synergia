@@ -55,7 +55,7 @@ export const fetchPost = async ( url: string, postType: string, slug: string, op
         return { id: json[ 0 ].id, date_gmt: json[ 0 ].date_gmt, title: json[ 0 ].title.rendered, data: optionalData( options, json[ 0 ] ) }
       }
     } catch ( exception ) {
-      console.error( `Failed to fetch /${ slug } (${ postType }): ${ exception }` )
+      console.error( `Failed to fetch /${ postType }/${ slug }: ${ exception }` )
     }
     return null
   }

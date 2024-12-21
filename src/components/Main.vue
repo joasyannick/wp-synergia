@@ -2,10 +2,9 @@
   import { ref } from 'vue'
   import { useEventListener } from '@vueuse/core'
   import { throttle } from 'throttle-debounce'
-  import { THROTTLING_PERIOD } from '@/constants'
-  import { ScrollDirection } from '@/types'
+  import { DOWNWARD, UPWARD, THROTTLING_PERIOD } from '@/constants'
 
-  const emit = defineEmits< { scrolled: [ direction: ScrollDirection ] } >()
+  const emit = defineEmits< { scrolled: [ direction: string ] } >()
 
   const scrollPosition = ref( 0 )
   const mainElement = ref( null as null | HTMLElement )
@@ -13,9 +12,9 @@
   const getScrollDirection = ( event: Event ) => {
         const currentScrollPosition = ( event.target as HTMLElement ).scrollTop
         if ( currentScrollPosition < scrollPosition.value ) {
-          emit( 'scrolled', ScrollDirection.UP )
+          emit( 'scrolled', UPWARD )
         } else if ( currentScrollPosition > scrollPosition.value ) {
-          emit( 'scrolled', ScrollDirection.DOWN )
+          emit( 'scrolled', DOWNWARD )
         }
         scrollPosition.value = currentScrollPosition
     }
